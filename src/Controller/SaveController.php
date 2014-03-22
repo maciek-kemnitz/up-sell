@@ -7,6 +7,7 @@ use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 
+use src\Model\Product;
 use src\Model\ProductInCart;
 use src\Model\RelatedProduct;
 use src\Model\UpSell;
@@ -47,11 +48,38 @@ class SaveController implements ControllerProviderInterface
 
 			if (count($upSellProducts) > 0)
 			{
-				foreach($upSellProducts as $product)
+				$config = array(
+					'api_key'      =>  CONSUMER_KEY,
+					'secret_key'   =>  SECRET_KEY,
+					'callback_url' =>  CALLBACK_URL,
+				);
+				$shoploApi = new ShoploApi($config);
+
+
+
+				foreach($upSellProducts as $productId)
 				{
+
+					$shoploProduct = $shoploApi->product->retrieve($productId)['products'];
+
+					$product = new Product();
+					$product->setName($shoploProduct['name']);
+					$product->setId($shoploProduct['id']);
+					$product->setImgUrl($shoploProduct['thumbnail']);
+
+					$variants = $shoploProduct['variants'];
+
+					$product->setOriginalPrice($variants[0]['price']);
+					$product->setUrl($shoploProduct['url']);
+					$product->setUpSell($upSell);
+					$product->save();
+
+					var_dump($product);
+
+
 					$relatedProduct = new RelatedProduct();
 					$relatedProduct->setUpSellId($upSell->getId());
-					$relatedProduct->setProductId($product);
+					$relatedProduct->setProductId($product->getId());
 					$relatedProduct->save();
 				}
 			}

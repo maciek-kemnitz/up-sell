@@ -11,31 +11,31 @@ use \Persistent;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
-use src\Model\ProductInCart;
-use src\Model\ProductInCartPeer;
-use src\Model\ProductInCartQuery;
+use src\Model\Product;
+use src\Model\ProductPeer;
+use src\Model\ProductQuery;
 use src\Model\UpSell;
 use src\Model\UpSellQuery;
 
 /**
- * Base class that represents a row from the 'product_in_cart' table.
+ * Base class that represents a row from the 'product' table.
  *
  *
  *
  * @package    propel.generator.up-sell.om
  */
-abstract class BaseProductInCart extends BaseObject implements Persistent
+abstract class BaseProduct extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'src\\Model\\ProductInCartPeer';
+    const PEER = 'src\\Model\\ProductPeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        ProductInCartPeer
+     * @var        ProductPeer
      */
     protected static $peer;
 
@@ -58,10 +58,28 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
     protected $up_sell_id;
 
     /**
-     * The value for the product_id field.
-     * @var        int
+     * The value for the name field.
+     * @var        string
      */
-    protected $product_id;
+    protected $name;
+
+    /**
+     * The value for the img_url field.
+     * @var        string
+     */
+    protected $img_url;
+
+    /**
+     * The value for the original_price field.
+     * @var        string
+     */
+    protected $original_price;
+
+    /**
+     * The value for the url field.
+     * @var        string
+     */
+    protected $url;
 
     /**
      * @var        UpSell
@@ -111,21 +129,54 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [product_id] column value.
+     * Get the [name] column value.
      *
-     * @return int
+     * @return string
      */
-    public function getProductId()
+    public function getName()
     {
 
-        return $this->product_id;
+        return $this->name;
+    }
+
+    /**
+     * Get the [img_url] column value.
+     *
+     * @return string
+     */
+    public function getImgUrl()
+    {
+
+        return $this->img_url;
+    }
+
+    /**
+     * Get the [original_price] column value.
+     *
+     * @return string
+     */
+    public function getOriginalPrice()
+    {
+
+        return $this->original_price;
+    }
+
+    /**
+     * Get the [url] column value.
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+
+        return $this->url;
     }
 
     /**
      * Set the value of [id] column.
      *
      * @param  int $v new value
-     * @return ProductInCart The current object (for fluent API support)
+     * @return Product The current object (for fluent API support)
      */
     public function setId($v)
     {
@@ -135,7 +186,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
 
         if ($this->id !== $v) {
             $this->id = $v;
-            $this->modifiedColumns[] = ProductInCartPeer::ID;
+            $this->modifiedColumns[] = ProductPeer::ID;
         }
 
 
@@ -146,7 +197,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      * Set the value of [up_sell_id] column.
      *
      * @param  int $v new value
-     * @return ProductInCart The current object (for fluent API support)
+     * @return Product The current object (for fluent API support)
      */
     public function setUpSellId($v)
     {
@@ -156,7 +207,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
 
         if ($this->up_sell_id !== $v) {
             $this->up_sell_id = $v;
-            $this->modifiedColumns[] = ProductInCartPeer::UP_SELL_ID;
+            $this->modifiedColumns[] = ProductPeer::UP_SELL_ID;
         }
 
         if ($this->aUpSell !== null && $this->aUpSell->getId() !== $v) {
@@ -168,25 +219,88 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
     } // setUpSellId()
 
     /**
-     * Set the value of [product_id] column.
+     * Set the value of [name] column.
      *
-     * @param  int $v new value
-     * @return ProductInCart The current object (for fluent API support)
+     * @param  string $v new value
+     * @return Product The current object (for fluent API support)
      */
-    public function setProductId($v)
+    public function setName($v)
     {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
+        if ($v !== null) {
+            $v = (string) $v;
         }
 
-        if ($this->product_id !== $v) {
-            $this->product_id = $v;
-            $this->modifiedColumns[] = ProductInCartPeer::PRODUCT_ID;
+        if ($this->name !== $v) {
+            $this->name = $v;
+            $this->modifiedColumns[] = ProductPeer::NAME;
         }
 
 
         return $this;
-    } // setProductId()
+    } // setName()
+
+    /**
+     * Set the value of [img_url] column.
+     *
+     * @param  string $v new value
+     * @return Product The current object (for fluent API support)
+     */
+    public function setImgUrl($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->img_url !== $v) {
+            $this->img_url = $v;
+            $this->modifiedColumns[] = ProductPeer::IMG_URL;
+        }
+
+
+        return $this;
+    } // setImgUrl()
+
+    /**
+     * Set the value of [original_price] column.
+     *
+     * @param  string $v new value
+     * @return Product The current object (for fluent API support)
+     */
+    public function setOriginalPrice($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->original_price !== $v) {
+            $this->original_price = $v;
+            $this->modifiedColumns[] = ProductPeer::ORIGINAL_PRICE;
+        }
+
+
+        return $this;
+    } // setOriginalPrice()
+
+    /**
+     * Set the value of [url] column.
+     *
+     * @param  string $v new value
+     * @return Product The current object (for fluent API support)
+     */
+    public function setUrl($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->url !== $v) {
+            $this->url = $v;
+            $this->modifiedColumns[] = ProductPeer::URL;
+        }
+
+
+        return $this;
+    } // setUrl()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -222,7 +336,10 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->up_sell_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->product_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->img_url = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->original_price = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->url = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -232,10 +349,10 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 3; // 3 = ProductInCartPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = ProductPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating ProductInCart object", $e);
+            throw new PropelException("Error populating Product object", $e);
         }
     }
 
@@ -281,13 +398,13 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(ProductInCartPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = ProductInCartPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = ProductPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -318,12 +435,12 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(ProductInCartPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ProductPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = ProductInCartQuery::create()
+            $deleteQuery = ProductQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -361,7 +478,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(ProductInCartPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ProductPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -381,7 +498,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                ProductInCartPeer::addInstanceToPool($this);
+                ProductPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -454,21 +571,29 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = ProductInCartPeer::ID;
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(ProductInCartPeer::ID)) {
+        if ($this->isColumnModified(ProductPeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
-        if ($this->isColumnModified(ProductInCartPeer::UP_SELL_ID)) {
+        if ($this->isColumnModified(ProductPeer::UP_SELL_ID)) {
             $modifiedColumns[':p' . $index++]  = '`up_sell_id`';
         }
-        if ($this->isColumnModified(ProductInCartPeer::PRODUCT_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`product_id`';
+        if ($this->isColumnModified(ProductPeer::NAME)) {
+            $modifiedColumns[':p' . $index++]  = '`name`';
+        }
+        if ($this->isColumnModified(ProductPeer::IMG_URL)) {
+            $modifiedColumns[':p' . $index++]  = '`img_url`';
+        }
+        if ($this->isColumnModified(ProductPeer::ORIGINAL_PRICE)) {
+            $modifiedColumns[':p' . $index++]  = '`original_price`';
+        }
+        if ($this->isColumnModified(ProductPeer::URL)) {
+            $modifiedColumns[':p' . $index++]  = '`url`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `product_in_cart` (%s) VALUES (%s)',
+            'INSERT INTO `product` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -483,8 +608,17 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
                     case '`up_sell_id`':
                         $stmt->bindValue($identifier, $this->up_sell_id, PDO::PARAM_INT);
                         break;
-                    case '`product_id`':
-                        $stmt->bindValue($identifier, $this->product_id, PDO::PARAM_INT);
+                    case '`name`':
+                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                        break;
+                    case '`img_url`':
+                        $stmt->bindValue($identifier, $this->img_url, PDO::PARAM_STR);
+                        break;
+                    case '`original_price`':
+                        $stmt->bindValue($identifier, $this->original_price, PDO::PARAM_STR);
+                        break;
+                    case '`url`':
+                        $stmt->bindValue($identifier, $this->url, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -492,15 +626,6 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
-        }
-
-        try {
-            $pk = $con->lastInsertId();
-        } catch (Exception $e) {
-            throw new PropelException('Unable to get autoincrement id.', $e);
-        }
-        if ($pk !== null) {
-            $this->setId($pk);
         }
 
         $this->setNew(false);
@@ -594,7 +719,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
             }
 
 
-            if (($retval = ProductInCartPeer::doValidate($this, $columns)) !== true) {
+            if (($retval = ProductPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
@@ -618,7 +743,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = ProductInCartPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = ProductPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -641,7 +766,16 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
                 return $this->getUpSellId();
                 break;
             case 2:
-                return $this->getProductId();
+                return $this->getName();
+                break;
+            case 3:
+                return $this->getImgUrl();
+                break;
+            case 4:
+                return $this->getOriginalPrice();
+                break;
+            case 5:
+                return $this->getUrl();
                 break;
             default:
                 return null;
@@ -666,15 +800,18 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['ProductInCart'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['Product'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['ProductInCart'][$this->getPrimaryKey()] = true;
-        $keys = ProductInCartPeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['Product'][$this->getPrimaryKey()] = true;
+        $keys = ProductPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getUpSellId(),
-            $keys[2] => $this->getProductId(),
+            $keys[2] => $this->getName(),
+            $keys[3] => $this->getImgUrl(),
+            $keys[4] => $this->getOriginalPrice(),
+            $keys[5] => $this->getUrl(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -703,7 +840,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = ProductInCartPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = ProductPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -726,7 +863,16 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
                 $this->setUpSellId($value);
                 break;
             case 2:
-                $this->setProductId($value);
+                $this->setName($value);
+                break;
+            case 3:
+                $this->setImgUrl($value);
+                break;
+            case 4:
+                $this->setOriginalPrice($value);
+                break;
+            case 5:
+                $this->setUrl($value);
                 break;
         } // switch()
     }
@@ -750,11 +896,14 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = ProductInCartPeer::getFieldNames($keyType);
+        $keys = ProductPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setUpSellId($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setProductId($arr[$keys[2]]);
+        if (array_key_exists($keys[2], $arr)) $this->setName($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setImgUrl($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setOriginalPrice($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setUrl($arr[$keys[5]]);
     }
 
     /**
@@ -764,11 +913,14 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(ProductInCartPeer::DATABASE_NAME);
+        $criteria = new Criteria(ProductPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(ProductInCartPeer::ID)) $criteria->add(ProductInCartPeer::ID, $this->id);
-        if ($this->isColumnModified(ProductInCartPeer::UP_SELL_ID)) $criteria->add(ProductInCartPeer::UP_SELL_ID, $this->up_sell_id);
-        if ($this->isColumnModified(ProductInCartPeer::PRODUCT_ID)) $criteria->add(ProductInCartPeer::PRODUCT_ID, $this->product_id);
+        if ($this->isColumnModified(ProductPeer::ID)) $criteria->add(ProductPeer::ID, $this->id);
+        if ($this->isColumnModified(ProductPeer::UP_SELL_ID)) $criteria->add(ProductPeer::UP_SELL_ID, $this->up_sell_id);
+        if ($this->isColumnModified(ProductPeer::NAME)) $criteria->add(ProductPeer::NAME, $this->name);
+        if ($this->isColumnModified(ProductPeer::IMG_URL)) $criteria->add(ProductPeer::IMG_URL, $this->img_url);
+        if ($this->isColumnModified(ProductPeer::ORIGINAL_PRICE)) $criteria->add(ProductPeer::ORIGINAL_PRICE, $this->original_price);
+        if ($this->isColumnModified(ProductPeer::URL)) $criteria->add(ProductPeer::URL, $this->url);
 
         return $criteria;
     }
@@ -783,8 +935,8 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(ProductInCartPeer::DATABASE_NAME);
-        $criteria->add(ProductInCartPeer::ID, $this->id);
+        $criteria = new Criteria(ProductPeer::DATABASE_NAME);
+        $criteria->add(ProductPeer::ID, $this->id);
 
         return $criteria;
     }
@@ -825,7 +977,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of ProductInCart (or compatible) type.
+     * @param object $copyObj An object of Product (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -833,7 +985,10 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setUpSellId($this->getUpSellId());
-        $copyObj->setProductId($this->getProductId());
+        $copyObj->setName($this->getName());
+        $copyObj->setImgUrl($this->getImgUrl());
+        $copyObj->setOriginalPrice($this->getOriginalPrice());
+        $copyObj->setUrl($this->getUrl());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -861,7 +1016,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return ProductInCart Clone of current object.
+     * @return Product Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -881,12 +1036,12 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return ProductInCartPeer
+     * @return ProductPeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new ProductInCartPeer();
+            self::$peer = new ProductPeer();
         }
 
         return self::$peer;
@@ -896,7 +1051,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      * Declares an association between this object and a UpSell object.
      *
      * @param                  UpSell $v
-     * @return ProductInCart The current object (for fluent API support)
+     * @return Product The current object (for fluent API support)
      * @throws PropelException
      */
     public function setUpSell(UpSell $v = null)
@@ -912,7 +1067,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the UpSell object, it will not be re-added.
         if ($v !== null) {
-            $v->addProductInCart($this);
+            $v->addProduct($this);
         }
 
 
@@ -937,7 +1092,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUpSell->addProductInCarts($this);
+                $this->aUpSell->addProducts($this);
              */
         }
 
@@ -951,7 +1106,10 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->up_sell_id = null;
-        $this->product_id = null;
+        $this->name = null;
+        $this->img_url = null;
+        $this->original_price = null;
+        $this->url = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -991,7 +1149,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(ProductInCartPeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(ProductPeer::DEFAULT_STRING_FORMAT);
     }
 
     /**

@@ -7,7 +7,7 @@ use \TableMap;
 
 
 /**
- * This class defines the structure of the 'product_in_cart' table.
+ * This class defines the structure of the 'product' table.
  *
  *
  *
@@ -18,13 +18,13 @@ use \TableMap;
  *
  * @package    propel.generator.up-sell.map
  */
-class ProductInCartTableMap extends TableMap
+class ProductTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'up-sell.map.ProductInCartTableMap';
+    const CLASS_NAME = 'up-sell.map.ProductTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -36,15 +36,18 @@ class ProductInCartTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('product_in_cart');
-        $this->setPhpName('ProductInCart');
-        $this->setClassname('src\\Model\\ProductInCart');
+        $this->setName('product');
+        $this->setPhpName('Product');
+        $this->setClassname('src\\Model\\Product');
         $this->setPackage('up-sell');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('up_sell_id', 'UpSellId', 'INTEGER', 'up_sell', 'id', true, null, null);
-        $this->addColumn('product_id', 'ProductId', 'INTEGER', true, null, null);
+        $this->addColumn('name', 'Name', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('img_url', 'ImgUrl', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('original_price', 'OriginalPrice', 'DECIMAL', true, 10, null);
+        $this->addColumn('url', 'Url', 'LONGVARCHAR', true, null, null);
         // validators
     } // initialize()
 
@@ -56,4 +59,4 @@ class ProductInCartTableMap extends TableMap
         $this->addRelation('UpSell', 'src\\Model\\UpSell', RelationMap::MANY_TO_ONE, array('up_sell_id' => 'id', ), null, null);
     } // buildRelations()
 
-} // ProductInCartTableMap
+} // ProductTableMap

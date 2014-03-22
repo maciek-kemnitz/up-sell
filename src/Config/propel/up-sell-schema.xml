@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<database name="up-sell" namespace="src\Model" defaultIdMethod="native"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd">
+    <table name="product"  idMethod="native">
+        <column name="id"  type="INTEGER" primaryKey="true" required="true"/>
+        <column name="up_sell_id"  type="INTEGER" required="true"/>
+        <column name="name"  type="LONGVARCHAR" required="true"/>
+        <column name="img_url"  type="LONGVARCHAR" required="true"/>
+        <column name="original_price"  type="DECIMAL" size="10" scale="0" required="true"/>
+        <column name="url" type="LONGVARCHAR" required="true"/>
+        <foreign-key foreignTable="up_sell" name="product_ibfk_1" onDelete="RESTRICT" onUpdate="RESTRICT">
+            <reference local="up_sell_id" foreign="id"/>
+        </foreign-key>
+        <unique name="id">
+            <unique-column name="id"/>
+            <unique-column name="up_sell_id"/>
+        </unique>
+        <index name="up_sell_id">
+            <index-column name="up_sell_id"/>
+        </index>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+
+    <table name="product_in_cart"  idMethod="native" allowPkInsert="true">
+        <column name="id"  type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="up_sell_id"  type="INTEGER" required="true"/>
+        <column name="product_id"  type="INTEGER" required="true"/>
+        <foreign-key foreignTable="up_sell" name="product_in_cart_ibfk_1" onDelete="RESTRICT" onUpdate="RESTRICT">
+            <reference local="up_sell_id" foreign="id"/>
+        </foreign-key>
+        <unique name="up_sell_id">
+            <unique-column name="up_sell_id"/>
+            <unique-column name="product_id"/>
+        </unique>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="related_product"  idMethod="native">
+        <column name="id"  type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="up_sell_id" type="INTEGER" required="true"/>
+        <column name="product_id" type="INTEGER" required="true"/>
+        <foreign-key foreignTable="up_sell" name="related_product_ibfk_1" onDelete="RESTRICT" onUpdate="RESTRICT">
+            <reference local="up_sell_id" foreign="id"/>
+        </foreign-key>
+        <unique name="up_sell_id">
+            <unique-column name="up_sell_id"/>
+            <unique-column name="product_id"/>
+        </unique>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+    <table name="up_sell" idMethod="native">
+        <column name="id"  type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="name"  type="VARCHAR" size="255" required="true"/>
+        <column name="headline"  type="LONGVARCHAR" required="true"/>
+        <column name="description"  type="LONGVARCHAR" required="true"/>
+        <column name="price_from"  type="FLOAT" required="false"/>
+        <column name="price_to"  type="FLOAT" required="false"/>
+        <vendor type="mysql">
+            <parameter name="Engine" value="InnoDB"/>
+        </vendor>
+    </table>
+</database>

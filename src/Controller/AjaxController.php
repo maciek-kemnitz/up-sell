@@ -8,6 +8,9 @@ use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 
 use src\Lib\Database;
+use src\Model\ProductQuery;
+use src\Model\RelatedProduct;
+use src\Model\UpSell;
 use src\Model\UpSellQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -29,28 +32,28 @@ class AjaxController implements ControllerProviderInterface
 
 
 			$upSells = UpSellQuery::create()
-								->priceInRange($futureCartValue);
+								->priceInRange($futureCartValue)
+								->find();
+
+			$upSellByRelations = UpSellQuery::create()
+											->useRelatedProductQuery()
+												->filterByProductId($productId)
+											->endUse()
+											->find();
 
 
 
 
 
-			$config = array(
-				'api_key'      =>  CONSUMER_KEY,
-				'secret_key'   =>  SECRET_KEY,
-				'callback_url' =>  CALLBACK_URL,
-			);
-			$shoploApi = new ShoploApi($config);
-
-
-			$relatedProducts = Database::getRelatedProductByProductId($productId);
-
-			if (count($relatedProducts) > 0)
+			if ($upSellByRelations->count() > 0)
 			{
-				$product = $relatedProducts[0];
+				/** @var UpSell $upSellByRelation */
+				$upSellByRelation = $upSellByRelations->getFirst();
+
+
 				$data = [
 					"status" => "ok",
-					"html"	=> $app['twig']->render('widget.page.html.twig', ['id' => $product->getId(), "up_sell_id" => $product->getUpSellId()])
+					"html"	=> $app['twig']->render('widget.page.html.twig', ['upSell' => $upSellByRelation, 'products' => $upSellByRelation->getProducts()])
 				];
 
 				return new JsonResponse($data);

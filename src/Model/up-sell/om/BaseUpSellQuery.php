@@ -5,11 +5,16 @@ namespace src\Model\om;
 use \Criteria;
 use \Exception;
 use \ModelCriteria;
+use \ModelJoin;
 use \PDO;
 use \Propel;
+use \PropelCollection;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
+use src\Model\Product;
+use src\Model\ProductInCart;
+use src\Model\RelatedProduct;
 use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
@@ -36,6 +41,18 @@ use src\Model\UpSellQuery;
  * @method UpSellQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method UpSellQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method UpSellQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method UpSellQuery leftJoinProduct($relationAlias = null) Adds a LEFT JOIN clause to the query using the Product relation
+ * @method UpSellQuery rightJoinProduct($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Product relation
+ * @method UpSellQuery innerJoinProduct($relationAlias = null) Adds a INNER JOIN clause to the query using the Product relation
+ *
+ * @method UpSellQuery leftJoinProductInCart($relationAlias = null) Adds a LEFT JOIN clause to the query using the ProductInCart relation
+ * @method UpSellQuery rightJoinProductInCart($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ProductInCart relation
+ * @method UpSellQuery innerJoinProductInCart($relationAlias = null) Adds a INNER JOIN clause to the query using the ProductInCart relation
+ *
+ * @method UpSellQuery leftJoinRelatedProduct($relationAlias = null) Adds a LEFT JOIN clause to the query using the RelatedProduct relation
+ * @method UpSellQuery rightJoinRelatedProduct($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RelatedProduct relation
+ * @method UpSellQuery innerJoinRelatedProduct($relationAlias = null) Adds a INNER JOIN clause to the query using the RelatedProduct relation
  *
  * @method UpSell findOne(PropelPDO $con = null) Return the first UpSell matching the query
  * @method UpSell findOneOrCreate(PropelPDO $con = null) Return the first UpSell matching the query, or a new UpSell object populated from the query conditions when no match is found
@@ -459,6 +476,228 @@ abstract class BaseUpSellQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UpSellPeer::PRICE_TO, $priceTo, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Product object
+     *
+     * @param   Product|PropelObjectCollection $product  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UpSellQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProduct($product, $comparison = null)
+    {
+        if ($product instanceof Product) {
+            return $this
+                ->addUsingAlias(UpSellPeer::ID, $product->getUpSellId(), $comparison);
+        } elseif ($product instanceof PropelObjectCollection) {
+            return $this
+                ->useProductQuery()
+                ->filterByPrimaryKeys($product->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProduct() only accepts arguments of type Product or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Product relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UpSellQuery The current query, for fluid interface
+     */
+    public function joinProduct($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Product');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Product');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Product relation Product object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \src\Model\ProductQuery A secondary query class using the current class as primary query
+     */
+    public function useProductQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProduct($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Product', '\src\Model\ProductQuery');
+    }
+
+    /**
+     * Filter the query by a related ProductInCart object
+     *
+     * @param   ProductInCart|PropelObjectCollection $productInCart  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UpSellQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProductInCart($productInCart, $comparison = null)
+    {
+        if ($productInCart instanceof ProductInCart) {
+            return $this
+                ->addUsingAlias(UpSellPeer::ID, $productInCart->getUpSellId(), $comparison);
+        } elseif ($productInCart instanceof PropelObjectCollection) {
+            return $this
+                ->useProductInCartQuery()
+                ->filterByPrimaryKeys($productInCart->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProductInCart() only accepts arguments of type ProductInCart or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ProductInCart relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UpSellQuery The current query, for fluid interface
+     */
+    public function joinProductInCart($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ProductInCart');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ProductInCart');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ProductInCart relation ProductInCart object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \src\Model\ProductInCartQuery A secondary query class using the current class as primary query
+     */
+    public function useProductInCartQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProductInCart($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ProductInCart', '\src\Model\ProductInCartQuery');
+    }
+
+    /**
+     * Filter the query by a related RelatedProduct object
+     *
+     * @param   RelatedProduct|PropelObjectCollection $relatedProduct  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UpSellQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByRelatedProduct($relatedProduct, $comparison = null)
+    {
+        if ($relatedProduct instanceof RelatedProduct) {
+            return $this
+                ->addUsingAlias(UpSellPeer::ID, $relatedProduct->getUpSellId(), $comparison);
+        } elseif ($relatedProduct instanceof PropelObjectCollection) {
+            return $this
+                ->useRelatedProductQuery()
+                ->filterByPrimaryKeys($relatedProduct->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRelatedProduct() only accepts arguments of type RelatedProduct or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the RelatedProduct relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UpSellQuery The current query, for fluid interface
+     */
+    public function joinRelatedProduct($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('RelatedProduct');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'RelatedProduct');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the RelatedProduct relation RelatedProduct object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \src\Model\RelatedProductQuery A secondary query class using the current class as primary query
+     */
+    public function useRelatedProductQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinRelatedProduct($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RelatedProduct', '\src\Model\RelatedProductQuery');
     }
 
     /**

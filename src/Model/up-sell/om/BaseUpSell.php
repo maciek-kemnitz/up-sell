@@ -9,8 +9,16 @@ use \Exception;
 use \PDO;
 use \Persistent;
 use \Propel;
+use \PropelCollection;
 use \PropelException;
+use \PropelObjectCollection;
 use \PropelPDO;
+use src\Model\Product;
+use src\Model\ProductInCart;
+use src\Model\ProductInCartQuery;
+use src\Model\ProductQuery;
+use src\Model\RelatedProduct;
+use src\Model\RelatedProductQuery;
 use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
@@ -80,6 +88,24 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     protected $price_to;
 
     /**
+     * @var        PropelObjectCollection|Product[] Collection to store aggregation of Product objects.
+     */
+    protected $collProducts;
+    protected $collProductsPartial;
+
+    /**
+     * @var        PropelObjectCollection|ProductInCart[] Collection to store aggregation of ProductInCart objects.
+     */
+    protected $collProductInCarts;
+    protected $collProductInCartsPartial;
+
+    /**
+     * @var        PropelObjectCollection|RelatedProduct[] Collection to store aggregation of RelatedProduct objects.
+     */
+    protected $collRelatedProducts;
+    protected $collRelatedProductsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -98,6 +124,24 @@ abstract class BaseUpSell extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $productsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $productInCartsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $relatedProductsScheduledForDeletion = null;
 
     /**
      * Get the [id] column value.
@@ -400,6 +444,12 @@ abstract class BaseUpSell extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collProducts = null;
+
+            $this->collProductInCarts = null;
+
+            $this->collRelatedProducts = null;
+
         } // if (deep)
     }
 
@@ -522,6 +572,57 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->productsScheduledForDeletion !== null) {
+                if (!$this->productsScheduledForDeletion->isEmpty()) {
+                    ProductQuery::create()
+                        ->filterByPrimaryKeys($this->productsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->productsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collProducts !== null) {
+                foreach ($this->collProducts as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->productInCartsScheduledForDeletion !== null) {
+                if (!$this->productInCartsScheduledForDeletion->isEmpty()) {
+                    ProductInCartQuery::create()
+                        ->filterByPrimaryKeys($this->productInCartsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->productInCartsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collProductInCarts !== null) {
+                foreach ($this->collProductInCarts as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->relatedProductsScheduledForDeletion !== null) {
+                if (!$this->relatedProductsScheduledForDeletion->isEmpty()) {
+                    RelatedProductQuery::create()
+                        ->filterByPrimaryKeys($this->relatedProductsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->relatedProductsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collRelatedProducts !== null) {
+                foreach ($this->collRelatedProducts as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -696,6 +797,30 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             }
 
 
+                if ($this->collProducts !== null) {
+                    foreach ($this->collProducts as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collProductInCarts !== null) {
+                    foreach ($this->collProductInCarts as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collRelatedProducts !== null) {
+                    foreach ($this->collRelatedProducts as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -766,10 +891,11 @@ abstract class BaseUpSell extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['UpSell'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -789,6 +915,17 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->collProducts) {
+                $result['Products'] = $this->collProducts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collProductInCarts) {
+                $result['ProductInCarts'] = $this->collProductInCarts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collRelatedProducts) {
+                $result['RelatedProducts'] = $this->collRelatedProducts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -955,6 +1092,36 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         $copyObj->setDescription($this->getDescription());
         $copyObj->setPriceFrom($this->getPriceFrom());
         $copyObj->setPriceTo($this->getPriceTo());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            foreach ($this->getProducts() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addProduct($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getProductInCarts() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addProductInCart($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getRelatedProducts() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addRelatedProduct($relObj->copy($deepCopy));
+                }
+            }
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1001,6 +1168,703 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         return self::$peer;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Product' == $relationName) {
+            $this->initProducts();
+        }
+        if ('ProductInCart' == $relationName) {
+            $this->initProductInCarts();
+        }
+        if ('RelatedProduct' == $relationName) {
+            $this->initRelatedProducts();
+        }
+    }
+
+    /**
+     * Clears out the collProducts collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return UpSell The current object (for fluent API support)
+     * @see        addProducts()
+     */
+    public function clearProducts()
+    {
+        $this->collProducts = null; // important to set this to null since that means it is uninitialized
+        $this->collProductsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collProducts collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialProducts($v = true)
+    {
+        $this->collProductsPartial = $v;
+    }
+
+    /**
+     * Initializes the collProducts collection.
+     *
+     * By default this just sets the collProducts collection to an empty array (like clearcollProducts());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initProducts($overrideExisting = true)
+    {
+        if (null !== $this->collProducts && !$overrideExisting) {
+            return;
+        }
+        $this->collProducts = new PropelObjectCollection();
+        $this->collProducts->setModel('Product');
+    }
+
+    /**
+     * Gets an array of Product objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this UpSell is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Product[] List of Product objects
+     * @throws PropelException
+     */
+    public function getProducts($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collProductsPartial && !$this->isNew();
+        if (null === $this->collProducts || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collProducts) {
+                // return empty collection
+                $this->initProducts();
+            } else {
+                $collProducts = ProductQuery::create(null, $criteria)
+                    ->filterByUpSell($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collProductsPartial && count($collProducts)) {
+                      $this->initProducts(false);
+
+                      foreach ($collProducts as $obj) {
+                        if (false == $this->collProducts->contains($obj)) {
+                          $this->collProducts->append($obj);
+                        }
+                      }
+
+                      $this->collProductsPartial = true;
+                    }
+
+                    $collProducts->getInternalIterator()->rewind();
+
+                    return $collProducts;
+                }
+
+                if ($partial && $this->collProducts) {
+                    foreach ($this->collProducts as $obj) {
+                        if ($obj->isNew()) {
+                            $collProducts[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collProducts = $collProducts;
+                $this->collProductsPartial = false;
+            }
+        }
+
+        return $this->collProducts;
+    }
+
+    /**
+     * Sets a collection of Product objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $products A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function setProducts(PropelCollection $products, PropelPDO $con = null)
+    {
+        $productsToDelete = $this->getProducts(new Criteria(), $con)->diff($products);
+
+
+        $this->productsScheduledForDeletion = $productsToDelete;
+
+        foreach ($productsToDelete as $productRemoved) {
+            $productRemoved->setUpSell(null);
+        }
+
+        $this->collProducts = null;
+        foreach ($products as $product) {
+            $this->addProduct($product);
+        }
+
+        $this->collProducts = $products;
+        $this->collProductsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Product objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Product objects.
+     * @throws PropelException
+     */
+    public function countProducts(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collProductsPartial && !$this->isNew();
+        if (null === $this->collProducts || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collProducts) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getProducts());
+            }
+            $query = ProductQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUpSell($this)
+                ->count($con);
+        }
+
+        return count($this->collProducts);
+    }
+
+    /**
+     * Method called to associate a Product object to this object
+     * through the Product foreign key attribute.
+     *
+     * @param    Product $l Product
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function addProduct(Product $l)
+    {
+        if ($this->collProducts === null) {
+            $this->initProducts();
+            $this->collProductsPartial = true;
+        }
+
+        if (!in_array($l, $this->collProducts->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddProduct($l);
+
+            if ($this->productsScheduledForDeletion and $this->productsScheduledForDeletion->contains($l)) {
+                $this->productsScheduledForDeletion->remove($this->productsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Product $product The product object to add.
+     */
+    protected function doAddProduct($product)
+    {
+        $this->collProducts[]= $product;
+        $product->setUpSell($this);
+    }
+
+    /**
+     * @param	Product $product The product object to remove.
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function removeProduct($product)
+    {
+        if ($this->getProducts()->contains($product)) {
+            $this->collProducts->remove($this->collProducts->search($product));
+            if (null === $this->productsScheduledForDeletion) {
+                $this->productsScheduledForDeletion = clone $this->collProducts;
+                $this->productsScheduledForDeletion->clear();
+            }
+            $this->productsScheduledForDeletion[]= clone $product;
+            $product->setUpSell(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collProductInCarts collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return UpSell The current object (for fluent API support)
+     * @see        addProductInCarts()
+     */
+    public function clearProductInCarts()
+    {
+        $this->collProductInCarts = null; // important to set this to null since that means it is uninitialized
+        $this->collProductInCartsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collProductInCarts collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialProductInCarts($v = true)
+    {
+        $this->collProductInCartsPartial = $v;
+    }
+
+    /**
+     * Initializes the collProductInCarts collection.
+     *
+     * By default this just sets the collProductInCarts collection to an empty array (like clearcollProductInCarts());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initProductInCarts($overrideExisting = true)
+    {
+        if (null !== $this->collProductInCarts && !$overrideExisting) {
+            return;
+        }
+        $this->collProductInCarts = new PropelObjectCollection();
+        $this->collProductInCarts->setModel('ProductInCart');
+    }
+
+    /**
+     * Gets an array of ProductInCart objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this UpSell is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|ProductInCart[] List of ProductInCart objects
+     * @throws PropelException
+     */
+    public function getProductInCarts($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collProductInCartsPartial && !$this->isNew();
+        if (null === $this->collProductInCarts || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collProductInCarts) {
+                // return empty collection
+                $this->initProductInCarts();
+            } else {
+                $collProductInCarts = ProductInCartQuery::create(null, $criteria)
+                    ->filterByUpSell($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collProductInCartsPartial && count($collProductInCarts)) {
+                      $this->initProductInCarts(false);
+
+                      foreach ($collProductInCarts as $obj) {
+                        if (false == $this->collProductInCarts->contains($obj)) {
+                          $this->collProductInCarts->append($obj);
+                        }
+                      }
+
+                      $this->collProductInCartsPartial = true;
+                    }
+
+                    $collProductInCarts->getInternalIterator()->rewind();
+
+                    return $collProductInCarts;
+                }
+
+                if ($partial && $this->collProductInCarts) {
+                    foreach ($this->collProductInCarts as $obj) {
+                        if ($obj->isNew()) {
+                            $collProductInCarts[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collProductInCarts = $collProductInCarts;
+                $this->collProductInCartsPartial = false;
+            }
+        }
+
+        return $this->collProductInCarts;
+    }
+
+    /**
+     * Sets a collection of ProductInCart objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $productInCarts A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function setProductInCarts(PropelCollection $productInCarts, PropelPDO $con = null)
+    {
+        $productInCartsToDelete = $this->getProductInCarts(new Criteria(), $con)->diff($productInCarts);
+
+
+        $this->productInCartsScheduledForDeletion = $productInCartsToDelete;
+
+        foreach ($productInCartsToDelete as $productInCartRemoved) {
+            $productInCartRemoved->setUpSell(null);
+        }
+
+        $this->collProductInCarts = null;
+        foreach ($productInCarts as $productInCart) {
+            $this->addProductInCart($productInCart);
+        }
+
+        $this->collProductInCarts = $productInCarts;
+        $this->collProductInCartsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related ProductInCart objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related ProductInCart objects.
+     * @throws PropelException
+     */
+    public function countProductInCarts(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collProductInCartsPartial && !$this->isNew();
+        if (null === $this->collProductInCarts || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collProductInCarts) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getProductInCarts());
+            }
+            $query = ProductInCartQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUpSell($this)
+                ->count($con);
+        }
+
+        return count($this->collProductInCarts);
+    }
+
+    /**
+     * Method called to associate a ProductInCart object to this object
+     * through the ProductInCart foreign key attribute.
+     *
+     * @param    ProductInCart $l ProductInCart
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function addProductInCart(ProductInCart $l)
+    {
+        if ($this->collProductInCarts === null) {
+            $this->initProductInCarts();
+            $this->collProductInCartsPartial = true;
+        }
+
+        if (!in_array($l, $this->collProductInCarts->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddProductInCart($l);
+
+            if ($this->productInCartsScheduledForDeletion and $this->productInCartsScheduledForDeletion->contains($l)) {
+                $this->productInCartsScheduledForDeletion->remove($this->productInCartsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	ProductInCart $productInCart The productInCart object to add.
+     */
+    protected function doAddProductInCart($productInCart)
+    {
+        $this->collProductInCarts[]= $productInCart;
+        $productInCart->setUpSell($this);
+    }
+
+    /**
+     * @param	ProductInCart $productInCart The productInCart object to remove.
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function removeProductInCart($productInCart)
+    {
+        if ($this->getProductInCarts()->contains($productInCart)) {
+            $this->collProductInCarts->remove($this->collProductInCarts->search($productInCart));
+            if (null === $this->productInCartsScheduledForDeletion) {
+                $this->productInCartsScheduledForDeletion = clone $this->collProductInCarts;
+                $this->productInCartsScheduledForDeletion->clear();
+            }
+            $this->productInCartsScheduledForDeletion[]= clone $productInCart;
+            $productInCart->setUpSell(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collRelatedProducts collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return UpSell The current object (for fluent API support)
+     * @see        addRelatedProducts()
+     */
+    public function clearRelatedProducts()
+    {
+        $this->collRelatedProducts = null; // important to set this to null since that means it is uninitialized
+        $this->collRelatedProductsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collRelatedProducts collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialRelatedProducts($v = true)
+    {
+        $this->collRelatedProductsPartial = $v;
+    }
+
+    /**
+     * Initializes the collRelatedProducts collection.
+     *
+     * By default this just sets the collRelatedProducts collection to an empty array (like clearcollRelatedProducts());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initRelatedProducts($overrideExisting = true)
+    {
+        if (null !== $this->collRelatedProducts && !$overrideExisting) {
+            return;
+        }
+        $this->collRelatedProducts = new PropelObjectCollection();
+        $this->collRelatedProducts->setModel('RelatedProduct');
+    }
+
+    /**
+     * Gets an array of RelatedProduct objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this UpSell is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|RelatedProduct[] List of RelatedProduct objects
+     * @throws PropelException
+     */
+    public function getRelatedProducts($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collRelatedProductsPartial && !$this->isNew();
+        if (null === $this->collRelatedProducts || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collRelatedProducts) {
+                // return empty collection
+                $this->initRelatedProducts();
+            } else {
+                $collRelatedProducts = RelatedProductQuery::create(null, $criteria)
+                    ->filterByUpSell($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collRelatedProductsPartial && count($collRelatedProducts)) {
+                      $this->initRelatedProducts(false);
+
+                      foreach ($collRelatedProducts as $obj) {
+                        if (false == $this->collRelatedProducts->contains($obj)) {
+                          $this->collRelatedProducts->append($obj);
+                        }
+                      }
+
+                      $this->collRelatedProductsPartial = true;
+                    }
+
+                    $collRelatedProducts->getInternalIterator()->rewind();
+
+                    return $collRelatedProducts;
+                }
+
+                if ($partial && $this->collRelatedProducts) {
+                    foreach ($this->collRelatedProducts as $obj) {
+                        if ($obj->isNew()) {
+                            $collRelatedProducts[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collRelatedProducts = $collRelatedProducts;
+                $this->collRelatedProductsPartial = false;
+            }
+        }
+
+        return $this->collRelatedProducts;
+    }
+
+    /**
+     * Sets a collection of RelatedProduct objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $relatedProducts A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function setRelatedProducts(PropelCollection $relatedProducts, PropelPDO $con = null)
+    {
+        $relatedProductsToDelete = $this->getRelatedProducts(new Criteria(), $con)->diff($relatedProducts);
+
+
+        $this->relatedProductsScheduledForDeletion = $relatedProductsToDelete;
+
+        foreach ($relatedProductsToDelete as $relatedProductRemoved) {
+            $relatedProductRemoved->setUpSell(null);
+        }
+
+        $this->collRelatedProducts = null;
+        foreach ($relatedProducts as $relatedProduct) {
+            $this->addRelatedProduct($relatedProduct);
+        }
+
+        $this->collRelatedProducts = $relatedProducts;
+        $this->collRelatedProductsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related RelatedProduct objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related RelatedProduct objects.
+     * @throws PropelException
+     */
+    public function countRelatedProducts(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collRelatedProductsPartial && !$this->isNew();
+        if (null === $this->collRelatedProducts || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRelatedProducts) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getRelatedProducts());
+            }
+            $query = RelatedProductQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUpSell($this)
+                ->count($con);
+        }
+
+        return count($this->collRelatedProducts);
+    }
+
+    /**
+     * Method called to associate a RelatedProduct object to this object
+     * through the RelatedProduct foreign key attribute.
+     *
+     * @param    RelatedProduct $l RelatedProduct
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function addRelatedProduct(RelatedProduct $l)
+    {
+        if ($this->collRelatedProducts === null) {
+            $this->initRelatedProducts();
+            $this->collRelatedProductsPartial = true;
+        }
+
+        if (!in_array($l, $this->collRelatedProducts->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddRelatedProduct($l);
+
+            if ($this->relatedProductsScheduledForDeletion and $this->relatedProductsScheduledForDeletion->contains($l)) {
+                $this->relatedProductsScheduledForDeletion->remove($this->relatedProductsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	RelatedProduct $relatedProduct The relatedProduct object to add.
+     */
+    protected function doAddRelatedProduct($relatedProduct)
+    {
+        $this->collRelatedProducts[]= $relatedProduct;
+        $relatedProduct->setUpSell($this);
+    }
+
+    /**
+     * @param	RelatedProduct $relatedProduct The relatedProduct object to remove.
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function removeRelatedProduct($relatedProduct)
+    {
+        if ($this->getRelatedProducts()->contains($relatedProduct)) {
+            $this->collRelatedProducts->remove($this->collRelatedProducts->search($relatedProduct));
+            if (null === $this->relatedProductsScheduledForDeletion) {
+                $this->relatedProductsScheduledForDeletion = clone $this->collRelatedProducts;
+                $this->relatedProductsScheduledForDeletion->clear();
+            }
+            $this->relatedProductsScheduledForDeletion[]= clone $relatedProduct;
+            $relatedProduct->setUpSell(null);
+        }
+
+        return $this;
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -1034,10 +1898,37 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collProducts) {
+                foreach ($this->collProducts as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collProductInCarts) {
+                foreach ($this->collProductInCarts as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collRelatedProducts) {
+                foreach ($this->collRelatedProducts as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collProducts instanceof PropelCollection) {
+            $this->collProducts->clearIterator();
+        }
+        $this->collProducts = null;
+        if ($this->collProductInCarts instanceof PropelCollection) {
+            $this->collProductInCarts->clearIterator();
+        }
+        $this->collProductInCarts = null;
+        if ($this->collRelatedProducts instanceof PropelCollection) {
+            $this->collRelatedProducts->clearIterator();
+        }
+        $this->collRelatedProducts = null;
     }
 
     /**
