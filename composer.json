@@ -1,0 +1,18 @@
+{
+    "require": {
+        "silex/silex": "~1.1",
+        "twig/twig": ">=1.8,<2.0-dev",
+        "darklow/ff-silex-less-provider": "dev-master",
+        "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
+        "maciek-kemnitz/shoplo-php": "1.0.0",
+        "propel/propel-service-provider": "1.*@dev"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ],
+        "psr-0": {
+            "src/Model/": "src/Model"
+        }
+    }
+}

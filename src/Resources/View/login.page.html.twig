@@ -1,0 +1,105 @@
+
+<html>
+<head>
+    {#<link rel="shortcut icon" href="{{ app.request.basepath }}/img/favicon.ico" />#}
+    <link rel="stylesheet" type="text/css" href="{{ app.request.basepath }}/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="{{ app.request.basepath }}/css/styles.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/jquery-ui.min.js"></script>
+    <script src="{{ app.request.basepath }}/js/bootstrap.js"></script>
+    {#<script src="{{ app.request.basepath }}/js/common.js"></script>#}
+</head>
+<body>
+    <div class="container">
+        <div class="main">
+            <input type="submit" name="addToCard">
+            <div class="row headline">
+                <div class="span2">
+                    Product upsell
+                </div>
+                <div class="span2 offset8">
+                    <a href="/add" class="btn btn-inverse">Dodaj Ofertę</a>
+                </div>
+            </div>
+            <div class="row-fluid overview well">
+                <div class="span3">
+                    Wyświetleń
+                </div>
+                <div class="span3">
+                    Sprzedarz upsell
+                </div>
+                <div class="span3">
+                    Średnia wartość koszyka
+                </div>
+                <div class="span3">
+                    ostatnie 7 dni
+                </div>
+            </div>
+            <div class="row chart text-center">
+                upselling chart
+            </div>
+            <div class="row">
+                aktualna oferta
+            </div>
+            <div class="row upp-sell">
+                <div class="span2">
+                    Extra bateris
+                </div>
+                <div class="span1">
+                    20%
+                </div>
+                <div class="span3">
+                    Kategoria1 > Kategoria1.1
+                </div>
+                <div class="span2">
+                    data i minuty
+                </div>
+                <div class="span1 offset1">
+                    view
+                </div>
+                <div class="span1">
+                    stop
+                </div>
+                <div class="span1">
+                    delete
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    $(function(){
+
+        var uppSellContainer = '<div id="up-sell-container"></div>';
+
+        var userData = {
+            'productId': 4
+        }
+
+        $.post( "/ajax/up-sell/product", userData, function(ajaxResult) {
+
+            if (ajaxResult['status'] == 'ok')
+            {
+                $('body').append(uppSellContainer);
+
+//                console.log(ajaxResult['html']);
+                $('body').on('click','input[name="addToCard"]',function(){
+                    $('#up-sell-modal').css('display','block');
+                    $('#up-sell-modal').addClass('in');
+
+                    return false;
+                });
+
+                $('#up-sell-container').html(ajaxResult['html']);
+            }
+            else if (ajaxResult['status'] == 'no up-sell')
+            {
+
+//                do nothing
+            }
+
+        }, 'json');
+    });
+</script>
+</body>
+</html>

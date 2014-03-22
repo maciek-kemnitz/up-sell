@@ -1,0 +1,245 @@
+<!-- BREADCRUMB -->
+{if isset($collection) || isset($category) || isset($vendor)}
+{if isset($collection)}
+<div class="path clearFix">
+    <ul>
+        <li>
+            <a href="{reverse_url name=shop_home}">{$settings->translate_shop}</a> &raquo;
+        </li>
+        <li>
+            <a href="{reverse_url name=shop_collection collection_name=$collection->url}">{$collection->title|ucfirst}</a> &raquo;
+        </li>
+        <li>
+            <span>{$product->name}</span>
+        </li>
+    </ul>
+</div>
+{elseif isset($category)}
+<div class="path clearFix">
+    <ul>
+        <li>
+            <a href="{reverse_url name=shop_home}">{$settings->translate_shop}</a> &raquo;
+        </li>
+        <li>
+            <a href="{reverse_url name=shop_category category_name=$category->url}">{$category->title|ucfirst}</a> &raquo;
+        </li>
+        <li>
+            <span>{$product->name}</span>
+        </li>
+    </ul>
+</div>
+{elseif isset($vendor)}
+<div class="path clearFix">
+    <ul>
+        <li>
+            <a href="{reverse_url name=shop_home}">{$settings->translate_shop}</a> &raquo;
+        </li>
+        <li>
+            <a href="{reverse_url name=shop_vendor vendor_name=$vendor->url}">{$vendor->title|ucfirst}</a> &raquo;
+        </li>
+        <li>
+            <span>{$product->name}</span>
+        </li>
+    </ul>
+</div>
+{else}
+<div class="path clearFix">
+    <ul>
+        <li>
+            <a href="{reverse_url name=shop_home}">{$settings->translate_shop}</a> &raquo;
+        </li>
+        <li>
+            <span>{$product->name}</span>
+        </li>
+    </ul>
+</div>
+{/if}
+{/if}
+<!-- END BREADCRUMB -->
+
+<div class="productPage">
+    <!-- PRODUCT GALLERY -->
+    {assign var="photos" value="{$product->getImages()}"}
+    {if $photos}
+    <div class="ad-gallery {$settings->product_page_gallery}">
+        <div class="mainImage {if $settings->product_page_gallery == 'zoom'}ad-image-wrapper{/if}">
+            <img class="ad-loader" src="{'fancybox_loading.gif'|asset_url}" style="display: none; ">
+            <a href="{$product->main_image|product_img_url:th1024}" class="fancybox" style="display:inline-block;">
+                <img src="{$product->main_image|product_img_url:th480}" alt="" id="multizoom" alt="zoomable" style="max-width:400px;" />
+            </a>
+        </div>
+        <div class="ad-nav">
+            <div class="{if $settings->product_page_gallery == 'zoom'}multizoom {/if}thumbs ad-thumbs">
+                <ul class="{if $settings->product_page_gallery == 'lightbox'}ad-thumb-list {/if}clearfix">
+                    {foreach from=$photos item="photo" name="list"}
+                    <li>
+                        <a href="{$photo->url|product_img_url:th480}"{if !$smarty.foreach.list.first} rel="lightbox"{/if} data-large="{$photo->url|product_img_url:th1024}" data-title="{$product->name}">
+                        <img src="{$photo->url|product_img_url:th100}" alt="{$product->name|htmlspecialchars}">
+                        </a>
+                    </li>
+                    {/foreach}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {/if}
+    <!-- END PRODUCT GALLERY -->
+
+    <!-- PRODUCT DESCRIPTION -->
+    <div class="productDescription">
+        <h3>{$product->name}</h3>
+        {assign var="variants" value=$product->getVariants()}
+        {assign var="properties" value=$product->getProperties()}
+        <form action="{reverse_url name='shop_cart_add'}" method="post">
+            <input type="hidden" name="return_to" value="" />
+            {if $product->available}
+            {if $variants && $properties && count($variants) > 1}
+            <select name="id" id="variants">
+                {foreach from=$variants key="name" item="variant" name="variant"}
+                <option value="{$variant->id}" prc="{$variant->price|money}" prc-regular="{$variant->price_regular|money}"{if !$variant->available} disabled="disabled"{/if} data-img="{$variant->main_image|product_img_url:th100}">
+                {if $variant->property1}{$variant->property1}{/if}
+                {if $variant->property2} / {$variant->property2}{/if}
+                {if $variant->property3} / {$variant->property3}{/if}
+                </option>
+                {/foreach}
+            </select>
+            {else}
+            <input type="hidden" name="id" value="{$variants[0]->id}" />
+            {/if}
+            {/if}
+            <div class="price priceChangeable">
+				<span>
+					<span class="ch big">
+						{if $product->price_differ}<span class="from">{$settings->translate_price_from} </span>{/if}
+						{if $product->on_sale}
+							<span class="oldPrice">{$product->price_regular|money}</span>
+						{/if}
+						<span class="newPrice">{$product->price_min|money}</span><span></span>
+					</span>
+				</span>
+                {if $product->available}
+                <input type="submit" name="addToCard" value="{$settings->translate_add_to_cart_button_label}" />
+                {else}
+                <div class="clear"></div>
+                <p class="lack">{$settings->translate_product_unavailable}</p>
+                {/if}
+            </div>
+
+            <div class="desc productDescriptionText">
+                <p><strong>{$settings->translate_product_description_header}</strong></p>
+                {$product->description}
+            </div>
+        </form>
+
+        {if $product->previous_product || $product->next_product}
+        <div class="space"></div>
+        <div class="nextPrev">
+            {if $product->previous_product}
+            {if isset($category)}
+            <a href="{reverse_url name=shop_product_within_category category_name=$category->url product_name=$product->previous_product->url}">&laquo; {$settings->translate_product_previous}</a>
+            {elseif isset($collection)}
+            <a href="{reverse_url name=shop_product_within_collection collection_name=$collection->url product_name=$product->previous_product->url}">&laquo; {$settings->translate_product_previous}</a>
+            {else}
+            <a href="{reverse_url name=shop_product product_name=$product->previous_product->url}">&laquo; {$settings->translate_product_previous} </a>
+            {/if}
+            {/if}
+
+            {if $product->next_product}
+            {if isset($category)}
+            <a href="{reverse_url name=shop_product_within_category category_name=$category->url product_name=$product->next_product->url}">{$settings->translate_product_next} &raquo;</a>
+            {elseif isset($collection)}
+            <a href="{reverse_url name=shop_product_within_collection collection_name=$collection->url product_name=$product->next_product->url}">{$settings->translate_product_next} &raquo;</a>
+            {else}
+            <a href="{reverse_url name=shop_product product_name=$product->next_product->url}">{$settings->translate_product_next} &raquo;</a>
+            {/if}
+            {/if}
+        </div>
+        {/if}
+    </div>
+    <!-- END PRODUCT DESCRIPTION -->
+
+    <div id="myModal" class="modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Modal header</h3>
+        </div>
+        <div class="modal-body">
+            <p>One fine body…</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn">Close</a>
+            <a href="#" class="btn btn-primary">Save changes</a>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function(){
+
+            $('input[name="addToCard"]').click(function(){
+                $('#myModal').modal('show');
+                return false;
+            });
+
+        });
+    </script>
+
+    <div class="clearFix"></div>
+
+    {if isset($category) || isset($collection)}
+    <h2 class="header">
+        <span>{$settings->translate_related_products}</span>
+        {if isset($category)}
+        <a href="{reverse_url name='shop_category' category_name=$category->url}">{$settings->translate_more_products} &raquo;</a>
+        {elseif isset($collection)}
+        <a href="{reverse_url name='shop_collection' collection_name=$collection->url}">{$settings->translate_more_products} &raquo;</a>
+        {/if}
+    </h2>
+    {/if}
+
+    {if isset($category)}
+    {assign var="products" value=$category->getProducts($settings->product_page_similar_count)}
+    {elseif isset($collection)}
+    {assign var="products" value=$collection->getProducts($settings->product_page_similar_count)}
+    {/if}
+
+    {if isset($products) && $settings->product_page_show_similar}
+    <ul class="productList">
+        {foreach from=$products item="p" name="list"}
+        <li{if $smarty.foreach.list.iteration % 4 == 0} class="last"{/if}>
+        {if isset($category)}
+        <a href="{reverse_url name=shop_product_within_category category_name=$category->url product_name=$p->url}">
+            {elseif isset($collection)}
+            <a href="{reverse_url name=shop_product_within_collection collection_name=$collection->url product_name=$p->url}">
+                {/if}
+                <div>
+                    <img src='{$p->main_image|product_img_url:th160}' alt="" />
+                </div>
+                <span><strong>{$p->name|truncate:16}</strong></span>
+				<span class="price priceSmall">
+					{if $p->price_differ}<span class="from">{$settings->translate_price_from} </span>{/if}
+					{if $p->on_sale}
+						<span class="oldPrice">{$p->price_regular|money}</span>
+					{/if}
+					<span class="newPrice">{$p->price_min|money}</span>
+				</span>
+            </a>
+            </li>
+            {/foreach}
+    </ul>
+    {/if}
+</div>
+
+
+<a id="zl-url" class="zl-url" href="http://www.znanylekarz.pl/marek-litmanowicz/ginekolog/warszawa" rel="nofollow"
+   data-zlw-doctor="marek-litmanowicz" data-zlw-type="big" data-zlw-opinion="true">Marek Litmanowicz -
+    ZnanyLekarz.pl</a>
+<script>
+    !function ($_x, _s, id) {
+        var js, fjs = $_x.getElementsByTagName(_s)[0];
+        if (!$_x.getElementById(id)) {
+            js = $_x.createElement(_s);
+            js.id = id;
+            js.src = "//platform.docplanner.com/js/widget.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }
+    }(document, "script", "zl-widget-s");</script>

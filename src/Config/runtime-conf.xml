@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <propel>
+        <datasources default="up-sell">
+            <datasource id="up-sell">
+                <adapter>mysql</adapter> <!-- sqlite, mysql, mssql, oracle, or pgsql -->
+                <connection>
+                    <dsn>mysql:host=local.phpmyadmin.pl;dbname=shoplo_up_sell</dsn>
+                    <user>root</user>
+                    <password>maciekmarekmama</password>
+                </connection>
+            </datasource>
+        </datasources>
+    </propel>
+</config>

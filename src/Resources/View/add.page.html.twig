@@ -1,0 +1,73 @@
+
+<html>
+<head>
+    {#<link rel="shortcut icon" href="{{ app.request.basepath }}/img/favicon.ico" />#}
+    <link rel="stylesheet" type="text/css" href="{{ app.request.basepath }}/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="{{ app.request.basepath }}/css/styles.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/jquery-ui.min.js"></script>
+    <script src="{{ app.request.basepath }}/js/bootstrap.js"></script>
+    {#<script src="{{ app.request.basepath }}/js/common.js"></script>#}
+</head>
+<body>
+    <div class="container">
+        <form action="/save/" method="post">
+            <fieldset>
+                <h4>Opis</h4>
+                <label>Nazwa kampanii</label>
+                <input name="name" type="text" placeholder="Type something…">
+                <label>Nagłówek oferty</label>
+                <input name="headline" type="text" placeholder="Type something…">
+                <label>Opis oferty</label>
+                <textarea name="description"></textarea>
+            </fieldset>
+            <hr>
+            <h4>Przedział cenowy</h4>
+                <label class="checkbox">
+                    <input type="checkbox"> Check me out
+                </label>
+                <div class="input-prepend">
+                    <span class="add-on">PLN</span>
+                    <input name="price_from" class="span2" id="prependedInput" type="text" placeholder="Username">
+                </div>
+                <div class="input-prepend">
+                    <span class="add-on">PLN</span>
+                    <input name="price_to" class="span2" id="prependedInput" type="text" placeholder="Username">
+                </div>
+            <hr>
+
+            <h4>Gdy produkty w koszyku:</h4>
+            <label class="checkbox">
+                <input type="checkbox"> Check me out
+            </label>
+
+
+            <select name="selected-product-trigger[]" multiple>
+                {% for product in products['products'] %}
+                    <option value="{{ product['id'] }}">{{ product['name'] }}</option>
+                {% endfor %}
+            </select>
+
+            <hr>
+
+            <h4>wybierz zniżke:</h4>
+            <select>
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+
+            <hr>
+
+            <h4>Wybierz produkt:</h4>
+
+            <select name="up-sell-products[]" multiple>
+                {% for product in products['products'] %}
+                    <option value="{{ product['id'] }}">{{ product['name'] }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
