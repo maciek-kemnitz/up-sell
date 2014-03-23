@@ -53,7 +53,7 @@ class AjaxController implements ControllerProviderInterface
 
 				if (!$uppSells->count())
 				{
-					return new JsonResponse(['status' => 'no up-sell', "count" => (!$uppSells->count())]);
+					return new JsonResponse(['status' => 'no up-sell', "count" => ($uppSells->count())]);
 				}
 			}
 
