@@ -5,26 +5,20 @@
           xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd">
     <table name="product"  idMethod="native">
         <column name="id"  type="INTEGER" primaryKey="true" required="true"/>
-        <column name="up_sell_id"  type="INTEGER" required="true"/>
+        <column name="shoplo_product_id" type="INTEGER" required="true"/>
+        <column name="shop_id" type="INTEGER" required="true"/>
         <column name="name"  type="LONGVARCHAR" required="true"/>
         <column name="img_url"  type="LONGVARCHAR" required="true"/>
         <column name="original_price"  type="DECIMAL" size="10" scale="0" required="true"/>
         <column name="url" type="LONGVARCHAR" required="true"/>
-        <foreign-key foreignTable="up_sell" name="product_ibfk_1" onDelete="RESTRICT" onUpdate="RESTRICT">
-            <reference local="up_sell_id" foreign="id"/>
-        </foreign-key>
-        <unique name="id">
-            <unique-column name="id"/>
-            <unique-column name="up_sell_id"/>
+        <unique name="shoplo_product_id">
+            <unique-column name="shoplo_product_id"/>
+            <unique-column name="shop_id"/>
         </unique>
-        <index name="up_sell_id">
-            <index-column name="up_sell_id"/>
-        </index>
         <vendor type="mysql">
             <parameter name="Engine" value="InnoDB"/>
         </vendor>
     </table>
-
     <table name="product_in_cart"  idMethod="native" allowPkInsert="true">
         <column name="id"  type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
         <column name="up_sell_id"  type="INTEGER" required="true"/>
@@ -57,6 +51,8 @@
     </table>
     <table name="up_sell" idMethod="native">
         <column name="id"  type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+        <column name="shop_id"  type="INTEGER" required="true"/>
+        <column name="order"  type="INTEGER" required="true"/>
         <column name="name"  type="VARCHAR" size="255" required="true"/>
         <column name="headline"  type="LONGVARCHAR" required="true"/>
         <column name="description"  type="LONGVARCHAR" required="true"/>
@@ -67,3 +63,4 @@
         </vendor>
     </table>
 </database>
+

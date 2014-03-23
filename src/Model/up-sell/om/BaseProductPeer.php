@@ -11,7 +11,6 @@ use \PropelException;
 use \PropelPDO;
 use src\Model\Product;
 use src\Model\ProductPeer;
-use src\Model\UpSellPeer;
 use src\Model\map\ProductTableMap;
 
 /**
@@ -37,19 +36,22 @@ abstract class BaseProductPeer
     const TM_CLASS = 'src\\Model\\map\\ProductTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /** the column name for the id field */
     const ID = 'product.id';
 
-    /** the column name for the up_sell_id field */
-    const UP_SELL_ID = 'product.up_sell_id';
+    /** the column name for the shoplo_product_id field */
+    const SHOPLO_PRODUCT_ID = 'product.shoplo_product_id';
+
+    /** the column name for the shop_id field */
+    const SHOP_ID = 'product.shop_id';
 
     /** the column name for the name field */
     const NAME = 'product.name';
@@ -82,12 +84,12 @@ abstract class BaseProductPeer
      * e.g. ProductPeer::$fieldNames[ProductPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'UpSellId', 'Name', 'ImgUrl', 'OriginalPrice', 'Url', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'upSellId', 'name', 'imgUrl', 'originalPrice', 'url', ),
-        BasePeer::TYPE_COLNAME => array (ProductPeer::ID, ProductPeer::UP_SELL_ID, ProductPeer::NAME, ProductPeer::IMG_URL, ProductPeer::ORIGINAL_PRICE, ProductPeer::URL, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'UP_SELL_ID', 'NAME', 'IMG_URL', 'ORIGINAL_PRICE', 'URL', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'up_sell_id', 'name', 'img_url', 'original_price', 'url', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'ShoploProductId', 'ShopId', 'Name', 'ImgUrl', 'OriginalPrice', 'Url', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shoploProductId', 'shopId', 'name', 'imgUrl', 'originalPrice', 'url', ),
+        BasePeer::TYPE_COLNAME => array (ProductPeer::ID, ProductPeer::SHOPLO_PRODUCT_ID, ProductPeer::SHOP_ID, ProductPeer::NAME, ProductPeer::IMG_URL, ProductPeer::ORIGINAL_PRICE, ProductPeer::URL, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOPLO_PRODUCT_ID', 'SHOP_ID', 'NAME', 'IMG_URL', 'ORIGINAL_PRICE', 'URL', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'shoplo_product_id', 'shop_id', 'name', 'img_url', 'original_price', 'url', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -97,12 +99,12 @@ abstract class BaseProductPeer
      * e.g. ProductPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UpSellId' => 1, 'Name' => 2, 'ImgUrl' => 3, 'OriginalPrice' => 4, 'Url' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'upSellId' => 1, 'name' => 2, 'imgUrl' => 3, 'originalPrice' => 4, 'url' => 5, ),
-        BasePeer::TYPE_COLNAME => array (ProductPeer::ID => 0, ProductPeer::UP_SELL_ID => 1, ProductPeer::NAME => 2, ProductPeer::IMG_URL => 3, ProductPeer::ORIGINAL_PRICE => 4, ProductPeer::URL => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'UP_SELL_ID' => 1, 'NAME' => 2, 'IMG_URL' => 3, 'ORIGINAL_PRICE' => 4, 'URL' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'up_sell_id' => 1, 'name' => 2, 'img_url' => 3, 'original_price' => 4, 'url' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShoploProductId' => 1, 'ShopId' => 2, 'Name' => 3, 'ImgUrl' => 4, 'OriginalPrice' => 5, 'Url' => 6, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shoploProductId' => 1, 'shopId' => 2, 'name' => 3, 'imgUrl' => 4, 'originalPrice' => 5, 'url' => 6, ),
+        BasePeer::TYPE_COLNAME => array (ProductPeer::ID => 0, ProductPeer::SHOPLO_PRODUCT_ID => 1, ProductPeer::SHOP_ID => 2, ProductPeer::NAME => 3, ProductPeer::IMG_URL => 4, ProductPeer::ORIGINAL_PRICE => 5, ProductPeer::URL => 6, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOPLO_PRODUCT_ID' => 1, 'SHOP_ID' => 2, 'NAME' => 3, 'IMG_URL' => 4, 'ORIGINAL_PRICE' => 5, 'URL' => 6, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shoplo_product_id' => 1, 'shop_id' => 2, 'name' => 3, 'img_url' => 4, 'original_price' => 5, 'url' => 6, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -177,14 +179,16 @@ abstract class BaseProductPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(ProductPeer::ID);
-            $criteria->addSelectColumn(ProductPeer::UP_SELL_ID);
+            $criteria->addSelectColumn(ProductPeer::SHOPLO_PRODUCT_ID);
+            $criteria->addSelectColumn(ProductPeer::SHOP_ID);
             $criteria->addSelectColumn(ProductPeer::NAME);
             $criteria->addSelectColumn(ProductPeer::IMG_URL);
             $criteria->addSelectColumn(ProductPeer::ORIGINAL_PRICE);
             $criteria->addSelectColumn(ProductPeer::URL);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.up_sell_id');
+            $criteria->addSelectColumn($alias . '.shoplo_product_id');
+            $criteria->addSelectColumn($alias . '.shop_id');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.img_url');
             $criteria->addSelectColumn($alias . '.original_price');
@@ -487,244 +491,6 @@ abstract class BaseProductPeer
         }
 
         return array($obj, $col);
-    }
-
-
-    /**
-     * Returns the number of rows matching criteria, joining the related UpSell table
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return int Number of matching rows.
-     */
-    public static function doCountJoinUpSell(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        // we're going to modify criteria, so copy it first
-        $criteria = clone $criteria;
-
-        // We need to set the primary table name, since in the case that there are no WHERE columns
-        // it will be impossible for the BasePeer::createSelectSql() method to determine which
-        // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ProductPeer::TABLE_NAME);
-
-        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-            $criteria->setDistinct();
-        }
-
-        if (!$criteria->hasSelectClause()) {
-            ProductPeer::addSelectColumns($criteria);
-        }
-
-        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-
-        // Set the correct dbName
-        $criteria->setDbName(ProductPeer::DATABASE_NAME);
-
-        if ($con === null) {
-            $con = Propel::getConnection(ProductPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-        }
-
-        $criteria->addJoin(ProductPeer::UP_SELL_ID, UpSellPeer::ID, $join_behavior);
-
-        $stmt = BasePeer::doCount($criteria, $con);
-
-        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $count = (int) $row[0];
-        } else {
-            $count = 0; // no rows returned; we infer that means 0 matches.
-        }
-        $stmt->closeCursor();
-
-        return $count;
-    }
-
-
-    /**
-     * Selects a collection of Product objects pre-filled with their UpSell objects.
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Product objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinUpSell(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(ProductPeer::DATABASE_NAME);
-        }
-
-        ProductPeer::addSelectColumns($criteria);
-        $startcol = ProductPeer::NUM_HYDRATE_COLUMNS;
-        UpSellPeer::addSelectColumns($criteria);
-
-        $criteria->addJoin(ProductPeer::UP_SELL_ID, UpSellPeer::ID, $join_behavior);
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = ProductPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = ProductPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-
-                $cls = ProductPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                ProductPeer::addInstanceToPool($obj1, $key1);
-            } // if $obj1 already loaded
-
-            $key2 = UpSellPeer::getPrimaryKeyHashFromRow($row, $startcol);
-            if ($key2 !== null) {
-                $obj2 = UpSellPeer::getInstanceFromPool($key2);
-                if (!$obj2) {
-
-                    $cls = UpSellPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol);
-                    UpSellPeer::addInstanceToPool($obj2, $key2);
-                } // if obj2 already loaded
-
-                // Add the $obj1 (Product) to $obj2 (UpSell)
-                $obj2->addProduct($obj1);
-
-            } // if joined row was not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Returns the number of rows matching criteria, joining all related tables
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return int Number of matching rows.
-     */
-    public static function doCountJoinAll(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        // we're going to modify criteria, so copy it first
-        $criteria = clone $criteria;
-
-        // We need to set the primary table name, since in the case that there are no WHERE columns
-        // it will be impossible for the BasePeer::createSelectSql() method to determine which
-        // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(ProductPeer::TABLE_NAME);
-
-        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-            $criteria->setDistinct();
-        }
-
-        if (!$criteria->hasSelectClause()) {
-            ProductPeer::addSelectColumns($criteria);
-        }
-
-        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-
-        // Set the correct dbName
-        $criteria->setDbName(ProductPeer::DATABASE_NAME);
-
-        if ($con === null) {
-            $con = Propel::getConnection(ProductPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-        }
-
-        $criteria->addJoin(ProductPeer::UP_SELL_ID, UpSellPeer::ID, $join_behavior);
-
-        $stmt = BasePeer::doCount($criteria, $con);
-
-        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $count = (int) $row[0];
-        } else {
-            $count = 0; // no rows returned; we infer that means 0 matches.
-        }
-        $stmt->closeCursor();
-
-        return $count;
-    }
-
-    /**
-     * Selects a collection of Product objects pre-filled with all related objects.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Product objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(ProductPeer::DATABASE_NAME);
-        }
-
-        ProductPeer::addSelectColumns($criteria);
-        $startcol2 = ProductPeer::NUM_HYDRATE_COLUMNS;
-
-        UpSellPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + UpSellPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(ProductPeer::UP_SELL_ID, UpSellPeer::ID, $join_behavior);
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = ProductPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = ProductPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = ProductPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                ProductPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-            // Add objects for joined UpSell rows
-
-            $key2 = UpSellPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-            if ($key2 !== null) {
-                $obj2 = UpSellPeer::getInstanceFromPool($key2);
-                if (!$obj2) {
-
-                    $cls = UpSellPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    UpSellPeer::addInstanceToPool($obj2, $key2);
-                } // if obj2 loaded
-
-                // Add the $obj1 (Product) to the collection in $obj2 (UpSell)
-                $obj2->addProduct($obj1);
-            } // if joined row not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
     }
 
     /**

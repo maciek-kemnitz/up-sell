@@ -7,10 +7,11 @@ use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 
+use src\Model\UpSellQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class CallbackController implements ControllerProviderInterface
+class HomePageController implements ControllerProviderInterface
 {
 	public function connect(Application $app)
 	{
@@ -25,11 +26,12 @@ class CallbackController implements ControllerProviderInterface
 			);
 			$shoploApi = new ShoploApi($config);
 
-			if ($shoploApi->authorized)
-			{
-				return new RedirectResponse('/');
-			}
-//			return $app['twig']->render('login.page.html.twig', ['product'=>$shoploApi->product->retrieve()]);
+			$upSells = UpSellQuery::create()
+								->filterByShopId($shoploApi->shop->retrieve()['id'])
+								->find();
+
+			return $app['twig']->render('home.page.html.twig', ['product'=>$shoploApi->product->retrieve(), 'uppSells' => $upSells]);
+
 		});
 
 		return $controllers;

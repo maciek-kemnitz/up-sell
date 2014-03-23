@@ -14,8 +14,6 @@ use \PropelPDO;
 use src\Model\Product;
 use src\Model\ProductPeer;
 use src\Model\ProductQuery;
-use src\Model\UpSell;
-use src\Model\UpSellQuery;
 
 /**
  * Base class that represents a row from the 'product' table.
@@ -52,10 +50,16 @@ abstract class BaseProduct extends BaseObject implements Persistent
     protected $id;
 
     /**
-     * The value for the up_sell_id field.
+     * The value for the shoplo_product_id field.
      * @var        int
      */
-    protected $up_sell_id;
+    protected $shoplo_product_id;
+
+    /**
+     * The value for the shop_id field.
+     * @var        int
+     */
+    protected $shop_id;
 
     /**
      * The value for the name field.
@@ -80,11 +84,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
      * @var        string
      */
     protected $url;
-
-    /**
-     * @var        UpSell
-     */
-    protected $aUpSell;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -118,14 +117,25 @@ abstract class BaseProduct extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [up_sell_id] column value.
+     * Get the [shoplo_product_id] column value.
      *
      * @return int
      */
-    public function getUpSellId()
+    public function getShoploProductId()
     {
 
-        return $this->up_sell_id;
+        return $this->shoplo_product_id;
+    }
+
+    /**
+     * Get the [shop_id] column value.
+     *
+     * @return int
+     */
+    public function getShopId()
+    {
+
+        return $this->shop_id;
     }
 
     /**
@@ -194,29 +204,46 @@ abstract class BaseProduct extends BaseObject implements Persistent
     } // setId()
 
     /**
-     * Set the value of [up_sell_id] column.
+     * Set the value of [shoplo_product_id] column.
      *
      * @param  int $v new value
      * @return Product The current object (for fluent API support)
      */
-    public function setUpSellId($v)
+    public function setShoploProductId($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->up_sell_id !== $v) {
-            $this->up_sell_id = $v;
-            $this->modifiedColumns[] = ProductPeer::UP_SELL_ID;
-        }
-
-        if ($this->aUpSell !== null && $this->aUpSell->getId() !== $v) {
-            $this->aUpSell = null;
+        if ($this->shoplo_product_id !== $v) {
+            $this->shoplo_product_id = $v;
+            $this->modifiedColumns[] = ProductPeer::SHOPLO_PRODUCT_ID;
         }
 
 
         return $this;
-    } // setUpSellId()
+    } // setShoploProductId()
+
+    /**
+     * Set the value of [shop_id] column.
+     *
+     * @param  int $v new value
+     * @return Product The current object (for fluent API support)
+     */
+    public function setShopId($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->shop_id !== $v) {
+            $this->shop_id = $v;
+            $this->modifiedColumns[] = ProductPeer::SHOP_ID;
+        }
+
+
+        return $this;
+    } // setShopId()
 
     /**
      * Set the value of [name] column.
@@ -335,11 +362,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
         try {
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->up_sell_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->img_url = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->original_price = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->url = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->shoplo_product_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->shop_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->img_url = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->original_price = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->url = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -349,7 +377,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 6; // 6 = ProductPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = ProductPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Product object", $e);
@@ -372,9 +400,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
-        if ($this->aUpSell !== null && $this->up_sell_id !== $this->aUpSell->getId()) {
-            $this->aUpSell = null;
-        }
     } // ensureConsistency
 
     /**
@@ -414,7 +439,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aUpSell = null;
         } // if (deep)
     }
 
@@ -528,18 +552,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
-            // We call the save method on the following object(s) if they
-            // were passed to this object by their corresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aUpSell !== null) {
-                if ($this->aUpSell->isModified() || $this->aUpSell->isNew()) {
-                    $affectedRows += $this->aUpSell->save($con);
-                }
-                $this->setUpSell($this->aUpSell);
-            }
-
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -576,8 +588,11 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductPeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
-        if ($this->isColumnModified(ProductPeer::UP_SELL_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`up_sell_id`';
+        if ($this->isColumnModified(ProductPeer::SHOPLO_PRODUCT_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`shoplo_product_id`';
+        }
+        if ($this->isColumnModified(ProductPeer::SHOP_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`shop_id`';
         }
         if ($this->isColumnModified(ProductPeer::NAME)) {
             $modifiedColumns[':p' . $index++]  = '`name`';
@@ -605,8 +620,11 @@ abstract class BaseProduct extends BaseObject implements Persistent
                     case '`id`':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case '`up_sell_id`':
-                        $stmt->bindValue($identifier, $this->up_sell_id, PDO::PARAM_INT);
+                    case '`shoplo_product_id`':
+                        $stmt->bindValue($identifier, $this->shoplo_product_id, PDO::PARAM_INT);
+                        break;
+                    case '`shop_id`':
+                        $stmt->bindValue($identifier, $this->shop_id, PDO::PARAM_INT);
                         break;
                     case '`name`':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
@@ -707,18 +725,6 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $failureMap = array();
 
 
-            // We call the validate method on the following object(s) if they
-            // were passed to this object by their corresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aUpSell !== null) {
-                if (!$this->aUpSell->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aUpSell->getValidationFailures());
-                }
-            }
-
-
             if (($retval = ProductPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
@@ -763,18 +769,21 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getUpSellId();
+                return $this->getShoploProductId();
                 break;
             case 2:
-                return $this->getName();
+                return $this->getShopId();
                 break;
             case 3:
-                return $this->getImgUrl();
+                return $this->getName();
                 break;
             case 4:
-                return $this->getOriginalPrice();
+                return $this->getImgUrl();
                 break;
             case 5:
+                return $this->getOriginalPrice();
+                break;
+            case 6:
                 return $this->getUrl();
                 break;
             default:
@@ -794,11 +803,10 @@ abstract class BaseProduct extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
     {
         if (isset($alreadyDumpedObjects['Product'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -807,22 +815,18 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $keys = ProductPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getUpSellId(),
-            $keys[2] => $this->getName(),
-            $keys[3] => $this->getImgUrl(),
-            $keys[4] => $this->getOriginalPrice(),
-            $keys[5] => $this->getUrl(),
+            $keys[1] => $this->getShoploProductId(),
+            $keys[2] => $this->getShopId(),
+            $keys[3] => $this->getName(),
+            $keys[4] => $this->getImgUrl(),
+            $keys[5] => $this->getOriginalPrice(),
+            $keys[6] => $this->getUrl(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
-        if ($includeForeignObjects) {
-            if (null !== $this->aUpSell) {
-                $result['UpSell'] = $this->aUpSell->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-        }
 
         return $result;
     }
@@ -860,18 +864,21 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setUpSellId($value);
+                $this->setShoploProductId($value);
                 break;
             case 2:
-                $this->setName($value);
+                $this->setShopId($value);
                 break;
             case 3:
-                $this->setImgUrl($value);
+                $this->setName($value);
                 break;
             case 4:
-                $this->setOriginalPrice($value);
+                $this->setImgUrl($value);
                 break;
             case 5:
+                $this->setOriginalPrice($value);
+                break;
+            case 6:
                 $this->setUrl($value);
                 break;
         } // switch()
@@ -899,11 +906,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $keys = ProductPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setUpSellId($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setName($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setImgUrl($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setOriginalPrice($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setUrl($arr[$keys[5]]);
+        if (array_key_exists($keys[1], $arr)) $this->setShoploProductId($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setShopId($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setName($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setImgUrl($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setOriginalPrice($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setUrl($arr[$keys[6]]);
     }
 
     /**
@@ -916,7 +924,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $criteria = new Criteria(ProductPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(ProductPeer::ID)) $criteria->add(ProductPeer::ID, $this->id);
-        if ($this->isColumnModified(ProductPeer::UP_SELL_ID)) $criteria->add(ProductPeer::UP_SELL_ID, $this->up_sell_id);
+        if ($this->isColumnModified(ProductPeer::SHOPLO_PRODUCT_ID)) $criteria->add(ProductPeer::SHOPLO_PRODUCT_ID, $this->shoplo_product_id);
+        if ($this->isColumnModified(ProductPeer::SHOP_ID)) $criteria->add(ProductPeer::SHOP_ID, $this->shop_id);
         if ($this->isColumnModified(ProductPeer::NAME)) $criteria->add(ProductPeer::NAME, $this->name);
         if ($this->isColumnModified(ProductPeer::IMG_URL)) $criteria->add(ProductPeer::IMG_URL, $this->img_url);
         if ($this->isColumnModified(ProductPeer::ORIGINAL_PRICE)) $criteria->add(ProductPeer::ORIGINAL_PRICE, $this->original_price);
@@ -984,23 +993,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setUpSellId($this->getUpSellId());
+        $copyObj->setShoploProductId($this->getShoploProductId());
+        $copyObj->setShopId($this->getShopId());
         $copyObj->setName($this->getName());
         $copyObj->setImgUrl($this->getImgUrl());
         $copyObj->setOriginalPrice($this->getOriginalPrice());
         $copyObj->setUrl($this->getUrl());
-
-        if ($deepCopy && !$this->startCopy) {
-            // important: temporarily setNew(false) because this affects the behavior of
-            // the getter/setter methods for fkey referrer objects.
-            $copyObj->setNew(false);
-            // store object hash to prevent cycle
-            $this->startCopy = true;
-
-            //unflag object copy
-            $this->startCopy = false;
-        } // if ($deepCopy)
-
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1048,64 +1046,13 @@ abstract class BaseProduct extends BaseObject implements Persistent
     }
 
     /**
-     * Declares an association between this object and a UpSell object.
-     *
-     * @param                  UpSell $v
-     * @return Product The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setUpSell(UpSell $v = null)
-    {
-        if ($v === null) {
-            $this->setUpSellId(NULL);
-        } else {
-            $this->setUpSellId($v->getId());
-        }
-
-        $this->aUpSell = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the UpSell object, it will not be re-added.
-        if ($v !== null) {
-            $v->addProduct($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated UpSell object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return UpSell The associated UpSell object.
-     * @throws PropelException
-     */
-    public function getUpSell(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aUpSell === null && ($this->up_sell_id !== null) && $doQuery) {
-            $this->aUpSell = UpSellQuery::create()->findPk($this->up_sell_id, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aUpSell->addProducts($this);
-             */
-        }
-
-        return $this->aUpSell;
-    }
-
-    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->id = null;
-        $this->up_sell_id = null;
+        $this->shoplo_product_id = null;
+        $this->shop_id = null;
         $this->name = null;
         $this->img_url = null;
         $this->original_price = null;
@@ -1132,14 +1079,10 @@ abstract class BaseProduct extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->aUpSell instanceof Persistent) {
-              $this->aUpSell->clearAllReferences($deep);
-            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        $this->aUpSell = null;
     }
 
     /**

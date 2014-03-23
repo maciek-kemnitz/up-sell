@@ -18,4 +18,20 @@ use src\Model\om\BaseUpSell;
  */
 class UpSell extends BaseUpSell
 {
+
+	/**
+	 * @return \PropelObjectCollection
+	 */
+	public function getProducts()
+	{
+		$relatedProductIds = $this->getRelatedProducts()->toKeyValue('productId', 'productId');
+
+		$products = ProductQuery::create()
+						->filterByShopId($this->getShopId())
+						->filterByShoploProductId($relatedProductIds)
+						->find();
+
+		return $products;
+
+	}
 }

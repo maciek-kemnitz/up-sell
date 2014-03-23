@@ -36,16 +36,22 @@ abstract class BaseUpSellPeer
     const TM_CLASS = 'src\\Model\\map\\UpSellTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 8;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /** the column name for the id field */
     const ID = 'up_sell.id';
+
+    /** the column name for the shop_id field */
+    const SHOP_ID = 'up_sell.shop_id';
+
+    /** the column name for the order field */
+    const ORDER = 'up_sell.order';
 
     /** the column name for the name field */
     const NAME = 'up_sell.name';
@@ -81,12 +87,12 @@ abstract class BaseUpSellPeer
      * e.g. UpSellPeer::$fieldNames[UpSellPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Headline', 'Description', 'PriceFrom', 'PriceTo', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'headline', 'description', 'priceFrom', 'priceTo', ),
-        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID, UpSellPeer::NAME, UpSellPeer::HEADLINE, UpSellPeer::DESCRIPTION, UpSellPeer::PRICE_FROM, UpSellPeer::PRICE_TO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'HEADLINE', 'DESCRIPTION', 'PRICE_FROM', 'PRICE_TO', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'headline', 'description', 'price_from', 'price_to', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'ShopId', 'Order', 'Name', 'Headline', 'Description', 'PriceFrom', 'PriceTo', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shopId', 'order', 'name', 'headline', 'description', 'priceFrom', 'priceTo', ),
+        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID, UpSellPeer::SHOP_ID, UpSellPeer::ORDER, UpSellPeer::NAME, UpSellPeer::HEADLINE, UpSellPeer::DESCRIPTION, UpSellPeer::PRICE_FROM, UpSellPeer::PRICE_TO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOP_ID', 'ORDER', 'NAME', 'HEADLINE', 'DESCRIPTION', 'PRICE_FROM', 'PRICE_TO', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'shop_id', 'order', 'name', 'headline', 'description', 'price_from', 'price_to', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -96,12 +102,12 @@ abstract class BaseUpSellPeer
      * e.g. UpSellPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Headline' => 2, 'Description' => 3, 'PriceFrom' => 4, 'PriceTo' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'headline' => 2, 'description' => 3, 'priceFrom' => 4, 'priceTo' => 5, ),
-        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID => 0, UpSellPeer::NAME => 1, UpSellPeer::HEADLINE => 2, UpSellPeer::DESCRIPTION => 3, UpSellPeer::PRICE_FROM => 4, UpSellPeer::PRICE_TO => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'HEADLINE' => 2, 'DESCRIPTION' => 3, 'PRICE_FROM' => 4, 'PRICE_TO' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'headline' => 2, 'description' => 3, 'price_from' => 4, 'price_to' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShopId' => 1, 'Order' => 2, 'Name' => 3, 'Headline' => 4, 'Description' => 5, 'PriceFrom' => 6, 'PriceTo' => 7, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shopId' => 1, 'order' => 2, 'name' => 3, 'headline' => 4, 'description' => 5, 'priceFrom' => 6, 'priceTo' => 7, ),
+        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID => 0, UpSellPeer::SHOP_ID => 1, UpSellPeer::ORDER => 2, UpSellPeer::NAME => 3, UpSellPeer::HEADLINE => 4, UpSellPeer::DESCRIPTION => 5, UpSellPeer::PRICE_FROM => 6, UpSellPeer::PRICE_TO => 7, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOP_ID' => 1, 'ORDER' => 2, 'NAME' => 3, 'HEADLINE' => 4, 'DESCRIPTION' => 5, 'PRICE_FROM' => 6, 'PRICE_TO' => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shop_id' => 1, 'order' => 2, 'name' => 3, 'headline' => 4, 'description' => 5, 'price_from' => 6, 'price_to' => 7, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -176,6 +182,8 @@ abstract class BaseUpSellPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(UpSellPeer::ID);
+            $criteria->addSelectColumn(UpSellPeer::SHOP_ID);
+            $criteria->addSelectColumn(UpSellPeer::ORDER);
             $criteria->addSelectColumn(UpSellPeer::NAME);
             $criteria->addSelectColumn(UpSellPeer::HEADLINE);
             $criteria->addSelectColumn(UpSellPeer::DESCRIPTION);
@@ -183,6 +191,8 @@ abstract class BaseUpSellPeer
             $criteria->addSelectColumn(UpSellPeer::PRICE_TO);
         } else {
             $criteria->addSelectColumn($alias . '.id');
+            $criteria->addSelectColumn($alias . '.shop_id');
+            $criteria->addSelectColumn($alias . '.order');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.headline');
             $criteria->addSelectColumn($alias . '.description');

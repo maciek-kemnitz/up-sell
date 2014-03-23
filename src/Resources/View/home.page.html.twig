@@ -41,9 +41,10 @@
             <div class="row">
                 aktualna oferta
             </div>
+            {% for upSell in uppSells %}
             <div class="row upp-sell">
                 <div class="span2">
-                    Extra bateris
+                    {{ upSell.getName() }}
                 </div>
                 <div class="span1">
                     20%
@@ -64,6 +65,7 @@
                     delete
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 
@@ -73,7 +75,8 @@
         var uppSellContainer = '<div id="up-sell-container"></div>';
 
         var userData = {
-            'productId': 6
+            'productId': 6,
+            'shopId': 10344
         }
 
         $.post( "/ajax/up-sell/product", userData, function(ajaxResult) {
@@ -88,6 +91,11 @@
                     $('#up-sell-modal').addClass('in');
 
                     return false;
+                });
+
+                $('body').on('click','[data-dismiss="modal"]', function(){
+                    $('#up-sell-modal').removeClass('in');
+                    $('#up-sell-modal').css('display','none');
                 });
 
                 $('#up-sell-container').html(ajaxResult['html']);

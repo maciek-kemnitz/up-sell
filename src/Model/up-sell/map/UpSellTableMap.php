@@ -43,6 +43,8 @@ class UpSellTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('shop_id', 'ShopId', 'INTEGER', true, null, null);
+        $this->addColumn('order', 'Order', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
         $this->addColumn('headline', 'Headline', 'LONGVARCHAR', true, null, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', true, null, null);
@@ -56,7 +58,6 @@ class UpSellTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Product', 'src\\Model\\Product', RelationMap::ONE_TO_MANY, array('id' => 'up_sell_id', ), null, null, 'Products');
         $this->addRelation('ProductInCart', 'src\\Model\\ProductInCart', RelationMap::ONE_TO_MANY, array('id' => 'up_sell_id', ), null, null, 'ProductInCarts');
         $this->addRelation('RelatedProduct', 'src\\Model\\RelatedProduct', RelationMap::ONE_TO_MANY, array('id' => 'up_sell_id', ), null, null, 'RelatedProducts');
     } // buildRelations()

@@ -11,6 +11,7 @@ use src\Lib\Database;
 use src\Model\ProductQuery;
 use src\Model\RelatedProduct;
 use src\Model\UpSell;
+use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,46 +25,50 @@ class AjaxController implements ControllerProviderInterface
 
 		$controllers->post('/up-sell/product', function (Request $request) use ($app)
 		{
-			$productId = $request->request->get('productId');
-			$productCurrentPrice = $request->request->get('productPrice');
-			$cartValue = $request->request->get('cartValue');
+			$productId 				= $request->request->get('productId');
+			$shopId					= $request->request->get('shopId');
+			$cartValue 				= $request->request->get('cartValue');
+			$productCurrentPrice 	= $request->request->get('productPrice');
 
 			$futureCartValue = $cartValue + $productCurrentPrice;
 
 
-			$upSells = UpSellQuery::create()
-								->priceInRange($futureCartValue)
+			$uppSells = UpSellQuery::create()
+								->filterByShopId($shopId)
+								->useProductInCartQuery()
+									->filterByProductId($productId)
+								->endUse()
+								->orderBy(UpSellPeer::ORDER)
+								->distinct()
 								->find();
 
-			$upSellByRelations = UpSellQuery::create()
-											->useRelatedProductQuery()
-												->filterByProductId($productId)
-											->endUse()
-											->find();
-
-
-
-
-
-			if ($upSellByRelations->count() > 0)
+			if (!$uppSells->count())
 			{
-				/** @var UpSell $upSellByRelation */
-				$upSellByRelation = $upSellByRelations->getFirst();
+				$uppSell = UpSellQuery::create()
+									->priceInRange($futureCartValue)
+									->filterByShopId($shopId)
+									->orderBy(UpSellPeer::ORDER)
+									->find();
 
 
-				$data = [
-					"status" => "ok",
-					"html"	=> $app['twig']->render('widget.page.html.twig', ['upSell' => $upSellByRelation, 'products' => $upSellByRelation->getProducts()])
-				];
-
-				return new JsonResponse($data);
+				if (!$uppSells->count())
+				{
+					return new JsonResponse(['status' => 'no up-sell']);
+				}
 			}
 
 
+			/** @var UpSell $upSellByRelation */
+			$upSellByRelation = $uppSells->getFirst();
 
 
+			$data = [
+				"status" => "ok",
+				"html"	=> $app['twig']->render('widget.page.html.twig', ['upSell' => $upSellByRelation, 'products' => $upSellByRelation->getProducts()])
+			];
 
-			return new JsonResponse(['status' => 'no up-sell']);
+			return new JsonResponse($data);
+
 		});
 
 		return $controllers;

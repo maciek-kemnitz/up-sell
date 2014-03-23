@@ -9,8 +9,10 @@ use Silex\ControllerProviderInterface;
 
 use src\Model\Product;
 use src\Model\ProductInCart;
+use src\Model\ProductQuery;
 use src\Model\RelatedProduct;
 use src\Model\UpSell;
+use src\Model\UpSellQuery;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,8 +24,6 @@ class SaveController implements ControllerProviderInterface
 
 		$controllers->post('/', function (Request $request) use ($app)
 		{
-			var_dump($request->request);
-
 			$name = $request->request->get('name');
 			$headline = $request->request->get('headline');
 			$description = $request->request->get('description');
@@ -32,7 +32,17 @@ class SaveController implements ControllerProviderInterface
 			$productTrigger = $request->request->get('selected-product-trigger');
 			$upSellProducts = $request->request->get('up-sell-products');
 
+			$config = array(
+				'api_key'      =>  CONSUMER_KEY,
+				'secret_key'   =>  SECRET_KEY,
+				'callback_url' =>  CALLBACK_URL,
+			);
+			$shoploApi = new ShoploApi($config);
+			$shopId = $shoploApi->shop->retrieve()['id'];
+
+
 			$upSell = new UpSell();
+			$upSell->setShopId($shopId);
 			$upSell->setName($name);
 			$upSell->setHeadline($headline);
 			$upSell->setDescription($description);
@@ -43,63 +53,63 @@ class SaveController implements ControllerProviderInterface
 				$upSell->setPriceTo($priceTo);
 			}
 
+			$currentUpSellCount = UpSellQuery::create()
+										->filterByShopId($shopId)
+										->count();
+			$currentUpSellCount++;
+
+			$upSell->setOrder($currentUpSellCount);
 			$upSell->save();
 
 
 			if (count($upSellProducts) > 0)
 			{
-				$config = array(
-					'api_key'      =>  CONSUMER_KEY,
-					'secret_key'   =>  SECRET_KEY,
-					'callback_url' =>  CALLBACK_URL,
-				);
-				$shoploApi = new ShoploApi($config);
-
-
-
 				foreach($upSellProducts as $productId)
 				{
-
 					$shoploProduct = $shoploApi->product->retrieve($productId)['products'];
 
-					$product = new Product();
-					$product->setName($shoploProduct['name']);
-					$product->setId($shoploProduct['id']);
-					$product->setImgUrl($shoploProduct['thumbnail']);
+					$product = ProductQuery::create()
+										->filterByShopId($shopId)
+										->filterByShoploProductId($shoploProduct['id'])
+										->findOne();
 
-					$variants = $shoploProduct['variants'];
+					if (null == $product)
+					{
+						$product = new Product();
+						$product->setName($shoploProduct['name']);
+						$product->setId($shoploProduct['id']);
+						$product->setImgUrl($shoploProduct['thumbnail']);
 
-					$product->setOriginalPrice($variants[0]['price']);
-					$product->setUrl($shoploProduct['url']);
-					$product->setUpSell($upSell);
-					$product->save();
+						$variants = $shoploProduct['variants'];
 
-					var_dump($product);
-
+						$product->setOriginalPrice($variants[0]['price']);
+						$product->setUrl($shoploProduct['url']);
+						$product->setShopId($shopId);
+						$product->save();
+					}
 
 					$relatedProduct = new RelatedProduct();
 					$relatedProduct->setUpSellId($upSell->getId());
-					$relatedProduct->setProductId($product->getId());
+					$relatedProduct->setProductId($product->getShoploProductId());
 					$relatedProduct->save();
 				}
 			}
 
+			$product = null;
+
 			if (count($productTrigger) > 0)
 			{
-				foreach($productTrigger as $product)
+				foreach($productTrigger as $productId)
 				{
-					$productInCart = new ProductInCart($upSell->getId(), $product);
+					$productInCart = new ProductInCart();
 					$productInCart->setUpSellId($upSell->getId());
-					$productInCart->setProductId($product);
+					$productInCart->setProductId($productId);
 					$productInCart->save();
 				}
 			}
 
 
-			exit;
-
-
-			return $app['twig']->render('add.page.html.twig');
+			return new RedirectResponse('/');
 		});
 
 		return $controllers;
