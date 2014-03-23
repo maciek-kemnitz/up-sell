@@ -1,19 +1,14 @@
 <?php
 
 require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/../src/Config/config.php';
 
 //require_once '/vendor/propel/propel1/runtime/lib/Propel.php';
 
 // Initialize Propel with the runtime configuration
 Propel::init(__DIR__."/../src/Model/conf/up-sell-conf.php");
 
-
-
-
 $app = getAppConfigured();
-define('SECRET_KEY','9WWoEfq0QznTi39gw14LlvckQAJzOVi5');
-define('CONSUMER_KEY', '2UHQfM0wKTFvsXK3w2c8REqc26XPy75J');
-define('CALLBACK_URL', 'http://local.up-sell.pl/callback');
 
 session_start();
 
