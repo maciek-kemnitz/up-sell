@@ -44,7 +44,7 @@ class AjaxController implements ControllerProviderInterface
 
 			if (!$uppSells->count())
 			{
-				$uppSell = UpSellQuery::create()
+				$uppSells = UpSellQuery::create()
 									->priceInRange($futureCartValue)
 									->filterByShopId($shopId)
 									->orderBy(UpSellPeer::ORDER)
