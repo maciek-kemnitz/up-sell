@@ -64,7 +64,8 @@ class AjaxController implements ControllerProviderInterface
 
 			$data = [
 				"status" => "ok",
-				"html"	=> $app['twig']->render('widget.page.html.twig', ['upSell' => $upSellByRelation, 'products' => $upSellByRelation->getProducts()])
+				"html"	=> $app['twig']->render('widget.page.html.twig', ['upSell' => $upSellByRelation, 'products' => $upSellByRelation->getProducts()]),
+				"count" => (!$uppSells->count())
 			];
 
 			return new JsonResponse($data);
