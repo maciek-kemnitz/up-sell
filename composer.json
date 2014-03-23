@@ -5,7 +5,7 @@
         "darklow/ff-silex-less-provider": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "maciek-kemnitz/shoplo-php": "1.0.0",
-        "propel/propel-service-provider": "1.*@dev"
+        "propel/propel1": "1.7.1"
     },
     "autoload": {
         "classmap": [
