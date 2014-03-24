@@ -26,7 +26,7 @@ class AjaxController implements ControllerProviderInterface
 		$controllers->post('/up-sell/product', function (Request $request) use ($app)
 		{
 			$productId 				= $request->request->get('productId');
-			$shopId					= $request->request->get('shopId');
+			$shopDomain				= $request->request->get('shopDomain');
 			$cartValue 				= $request->request->get('cartValue');
 			$productCurrentPrice 	= $request->request->get('productPrice');
 
@@ -34,7 +34,8 @@ class AjaxController implements ControllerProviderInterface
 
 
 			$uppSells = UpSellQuery::create()
-								->filterByShopId($shopId)
+								->filterByShopDomain($shopDomain)
+								->filterByStatus(UpSellPeer::STATUS_ACTIVE)
 								->useProductInCartQuery()
 									->filterByProductId($productId)
 								->endUse()
@@ -46,7 +47,9 @@ class AjaxController implements ControllerProviderInterface
 			{
 				$uppSells = UpSellQuery::create()
 									->priceInRange($futureCartValue)
-									->filterByShopId($shopId)
+									->filterByUsePriceRange(UpSellPeer::USE_PRICE_RANGE_1)
+									->filterByStatus(UpSellPeer::STATUS_ACTIVE)
+									->filterByShopDomain($shopDomain)
 									->orderBy(UpSellPeer::ORDER)
 									->find();
 

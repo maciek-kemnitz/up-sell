@@ -50,8 +50,8 @@ abstract class BaseProductPeer
     /** the column name for the shoplo_product_id field */
     const SHOPLO_PRODUCT_ID = 'product.shoplo_product_id';
 
-    /** the column name for the shop_id field */
-    const SHOP_ID = 'product.shop_id';
+    /** the column name for the shop_domain field */
+    const SHOP_DOMAIN = 'product.shop_domain';
 
     /** the column name for the name field */
     const NAME = 'product.name';
@@ -84,11 +84,11 @@ abstract class BaseProductPeer
      * e.g. ProductPeer::$fieldNames[ProductPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'ShoploProductId', 'ShopId', 'Name', 'ImgUrl', 'OriginalPrice', 'Url', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shoploProductId', 'shopId', 'name', 'imgUrl', 'originalPrice', 'url', ),
-        BasePeer::TYPE_COLNAME => array (ProductPeer::ID, ProductPeer::SHOPLO_PRODUCT_ID, ProductPeer::SHOP_ID, ProductPeer::NAME, ProductPeer::IMG_URL, ProductPeer::ORIGINAL_PRICE, ProductPeer::URL, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOPLO_PRODUCT_ID', 'SHOP_ID', 'NAME', 'IMG_URL', 'ORIGINAL_PRICE', 'URL', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'shoplo_product_id', 'shop_id', 'name', 'img_url', 'original_price', 'url', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'ShoploProductId', 'ShopDomain', 'Name', 'ImgUrl', 'OriginalPrice', 'Url', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shoploProductId', 'shopDomain', 'name', 'imgUrl', 'originalPrice', 'url', ),
+        BasePeer::TYPE_COLNAME => array (ProductPeer::ID, ProductPeer::SHOPLO_PRODUCT_ID, ProductPeer::SHOP_DOMAIN, ProductPeer::NAME, ProductPeer::IMG_URL, ProductPeer::ORIGINAL_PRICE, ProductPeer::URL, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOPLO_PRODUCT_ID', 'SHOP_DOMAIN', 'NAME', 'IMG_URL', 'ORIGINAL_PRICE', 'URL', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'shoplo_product_id', 'shop_domain', 'name', 'img_url', 'original_price', 'url', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
@@ -99,11 +99,11 @@ abstract class BaseProductPeer
      * e.g. ProductPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShoploProductId' => 1, 'ShopId' => 2, 'Name' => 3, 'ImgUrl' => 4, 'OriginalPrice' => 5, 'Url' => 6, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shoploProductId' => 1, 'shopId' => 2, 'name' => 3, 'imgUrl' => 4, 'originalPrice' => 5, 'url' => 6, ),
-        BasePeer::TYPE_COLNAME => array (ProductPeer::ID => 0, ProductPeer::SHOPLO_PRODUCT_ID => 1, ProductPeer::SHOP_ID => 2, ProductPeer::NAME => 3, ProductPeer::IMG_URL => 4, ProductPeer::ORIGINAL_PRICE => 5, ProductPeer::URL => 6, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOPLO_PRODUCT_ID' => 1, 'SHOP_ID' => 2, 'NAME' => 3, 'IMG_URL' => 4, 'ORIGINAL_PRICE' => 5, 'URL' => 6, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shoplo_product_id' => 1, 'shop_id' => 2, 'name' => 3, 'img_url' => 4, 'original_price' => 5, 'url' => 6, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShoploProductId' => 1, 'ShopDomain' => 2, 'Name' => 3, 'ImgUrl' => 4, 'OriginalPrice' => 5, 'Url' => 6, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shoploProductId' => 1, 'shopDomain' => 2, 'name' => 3, 'imgUrl' => 4, 'originalPrice' => 5, 'url' => 6, ),
+        BasePeer::TYPE_COLNAME => array (ProductPeer::ID => 0, ProductPeer::SHOPLO_PRODUCT_ID => 1, ProductPeer::SHOP_DOMAIN => 2, ProductPeer::NAME => 3, ProductPeer::IMG_URL => 4, ProductPeer::ORIGINAL_PRICE => 5, ProductPeer::URL => 6, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOPLO_PRODUCT_ID' => 1, 'SHOP_DOMAIN' => 2, 'NAME' => 3, 'IMG_URL' => 4, 'ORIGINAL_PRICE' => 5, 'URL' => 6, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shoplo_product_id' => 1, 'shop_domain' => 2, 'name' => 3, 'img_url' => 4, 'original_price' => 5, 'url' => 6, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
@@ -180,7 +180,7 @@ abstract class BaseProductPeer
         if (null === $alias) {
             $criteria->addSelectColumn(ProductPeer::ID);
             $criteria->addSelectColumn(ProductPeer::SHOPLO_PRODUCT_ID);
-            $criteria->addSelectColumn(ProductPeer::SHOP_ID);
+            $criteria->addSelectColumn(ProductPeer::SHOP_DOMAIN);
             $criteria->addSelectColumn(ProductPeer::NAME);
             $criteria->addSelectColumn(ProductPeer::IMG_URL);
             $criteria->addSelectColumn(ProductPeer::ORIGINAL_PRICE);
@@ -188,7 +188,7 @@ abstract class BaseProductPeer
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.shoplo_product_id');
-            $criteria->addSelectColumn($alias . '.shop_id');
+            $criteria->addSelectColumn($alias . '.shop_domain');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.img_url');
             $criteria->addSelectColumn($alias . '.original_price');

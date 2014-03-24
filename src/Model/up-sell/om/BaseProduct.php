@@ -56,10 +56,10 @@ abstract class BaseProduct extends BaseObject implements Persistent
     protected $shoplo_product_id;
 
     /**
-     * The value for the shop_id field.
-     * @var        int
+     * The value for the shop_domain field.
+     * @var        string
      */
-    protected $shop_id;
+    protected $shop_domain;
 
     /**
      * The value for the name field.
@@ -128,14 +128,14 @@ abstract class BaseProduct extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [shop_id] column value.
+     * Get the [shop_domain] column value.
      *
-     * @return int
+     * @return string
      */
-    public function getShopId()
+    public function getShopDomain()
     {
 
-        return $this->shop_id;
+        return $this->shop_domain;
     }
 
     /**
@@ -225,25 +225,25 @@ abstract class BaseProduct extends BaseObject implements Persistent
     } // setShoploProductId()
 
     /**
-     * Set the value of [shop_id] column.
+     * Set the value of [shop_domain] column.
      *
-     * @param  int $v new value
+     * @param  string $v new value
      * @return Product The current object (for fluent API support)
      */
-    public function setShopId($v)
+    public function setShopDomain($v)
     {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
+        if ($v !== null) {
+            $v = (string) $v;
         }
 
-        if ($this->shop_id !== $v) {
-            $this->shop_id = $v;
-            $this->modifiedColumns[] = ProductPeer::SHOP_ID;
+        if ($this->shop_domain !== $v) {
+            $this->shop_domain = $v;
+            $this->modifiedColumns[] = ProductPeer::SHOP_DOMAIN;
         }
 
 
         return $this;
-    } // setShopId()
+    } // setShopDomain()
 
     /**
      * Set the value of [name] column.
@@ -363,7 +363,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->shoplo_product_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->shop_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->shop_domain = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
             $this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->img_url = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->original_price = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
@@ -591,8 +591,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductPeer::SHOPLO_PRODUCT_ID)) {
             $modifiedColumns[':p' . $index++]  = '`shoplo_product_id`';
         }
-        if ($this->isColumnModified(ProductPeer::SHOP_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`shop_id`';
+        if ($this->isColumnModified(ProductPeer::SHOP_DOMAIN)) {
+            $modifiedColumns[':p' . $index++]  = '`shop_domain`';
         }
         if ($this->isColumnModified(ProductPeer::NAME)) {
             $modifiedColumns[':p' . $index++]  = '`name`';
@@ -623,8 +623,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
                     case '`shoplo_product_id`':
                         $stmt->bindValue($identifier, $this->shoplo_product_id, PDO::PARAM_INT);
                         break;
-                    case '`shop_id`':
-                        $stmt->bindValue($identifier, $this->shop_id, PDO::PARAM_INT);
+                    case '`shop_domain`':
+                        $stmt->bindValue($identifier, $this->shop_domain, PDO::PARAM_STR);
                         break;
                     case '`name`':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
@@ -772,7 +772,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 return $this->getShoploProductId();
                 break;
             case 2:
-                return $this->getShopId();
+                return $this->getShopDomain();
                 break;
             case 3:
                 return $this->getName();
@@ -816,7 +816,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getShoploProductId(),
-            $keys[2] => $this->getShopId(),
+            $keys[2] => $this->getShopDomain(),
             $keys[3] => $this->getName(),
             $keys[4] => $this->getImgUrl(),
             $keys[5] => $this->getOriginalPrice(),
@@ -867,7 +867,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 $this->setShoploProductId($value);
                 break;
             case 2:
-                $this->setShopId($value);
+                $this->setShopDomain($value);
                 break;
             case 3:
                 $this->setName($value);
@@ -907,7 +907,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setShoploProductId($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setShopId($arr[$keys[2]]);
+        if (array_key_exists($keys[2], $arr)) $this->setShopDomain($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setName($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setImgUrl($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setOriginalPrice($arr[$keys[5]]);
@@ -925,7 +925,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ProductPeer::ID)) $criteria->add(ProductPeer::ID, $this->id);
         if ($this->isColumnModified(ProductPeer::SHOPLO_PRODUCT_ID)) $criteria->add(ProductPeer::SHOPLO_PRODUCT_ID, $this->shoplo_product_id);
-        if ($this->isColumnModified(ProductPeer::SHOP_ID)) $criteria->add(ProductPeer::SHOP_ID, $this->shop_id);
+        if ($this->isColumnModified(ProductPeer::SHOP_DOMAIN)) $criteria->add(ProductPeer::SHOP_DOMAIN, $this->shop_domain);
         if ($this->isColumnModified(ProductPeer::NAME)) $criteria->add(ProductPeer::NAME, $this->name);
         if ($this->isColumnModified(ProductPeer::IMG_URL)) $criteria->add(ProductPeer::IMG_URL, $this->img_url);
         if ($this->isColumnModified(ProductPeer::ORIGINAL_PRICE)) $criteria->add(ProductPeer::ORIGINAL_PRICE, $this->original_price);
@@ -994,7 +994,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setShoploProductId($this->getShoploProductId());
-        $copyObj->setShopId($this->getShopId());
+        $copyObj->setShopDomain($this->getShopDomain());
         $copyObj->setName($this->getName());
         $copyObj->setImgUrl($this->getImgUrl());
         $copyObj->setOriginalPrice($this->getOriginalPrice());
@@ -1052,7 +1052,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->shoplo_product_id = null;
-        $this->shop_id = null;
+        $this->shop_domain = null;
         $this->name = null;
         $this->img_url = null;
         $this->original_price = null;

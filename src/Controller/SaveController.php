@@ -13,6 +13,7 @@ use src\Model\ProductQuery;
 use src\Model\RelatedProduct;
 use src\Model\UpSell;
 use src\Model\UpSellQuery;
+use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,17 +33,13 @@ class SaveController implements ControllerProviderInterface
 			$productTrigger = $request->request->get('selected-product-trigger');
 			$upSellProducts = $request->request->get('up-sell-products');
 
-			$config = array(
-				'api_key'      =>  CONSUMER_KEY,
-				'secret_key'   =>  SECRET_KEY,
-				'callback_url' =>  CALLBACK_URL,
-			);
-			$shoploApi = new ShoploApi($config);
-			$shopId = $shoploApi->shop->retrieve()['id'];
+			/** @var ShoploApi $shoploApi */
+			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
+			$shopDomain = $shoploApi->shop->retrieve()['domain'];
 
 
 			$upSell = new UpSell();
-			$upSell->setShopId($shopId);
+			$upSell->setShopDomain($shopDomain);
 			$upSell->setName($name);
 			$upSell->setHeadline($headline);
 			$upSell->setDescription($description);
@@ -54,11 +51,12 @@ class SaveController implements ControllerProviderInterface
 			}
 
 			$currentUpSellCount = UpSellQuery::create()
-										->filterByShopId($shopId)
+										->filterByShopDomain($shopDomain)
 										->count();
 			$currentUpSellCount++;
 
 			$upSell->setOrder($currentUpSellCount);
+			$upSell->setCreatedAt(date('Y-m-d H:i:s'));
 			$upSell->save();
 
 
@@ -69,7 +67,7 @@ class SaveController implements ControllerProviderInterface
 					$shoploProduct = $shoploApi->product->retrieve($productId)['products'];
 
 					$product = ProductQuery::create()
-										->filterByShopId($shopId)
+										->filterByShopDomain($shopDomain)
 										->filterByShoploProductId($shoploProduct['id'])
 										->findOne();
 
@@ -84,7 +82,7 @@ class SaveController implements ControllerProviderInterface
 
 						$product->setOriginalPrice($variants[0]['price']);
 						$product->setUrl($shoploProduct['url']);
-						$product->setShopId($shopId);
+						$product->setShopDomain($shopDomain);
 						$product->save();
 					}
 

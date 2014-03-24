@@ -5,11 +5,13 @@ namespace src\Model\om;
 use \BaseObject;
 use \BasePeer;
 use \Criteria;
+use \DateTime;
 use \Exception;
 use \PDO;
 use \Persistent;
 use \Propel;
 use \PropelCollection;
+use \PropelDateTime;
 use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
@@ -56,10 +58,10 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     protected $id;
 
     /**
-     * The value for the shop_id field.
-     * @var        int
+     * The value for the shop_domain field.
+     * @var        string
      */
-    protected $shop_id;
+    protected $shop_domain;
 
     /**
      * The value for the order field.
@@ -96,6 +98,26 @@ abstract class BaseUpSell extends BaseObject implements Persistent
      * @var        double
      */
     protected $price_to;
+
+    /**
+     * The value for the use_price_range field.
+     * Note: this column has a database default value of: '1'
+     * @var        string
+     */
+    protected $use_price_range;
+
+    /**
+     * The value for the created_at field.
+     * @var        string
+     */
+    protected $created_at;
+
+    /**
+     * The value for the status field.
+     * Note: this column has a database default value of: 'active'
+     * @var        string
+     */
+    protected $status;
 
     /**
      * @var        PropelObjectCollection|ProductInCart[] Collection to store aggregation of ProductInCart objects.
@@ -142,6 +164,28 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     protected $relatedProductsScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->use_price_range = '1';
+        $this->status = 'active';
+    }
+
+    /**
+     * Initializes internal state of BaseUpSell object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
+
+    /**
      * Get the [id] column value.
      *
      * @return int
@@ -153,14 +197,14 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [shop_id] column value.
+     * Get the [shop_domain] column value.
      *
-     * @return int
+     * @return string
      */
-    public function getShopId()
+    public function getShopDomain()
     {
 
-        return $this->shop_id;
+        return $this->shop_domain;
     }
 
     /**
@@ -230,6 +274,68 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [use_price_range] column value.
+     *
+     * @return string
+     */
+    public function getUsePriceRange()
+    {
+
+        return $this->use_price_range;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [created_at] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getCreatedAt($format = 'Y-m-d H:i:s')
+    {
+        if ($this->created_at === null) {
+            return null;
+        }
+
+        if ($this->created_at === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->created_at);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->created_at, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Get the [status] column value.
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+
+        return $this->status;
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param  int $v new value
@@ -251,25 +357,25 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     } // setId()
 
     /**
-     * Set the value of [shop_id] column.
+     * Set the value of [shop_domain] column.
      *
-     * @param  int $v new value
+     * @param  string $v new value
      * @return UpSell The current object (for fluent API support)
      */
-    public function setShopId($v)
+    public function setShopDomain($v)
     {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
+        if ($v !== null) {
+            $v = (string) $v;
         }
 
-        if ($this->shop_id !== $v) {
-            $this->shop_id = $v;
-            $this->modifiedColumns[] = UpSellPeer::SHOP_ID;
+        if ($this->shop_domain !== $v) {
+            $this->shop_domain = $v;
+            $this->modifiedColumns[] = UpSellPeer::SHOP_DOMAIN;
         }
 
 
         return $this;
-    } // setShopId()
+    } // setShopDomain()
 
     /**
      * Set the value of [order] column.
@@ -398,6 +504,71 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     } // setPriceTo()
 
     /**
+     * Set the value of [use_price_range] column.
+     *
+     * @param  string $v new value
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function setUsePriceRange($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->use_price_range !== $v) {
+            $this->use_price_range = $v;
+            $this->modifiedColumns[] = UpSellPeer::USE_PRICE_RANGE;
+        }
+
+
+        return $this;
+    } // setUsePriceRange()
+
+    /**
+     * Sets the value of [created_at] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function setCreatedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->created_at !== null || $dt !== null) {
+            $currentDateAsString = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->created_at = $newDateAsString;
+                $this->modifiedColumns[] = UpSellPeer::CREATED_AT;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setCreatedAt()
+
+    /**
+     * Set the value of [status] column.
+     *
+     * @param  string $v new value
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function setStatus($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->status !== $v) {
+            $this->status = $v;
+            $this->modifiedColumns[] = UpSellPeer::STATUS;
+        }
+
+
+        return $this;
+    } // setStatus()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -407,6 +578,14 @@ abstract class BaseUpSell extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->use_price_range !== '1') {
+                return false;
+            }
+
+            if ($this->status !== 'active') {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -430,13 +609,16 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         try {
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->shop_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->shop_domain = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->order = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->headline = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->description = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->price_from = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
             $this->price_to = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
+            $this->use_price_range = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->created_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->status = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -446,7 +628,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 8; // 8 = UpSellPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = UpSellPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating UpSell object", $e);
@@ -699,8 +881,8 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         if ($this->isColumnModified(UpSellPeer::ID)) {
             $modifiedColumns[':p' . $index++]  = '`id`';
         }
-        if ($this->isColumnModified(UpSellPeer::SHOP_ID)) {
-            $modifiedColumns[':p' . $index++]  = '`shop_id`';
+        if ($this->isColumnModified(UpSellPeer::SHOP_DOMAIN)) {
+            $modifiedColumns[':p' . $index++]  = '`shop_domain`';
         }
         if ($this->isColumnModified(UpSellPeer::ORDER)) {
             $modifiedColumns[':p' . $index++]  = '`order`';
@@ -720,6 +902,15 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         if ($this->isColumnModified(UpSellPeer::PRICE_TO)) {
             $modifiedColumns[':p' . $index++]  = '`price_to`';
         }
+        if ($this->isColumnModified(UpSellPeer::USE_PRICE_RANGE)) {
+            $modifiedColumns[':p' . $index++]  = '`use_price_range`';
+        }
+        if ($this->isColumnModified(UpSellPeer::CREATED_AT)) {
+            $modifiedColumns[':p' . $index++]  = '`created_at`';
+        }
+        if ($this->isColumnModified(UpSellPeer::STATUS)) {
+            $modifiedColumns[':p' . $index++]  = '`status`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `up_sell` (%s) VALUES (%s)',
@@ -734,8 +925,8 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                     case '`id`':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
-                    case '`shop_id`':
-                        $stmt->bindValue($identifier, $this->shop_id, PDO::PARAM_INT);
+                    case '`shop_domain`':
+                        $stmt->bindValue($identifier, $this->shop_domain, PDO::PARAM_STR);
                         break;
                     case '`order`':
                         $stmt->bindValue($identifier, $this->order, PDO::PARAM_INT);
@@ -754,6 +945,15 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                         break;
                     case '`price_to`':
                         $stmt->bindValue($identifier, $this->price_to, PDO::PARAM_STR);
+                        break;
+                    case '`use_price_range`':
+                        $stmt->bindValue($identifier, $this->use_price_range, PDO::PARAM_STR);
+                        break;
+                    case '`created_at`':
+                        $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
+                        break;
+                    case '`status`':
+                        $stmt->bindValue($identifier, $this->status, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -909,7 +1109,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                 return $this->getId();
                 break;
             case 1:
-                return $this->getShopId();
+                return $this->getShopDomain();
                 break;
             case 2:
                 return $this->getOrder();
@@ -928,6 +1128,15 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                 break;
             case 7:
                 return $this->getPriceTo();
+                break;
+            case 8:
+                return $this->getUsePriceRange();
+                break;
+            case 9:
+                return $this->getCreatedAt();
+                break;
+            case 10:
+                return $this->getStatus();
                 break;
             default:
                 return null;
@@ -959,13 +1168,16 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         $keys = UpSellPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getShopId(),
+            $keys[1] => $this->getShopDomain(),
             $keys[2] => $this->getOrder(),
             $keys[3] => $this->getName(),
             $keys[4] => $this->getHeadline(),
             $keys[5] => $this->getDescription(),
             $keys[6] => $this->getPriceFrom(),
             $keys[7] => $this->getPriceTo(),
+            $keys[8] => $this->getUsePriceRange(),
+            $keys[9] => $this->getCreatedAt(),
+            $keys[10] => $this->getStatus(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1017,7 +1229,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                 $this->setId($value);
                 break;
             case 1:
-                $this->setShopId($value);
+                $this->setShopDomain($value);
                 break;
             case 2:
                 $this->setOrder($value);
@@ -1036,6 +1248,15 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                 break;
             case 7:
                 $this->setPriceTo($value);
+                break;
+            case 8:
+                $this->setUsePriceRange($value);
+                break;
+            case 9:
+                $this->setCreatedAt($value);
+                break;
+            case 10:
+                $this->setStatus($value);
                 break;
         } // switch()
     }
@@ -1062,13 +1283,16 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         $keys = UpSellPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setShopId($arr[$keys[1]]);
+        if (array_key_exists($keys[1], $arr)) $this->setShopDomain($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setOrder($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setName($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setHeadline($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setDescription($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setPriceFrom($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setPriceTo($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setUsePriceRange($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setCreatedAt($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setStatus($arr[$keys[10]]);
     }
 
     /**
@@ -1081,13 +1305,16 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         $criteria = new Criteria(UpSellPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(UpSellPeer::ID)) $criteria->add(UpSellPeer::ID, $this->id);
-        if ($this->isColumnModified(UpSellPeer::SHOP_ID)) $criteria->add(UpSellPeer::SHOP_ID, $this->shop_id);
+        if ($this->isColumnModified(UpSellPeer::SHOP_DOMAIN)) $criteria->add(UpSellPeer::SHOP_DOMAIN, $this->shop_domain);
         if ($this->isColumnModified(UpSellPeer::ORDER)) $criteria->add(UpSellPeer::ORDER, $this->order);
         if ($this->isColumnModified(UpSellPeer::NAME)) $criteria->add(UpSellPeer::NAME, $this->name);
         if ($this->isColumnModified(UpSellPeer::HEADLINE)) $criteria->add(UpSellPeer::HEADLINE, $this->headline);
         if ($this->isColumnModified(UpSellPeer::DESCRIPTION)) $criteria->add(UpSellPeer::DESCRIPTION, $this->description);
         if ($this->isColumnModified(UpSellPeer::PRICE_FROM)) $criteria->add(UpSellPeer::PRICE_FROM, $this->price_from);
         if ($this->isColumnModified(UpSellPeer::PRICE_TO)) $criteria->add(UpSellPeer::PRICE_TO, $this->price_to);
+        if ($this->isColumnModified(UpSellPeer::USE_PRICE_RANGE)) $criteria->add(UpSellPeer::USE_PRICE_RANGE, $this->use_price_range);
+        if ($this->isColumnModified(UpSellPeer::CREATED_AT)) $criteria->add(UpSellPeer::CREATED_AT, $this->created_at);
+        if ($this->isColumnModified(UpSellPeer::STATUS)) $criteria->add(UpSellPeer::STATUS, $this->status);
 
         return $criteria;
     }
@@ -1151,13 +1378,16 @@ abstract class BaseUpSell extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setShopId($this->getShopId());
+        $copyObj->setShopDomain($this->getShopDomain());
         $copyObj->setOrder($this->getOrder());
         $copyObj->setName($this->getName());
         $copyObj->setHeadline($this->getHeadline());
         $copyObj->setDescription($this->getDescription());
         $copyObj->setPriceFrom($this->getPriceFrom());
         $copyObj->setPriceTo($this->getPriceTo());
+        $copyObj->setUsePriceRange($this->getUsePriceRange());
+        $copyObj->setCreatedAt($this->getCreatedAt());
+        $copyObj->setStatus($this->getStatus());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1703,17 +1933,21 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     public function clear()
     {
         $this->id = null;
-        $this->shop_id = null;
+        $this->shop_domain = null;
         $this->order = null;
         $this->name = null;
         $this->headline = null;
         $this->description = null;
         $this->price_from = null;
         $this->price_to = null;
+        $this->use_price_range = null;
+        $this->created_at = null;
+        $this->status = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

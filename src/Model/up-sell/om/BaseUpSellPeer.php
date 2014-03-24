@@ -36,19 +36,19 @@ abstract class BaseUpSellPeer
     const TM_CLASS = 'src\\Model\\map\\UpSellTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 11;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /** the column name for the id field */
     const ID = 'up_sell.id';
 
-    /** the column name for the shop_id field */
-    const SHOP_ID = 'up_sell.shop_id';
+    /** the column name for the shop_domain field */
+    const SHOP_DOMAIN = 'up_sell.shop_domain';
 
     /** the column name for the order field */
     const ORDER = 'up_sell.order';
@@ -67,6 +67,23 @@ abstract class BaseUpSellPeer
 
     /** the column name for the price_to field */
     const PRICE_TO = 'up_sell.price_to';
+
+    /** the column name for the use_price_range field */
+    const USE_PRICE_RANGE = 'up_sell.use_price_range';
+
+    /** the column name for the created_at field */
+    const CREATED_AT = 'up_sell.created_at';
+
+    /** the column name for the status field */
+    const STATUS = 'up_sell.status';
+
+    /** The enumerated values for the use_price_range field */
+    const USE_PRICE_RANGE_0 = '0';
+    const USE_PRICE_RANGE_1 = '1';
+
+    /** The enumerated values for the status field */
+    const STATUS_ACTIVE = 'active';
+    const STATUS_DISABLED = 'disabled';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -87,12 +104,12 @@ abstract class BaseUpSellPeer
      * e.g. UpSellPeer::$fieldNames[UpSellPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'ShopId', 'Order', 'Name', 'Headline', 'Description', 'PriceFrom', 'PriceTo', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shopId', 'order', 'name', 'headline', 'description', 'priceFrom', 'priceTo', ),
-        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID, UpSellPeer::SHOP_ID, UpSellPeer::ORDER, UpSellPeer::NAME, UpSellPeer::HEADLINE, UpSellPeer::DESCRIPTION, UpSellPeer::PRICE_FROM, UpSellPeer::PRICE_TO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOP_ID', 'ORDER', 'NAME', 'HEADLINE', 'DESCRIPTION', 'PRICE_FROM', 'PRICE_TO', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'shop_id', 'order', 'name', 'headline', 'description', 'price_from', 'price_to', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'ShopDomain', 'Order', 'Name', 'Headline', 'Description', 'PriceFrom', 'PriceTo', 'UsePriceRange', 'CreatedAt', 'Status', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shopDomain', 'order', 'name', 'headline', 'description', 'priceFrom', 'priceTo', 'usePriceRange', 'createdAt', 'status', ),
+        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID, UpSellPeer::SHOP_DOMAIN, UpSellPeer::ORDER, UpSellPeer::NAME, UpSellPeer::HEADLINE, UpSellPeer::DESCRIPTION, UpSellPeer::PRICE_FROM, UpSellPeer::PRICE_TO, UpSellPeer::USE_PRICE_RANGE, UpSellPeer::CREATED_AT, UpSellPeer::STATUS, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOP_DOMAIN', 'ORDER', 'NAME', 'HEADLINE', 'DESCRIPTION', 'PRICE_FROM', 'PRICE_TO', 'USE_PRICE_RANGE', 'CREATED_AT', 'STATUS', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'shop_domain', 'order', 'name', 'headline', 'description', 'price_from', 'price_to', 'use_price_range', 'created_at', 'status', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -102,12 +119,24 @@ abstract class BaseUpSellPeer
      * e.g. UpSellPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShopId' => 1, 'Order' => 2, 'Name' => 3, 'Headline' => 4, 'Description' => 5, 'PriceFrom' => 6, 'PriceTo' => 7, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shopId' => 1, 'order' => 2, 'name' => 3, 'headline' => 4, 'description' => 5, 'priceFrom' => 6, 'priceTo' => 7, ),
-        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID => 0, UpSellPeer::SHOP_ID => 1, UpSellPeer::ORDER => 2, UpSellPeer::NAME => 3, UpSellPeer::HEADLINE => 4, UpSellPeer::DESCRIPTION => 5, UpSellPeer::PRICE_FROM => 6, UpSellPeer::PRICE_TO => 7, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOP_ID' => 1, 'ORDER' => 2, 'NAME' => 3, 'HEADLINE' => 4, 'DESCRIPTION' => 5, 'PRICE_FROM' => 6, 'PRICE_TO' => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shop_id' => 1, 'order' => 2, 'name' => 3, 'headline' => 4, 'description' => 5, 'price_from' => 6, 'price_to' => 7, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShopDomain' => 1, 'Order' => 2, 'Name' => 3, 'Headline' => 4, 'Description' => 5, 'PriceFrom' => 6, 'PriceTo' => 7, 'UsePriceRange' => 8, 'CreatedAt' => 9, 'Status' => 10, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shopDomain' => 1, 'order' => 2, 'name' => 3, 'headline' => 4, 'description' => 5, 'priceFrom' => 6, 'priceTo' => 7, 'usePriceRange' => 8, 'createdAt' => 9, 'status' => 10, ),
+        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID => 0, UpSellPeer::SHOP_DOMAIN => 1, UpSellPeer::ORDER => 2, UpSellPeer::NAME => 3, UpSellPeer::HEADLINE => 4, UpSellPeer::DESCRIPTION => 5, UpSellPeer::PRICE_FROM => 6, UpSellPeer::PRICE_TO => 7, UpSellPeer::USE_PRICE_RANGE => 8, UpSellPeer::CREATED_AT => 9, UpSellPeer::STATUS => 10, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOP_DOMAIN' => 1, 'ORDER' => 2, 'NAME' => 3, 'HEADLINE' => 4, 'DESCRIPTION' => 5, 'PRICE_FROM' => 6, 'PRICE_TO' => 7, 'USE_PRICE_RANGE' => 8, 'CREATED_AT' => 9, 'STATUS' => 10, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shop_domain' => 1, 'order' => 2, 'name' => 3, 'headline' => 4, 'description' => 5, 'price_from' => 6, 'price_to' => 7, 'use_price_range' => 8, 'created_at' => 9, 'status' => 10, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+    );
+
+    /** The enumerated values for this table */
+    protected static $enumValueSets = array(
+        UpSellPeer::USE_PRICE_RANGE => array(
+            UpSellPeer::USE_PRICE_RANGE_0,
+            UpSellPeer::USE_PRICE_RANGE_1,
+        ),
+        UpSellPeer::STATUS => array(
+            UpSellPeer::STATUS_ACTIVE,
+            UpSellPeer::STATUS_DISABLED,
+        ),
     );
 
     /**
@@ -150,6 +179,51 @@ abstract class BaseUpSellPeer
     }
 
     /**
+     * Gets the list of values for all ENUM columns
+     * @return array
+     */
+    public static function getValueSets()
+    {
+      return UpSellPeer::$enumValueSets;
+    }
+
+    /**
+     * Gets the list of values for an ENUM column
+     *
+     * @param string $colname The ENUM column name.
+     *
+     * @return array list of possible values for the column
+     */
+    public static function getValueSet($colname)
+    {
+        $valueSets = UpSellPeer::getValueSets();
+
+        if (!isset($valueSets[$colname])) {
+            throw new PropelException(sprintf('Column "%s" has no ValueSet.', $colname));
+        }
+
+        return $valueSets[$colname];
+    }
+
+    /**
+     * Gets the SQL value for the ENUM column value
+     *
+     * @param string $colname ENUM column name.
+     * @param string $enumVal ENUM value.
+     *
+     * @return int SQL value
+     */
+    public static function getSqlValueForEnum($colname, $enumVal)
+    {
+        $values = UpSellPeer::getValueSet($colname);
+        if (!in_array($enumVal, $values)) {
+            throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $colname));
+        }
+
+        return array_search($enumVal, $values);
+    }
+
+    /**
      * Convenience method which changes table.column to alias.column.
      *
      * Using this method you can maintain SQL abstraction while using column aliases.
@@ -182,22 +256,28 @@ abstract class BaseUpSellPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(UpSellPeer::ID);
-            $criteria->addSelectColumn(UpSellPeer::SHOP_ID);
+            $criteria->addSelectColumn(UpSellPeer::SHOP_DOMAIN);
             $criteria->addSelectColumn(UpSellPeer::ORDER);
             $criteria->addSelectColumn(UpSellPeer::NAME);
             $criteria->addSelectColumn(UpSellPeer::HEADLINE);
             $criteria->addSelectColumn(UpSellPeer::DESCRIPTION);
             $criteria->addSelectColumn(UpSellPeer::PRICE_FROM);
             $criteria->addSelectColumn(UpSellPeer::PRICE_TO);
+            $criteria->addSelectColumn(UpSellPeer::USE_PRICE_RANGE);
+            $criteria->addSelectColumn(UpSellPeer::CREATED_AT);
+            $criteria->addSelectColumn(UpSellPeer::STATUS);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.shop_id');
+            $criteria->addSelectColumn($alias . '.shop_domain');
             $criteria->addSelectColumn($alias . '.order');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.headline');
             $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.price_from');
             $criteria->addSelectColumn($alias . '.price_to');
+            $criteria->addSelectColumn($alias . '.use_price_range');
+            $criteria->addSelectColumn($alias . '.created_at');
+            $criteria->addSelectColumn($alias . '.status');
         }
     }
 

@@ -56,13 +56,17 @@
                     data i minuty
                 </div>
                 <div class="span1 offset1">
-                    view
+                    <a href="/view?up-sell-id={{ upSell.getId() }}" class="btn btn-info">View</a>
                 </div>
                 <div class="span1">
-                    stop
+                    {% if upSell.isActive() %}
+                        <a href="/status/disable?up-sell-id={{ upSell.getId() }}" class="btn btn-warning">Disable</a>
+                    {% else %}
+                        <a href="/status/activate?up-sell-id={{ upSell.getId() }}" class="btn btn-success">Activate</a>
+                    {% endif %}
                 </div>
                 <div class="span1">
-                    delete
+                    <a href="/delete?up-sell-id={{ upSell.getId() }}" class="btn btn-danger">Delete</a>
                 </div>
             </div>
             {% endfor %}

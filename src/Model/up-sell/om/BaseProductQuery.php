@@ -21,7 +21,7 @@ use src\Model\ProductQuery;
  *
  * @method ProductQuery orderById($order = Criteria::ASC) Order by the id column
  * @method ProductQuery orderByShoploProductId($order = Criteria::ASC) Order by the shoplo_product_id column
- * @method ProductQuery orderByShopId($order = Criteria::ASC) Order by the shop_id column
+ * @method ProductQuery orderByShopDomain($order = Criteria::ASC) Order by the shop_domain column
  * @method ProductQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method ProductQuery orderByImgUrl($order = Criteria::ASC) Order by the img_url column
  * @method ProductQuery orderByOriginalPrice($order = Criteria::ASC) Order by the original_price column
@@ -29,7 +29,7 @@ use src\Model\ProductQuery;
  *
  * @method ProductQuery groupById() Group by the id column
  * @method ProductQuery groupByShoploProductId() Group by the shoplo_product_id column
- * @method ProductQuery groupByShopId() Group by the shop_id column
+ * @method ProductQuery groupByShopDomain() Group by the shop_domain column
  * @method ProductQuery groupByName() Group by the name column
  * @method ProductQuery groupByImgUrl() Group by the img_url column
  * @method ProductQuery groupByOriginalPrice() Group by the original_price column
@@ -43,7 +43,7 @@ use src\Model\ProductQuery;
  * @method Product findOneOrCreate(PropelPDO $con = null) Return the first Product matching the query, or a new Product object populated from the query conditions when no match is found
  *
  * @method Product findOneByShoploProductId(int $shoplo_product_id) Return the first Product filtered by the shoplo_product_id column
- * @method Product findOneByShopId(int $shop_id) Return the first Product filtered by the shop_id column
+ * @method Product findOneByShopDomain(string $shop_domain) Return the first Product filtered by the shop_domain column
  * @method Product findOneByName(string $name) Return the first Product filtered by the name column
  * @method Product findOneByImgUrl(string $img_url) Return the first Product filtered by the img_url column
  * @method Product findOneByOriginalPrice(string $original_price) Return the first Product filtered by the original_price column
@@ -51,7 +51,7 @@ use src\Model\ProductQuery;
  *
  * @method array findById(int $id) Return Product objects filtered by the id column
  * @method array findByShoploProductId(int $shoplo_product_id) Return Product objects filtered by the shoplo_product_id column
- * @method array findByShopId(int $shop_id) Return Product objects filtered by the shop_id column
+ * @method array findByShopDomain(string $shop_domain) Return Product objects filtered by the shop_domain column
  * @method array findByName(string $name) Return Product objects filtered by the name column
  * @method array findByImgUrl(string $img_url) Return Product objects filtered by the img_url column
  * @method array findByOriginalPrice(string $original_price) Return Product objects filtered by the original_price column
@@ -163,7 +163,7 @@ abstract class BaseProductQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `shoplo_product_id`, `shop_id`, `name`, `img_url`, `original_price`, `url` FROM `product` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `shoplo_product_id`, `shop_domain`, `name`, `img_url`, `original_price`, `url` FROM `product` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -337,45 +337,32 @@ abstract class BaseProductQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the shop_id column
+     * Filter the query on the shop_domain column
      *
      * Example usage:
      * <code>
-     * $query->filterByShopId(1234); // WHERE shop_id = 1234
-     * $query->filterByShopId(array(12, 34)); // WHERE shop_id IN (12, 34)
-     * $query->filterByShopId(array('min' => 12)); // WHERE shop_id >= 12
-     * $query->filterByShopId(array('max' => 12)); // WHERE shop_id <= 12
+     * $query->filterByShopDomain('fooValue');   // WHERE shop_domain = 'fooValue'
+     * $query->filterByShopDomain('%fooValue%'); // WHERE shop_domain LIKE '%fooValue%'
      * </code>
      *
-     * @param     mixed $shopId The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $shopDomain The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ProductQuery The current query, for fluid interface
      */
-    public function filterByShopId($shopId = null, $comparison = null)
+    public function filterByShopDomain($shopDomain = null, $comparison = null)
     {
-        if (is_array($shopId)) {
-            $useMinMax = false;
-            if (isset($shopId['min'])) {
-                $this->addUsingAlias(ProductPeer::SHOP_ID, $shopId['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($shopId['max'])) {
-                $this->addUsingAlias(ProductPeer::SHOP_ID, $shopId['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
+        if (null === $comparison) {
+            if (is_array($shopDomain)) {
                 $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $shopDomain)) {
+                $shopDomain = str_replace('*', '%', $shopDomain);
+                $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(ProductPeer::SHOP_ID, $shopId, $comparison);
+        return $this->addUsingAlias(ProductPeer::SHOP_DOMAIN, $shopDomain, $comparison);
     }
 
     /**

@@ -15,9 +15,10 @@ $app->mount('/callback', new \src\Controller\CallbackController());
 $app->mount('/add', new \src\Controller\AddController());
 $app->mount('/save', new \src\Controller\SaveController());
 $app->mount('/ajax', new \src\Controller\AjaxController());
-//$app->mount('/my-tickets', new \Src\Main\Controller\MyTicketsController());
-//$app->mount('/all-tickets', new \Src\Main\Controller\AllTicketsController());
-//$app->mount('/update-users', new \Src\Main\Controller\UpdateUsersController());
+$app->mount('/delete', new \src\Controller\DeleteController());
+$app->mount('/status', new \src\Controller\UpSellStatusController());
+
+
 
 
 
@@ -60,5 +61,9 @@ function getAppConfigured()
 //		'propel.config_file' => __DIR__.'/../src/Config/propel-conf.php',
 //		'propel.model_path' => __DIR__.'/../src/Model',
 //	));
+
+	$serviceRegistry = new \src\Service\ServiceRegistry($app);
+	$serviceRegistry->init();
+
 	return $app;
 }

@@ -44,7 +44,7 @@ class ProductTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('shoplo_product_id', 'ShoploProductId', 'INTEGER', true, null, null);
-        $this->addColumn('shop_id', 'ShopId', 'INTEGER', true, null, null);
+        $this->addColumn('shop_domain', 'ShopDomain', 'VARCHAR', true, 255, null);
         $this->addColumn('name', 'Name', 'LONGVARCHAR', true, null, null);
         $this->addColumn('img_url', 'ImgUrl', 'LONGVARCHAR', true, null, null);
         $this->addColumn('original_price', 'OriginalPrice', 'DECIMAL', true, 10, null);

@@ -43,13 +43,24 @@ class UpSellTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('shop_id', 'ShopId', 'INTEGER', true, null, null);
+        $this->addColumn('shop_domain', 'ShopDomain', 'VARCHAR', true, 255, null);
         $this->addColumn('order', 'Order', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
         $this->addColumn('headline', 'Headline', 'LONGVARCHAR', true, null, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', true, null, null);
         $this->addColumn('price_from', 'PriceFrom', 'FLOAT', false, null, null);
         $this->addColumn('price_to', 'PriceTo', 'FLOAT', false, null, null);
+        $this->addColumn('use_price_range', 'UsePriceRange', 'CHAR', true, null, '1');
+        $this->getColumn('use_price_range', false)->setValueSet(array (
+  0 => '0',
+  1 => '1',
+));
+        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', true, null, null);
+        $this->addColumn('status', 'Status', 'CHAR', true, null, 'active');
+        $this->getColumn('status', false)->setValueSet(array (
+  0 => 'active',
+  1 => 'disabled',
+));
         // validators
     } // initialize()
 
