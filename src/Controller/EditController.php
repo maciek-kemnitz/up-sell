@@ -14,21 +14,35 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AddController implements ControllerProviderInterface
+class EditController implements ControllerProviderInterface
 {
 	public function connect(Application $app)
 	{
 		$controllers = $app['controllers_factory'];
 
-		$controllers->get('/', function () use ($app)
+		$controllers->get('/{upSellId}', function ($upSellId) use ($app)
 		{
 
 			/** @var ShoploApi $shoploApi */
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
+			$upSell = UpSellQuery::create()->findPk($upSellId);
 
-			$upSell = null;
+			if (null === $upSell)
+			{
+				throw new NotFoundHttpException();
+			}
 
-			return $app['twig']->render('add.page.html.twig', ['products'=>$shoploApi->product->retrieve()]);
+
+			$shop = $shoploApi->shop->retrieve();
+
+			if ($shop['domain'] != $upSell->getShopDomain())
+			{
+				throw new AccessDeniedHttpException();
+			}
+
+
+
+			return $app['twig']->render('add.page.html.twig', ['products'=>$shoploApi->product->retrieve(), 'upSell' => $upSell]);
 		});
 
 

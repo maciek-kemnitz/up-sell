@@ -42,4 +42,25 @@ class UpSell extends BaseUpSell
 	{
 		return $this->getStatus() == UpSellPeer::STATUS_ACTIVE;
 	}
+
+	public function usePriceRane()
+	{
+		return $this->getUsePriceRange() == UpSellPeer::USE_PRICE_RANGE_1;
+	}
+
+	public function hasProductIdInCart($productId)
+	{
+		$connectedProducts = $this->getProductInCarts();
+		$connectedProducts = $connectedProducts->getArrayCopy('productId');
+
+		return array_key_exists($productId, $connectedProducts);
+	}
+
+	public function hasRelatedProductId($productId)
+	{
+		$connectedProducts = $this->getRelatedProducts();
+		$connectedProducts = $connectedProducts->getArrayCopy('productId');
+
+		return array_key_exists($productId, $connectedProducts);
+	}
 }

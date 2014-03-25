@@ -12,62 +12,99 @@
 <body>
     <div class="container">
         <form action="/save/" method="post">
+            {% if upSell is defined %}<input name="upSellId" type="hidden" value="{{ upSell.getId() }}">{% endif %}
             <fieldset>
                 <h4>Opis</h4>
                 <label>Nazwa kampanii</label>
-                <input name="name" type="text" placeholder="Type something…">
+                <input name="name" type="text" placeholder="Type something…" required="required" {% if upSell is defined %}value="{{ upSell.getName() }}"{% endif %}>
                 <label>Nagłówek oferty</label>
-                <input name="headline" type="text" placeholder="Type something…">
+                <input name="headline" type="text" placeholder="Type something…" required="required" {% if upSell is defined %}value="{{ upSell.getHeadLine() }}"{% endif %}>
                 <label>Opis oferty</label>
-                <textarea name="description"></textarea>
+                <textarea name="description" required="required">{% if upSell is defined %}{{ upSell.getDescription() }}{% endif %}</textarea>
             </fieldset>
             <hr>
             <h4>Przedział cenowy</h4>
                 <label class="checkbox">
-                    <input type="checkbox"> Check me out
+                    <input id="price-range" name="price-range" type="checkbox" checked="checked"> Check me out
                 </label>
-                <div class="input-prepend">
-                    <span class="add-on">PLN</span>
-                    <input name="price_from" class="span2" id="prependedInput" type="text" placeholder="Username">
-                </div>
-                <div class="input-prepend">
-                    <span class="add-on">PLN</span>
-                    <input name="price_to" class="span2" id="prependedInput" type="text" placeholder="Username">
+                <div id="price-range-container">
+                    <div class="input-prepend">
+                        <span class="add-on">PLN</span>
+                        <input name="price_from" class="span2" id="prependedInput" type="text" {% if upSell is defined and upSell.usePriceRane() %}value="{{ upSell.getPriceFrom() }}"{% endif %}>
+                    </div>
+                    <div class="input-prepend">
+                        <span class="add-on">PLN</span>
+                        <input name="price_to" class="span2" id="prependedInput" type="text" {% if upSell is defined and upSell.usePriceRane() %}value="{{ upSell.getPriceTo() }}"{% endif %}>
+                    </div>
                 </div>
             <hr>
 
             <h4>Gdy produkty w koszyku:</h4>
             <label class="checkbox">
-                <input type="checkbox"> Check me out
+                <input id="enable-in-cart" name="price-range" type="checkbox" checked="checked"> Check me out
             </label>
 
-
-            <select name="selected-product-trigger[]" multiple>
-                {% for product in products['products'] %}
-                    <option value="{{ product['id'] }}">{{ product['name'] }}</option>
-                {% endfor %}
-            </select>
-
-            <hr>
-
-            <h4>wybierz zniżke:</h4>
-            <select>
-                <option value="1">1</option>
-                <option value="2">2</option>
-            </select>
+            <div id="cart-container">
+                <select name="selected-product-trigger[]" multiple>
+                    {% for product in products['products'] %}
+                        <option value="{{ product['id'] }}" {% if upSell is defined and upSell.hasProductIdInCart(product['id']) %}selected="selected"{% endif %}>{{ product['name'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
             <hr>
 
-            <h4>Wybierz produkt:</h4>
+            <div class="hide">
+                <h4>wybierz zniżke:</h4>
+                <select>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
 
-            <select name="up-sell-products[]" multiple>
-                {% for product in products['products'] %}
-                    <option value="{{ product['id'] }}">{{ product['name'] }}</option>
-                {% endfor %}
-            </select>
+                <hr>
+            </div>
+
+            <div>
+                <h4>Wybierz produkt:</h4>
+
+                <select name="up-sell-products[]" multiple required="required">
+                    {% for product in products['products'] %}
+                        <option value="{{ product['id'] }}" {% if upSell is defined and upSell.hasRelatedProductId(product['id']) %}selected="selected"{% endif %}>{{ product['name'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
             <button type="submit" class="btn">Submit</button>
         </form>
     </div>
+    <script type="text/javascript">
+        $(function(){
+           $('#price-range').click(function() {
+              if ($(this).is(':checked'))
+              {
+                  $('#price-range-container').removeClass('hide');
+
+              }
+              else
+              {
+                  $('#price-range-container').addClass('hide');
+              }
+           });
+
+            $('#enable-in-cart').click(function() {
+                if ($(this).is(':checked'))
+                {
+                    $('#cart-container').removeClass('hide');
+
+                }
+                else
+                {
+                    $('#cart-container').addClass('hide');
+                }
+            });
+
+
+        });
+    </script>
 </body>
 </html>

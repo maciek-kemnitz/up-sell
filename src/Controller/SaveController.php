@@ -32,13 +32,37 @@ class SaveController implements ControllerProviderInterface
 			$priceTo = $request->request->get('price_to');
 			$productTrigger = $request->request->get('selected-product-trigger');
 			$upSellProducts = $request->request->get('up-sell-products');
+			$upSellId = $request->request->get('upSellId');
+
 
 			/** @var ShoploApi $shoploApi */
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
 			$shopDomain = $shoploApi->shop->retrieve()['domain'];
 
 
-			$upSell = new UpSell();
+			if ($upSellId)
+			{
+				$upSell = UpSellQuery::create()->findPk($upSellId);
+
+				if (null === $upSell)
+				{
+					throw new NotFoundHttpException();
+				}
+
+
+				$shop = $shoploApi->shop->retrieve();
+
+				if ($shop['domain'] != $shopDomain)
+				{
+					throw new AccessDeniedHttpException();
+				}
+			}
+			else
+			{
+				$upSell = new UpSell();
+			}
+
+
 			$upSell->setShopDomain($shopDomain);
 			$upSell->setName($name);
 			$upSell->setHeadline($headline);
@@ -58,6 +82,10 @@ class SaveController implements ControllerProviderInterface
 			$upSell->setOrder($currentUpSellCount);
 			$upSell->setCreatedAt(date('Y-m-d H:i:s'));
 			$upSell->save();
+			$relatedProducts = $upSell->getRelatedProducts()->getArrayCopy('productId');
+			$productsInCart = $upSell->getProductInCarts()->getArrayCopy('productId');
+			$newRelatedProducts = [];
+			$newProductsInCart = [];
 
 
 			if (count($upSellProducts) > 0)
@@ -71,11 +99,12 @@ class SaveController implements ControllerProviderInterface
 										->filterByShoploProductId($shoploProduct['id'])
 										->findOne();
 
+
 					if (null == $product)
 					{
 						$product = new Product();
 						$product->setName($shoploProduct['name']);
-						$product->setId($shoploProduct['id']);
+						$product->setShoploProductId($shoploProduct['id']);
 						$product->setImgUrl($shoploProduct['thumbnail']);
 
 						$variants = $shoploProduct['variants'];
@@ -86,10 +115,21 @@ class SaveController implements ControllerProviderInterface
 						$product->save();
 					}
 
-					$relatedProduct = new RelatedProduct();
-					$relatedProduct->setUpSellId($upSell->getId());
-					$relatedProduct->setProductId($product->getShoploProductId());
-					$relatedProduct->save();
+					if (!array_key_exists($productId, $relatedProducts))
+					{
+						$relatedProduct = new RelatedProduct();
+						$relatedProduct->setUpSellId($upSell->getId());
+						$relatedProduct->setProductId($product->getShoploProductId());
+						$relatedProduct->save();
+
+						$newRelatedProducts[] = $relatedProduct;
+					}
+					else
+					{
+						$newRelatedProducts[] = $relatedProducts[$productId];
+
+					}
+
 				}
 			}
 
@@ -99,12 +139,25 @@ class SaveController implements ControllerProviderInterface
 			{
 				foreach($productTrigger as $productId)
 				{
-					$productInCart = new ProductInCart();
-					$productInCart->setUpSellId($upSell->getId());
-					$productInCart->setProductId($productId);
-					$productInCart->save();
+					if (!array_key_exists($productId, $productsInCart))
+					{
+						$productInCart = new ProductInCart();
+						$productInCart->setUpSellId($upSell->getId());
+						$productInCart->setProductId($productId);
+						$productInCart->save();
+
+						$newProductsInCart[] = $productInCart;
+					}
+					else
+					{
+						$newProductsInCart[] = $productsInCart[$productId];
+					}
 				}
 			}
+
+			$upSell->setRelatedProducts(new \PropelObjectCollection($newRelatedProducts));
+			$upSell->setProductInCarts(new \PropelObjectCollection($newProductsInCart));
+			$upSell->save();
 
 
 			return new RedirectResponse('/');

@@ -53,10 +53,10 @@
                     Kategoria1 > Kategoria1.1
                 </div>
                 <div class="span2">
-                    data i minuty
+                    {{ upSell.getCreatedAt() }}
                 </div>
                 <div class="span1 offset1">
-                    <a href="/view?up-sell-id={{ upSell.getId() }}" class="btn btn-info">View</a>
+                    <a href="/edit/{{ upSell.getId() }}" class="btn btn-info">Edit</a>
                 </div>
                 <div class="span1">
                     {% if upSell.isActive() %}
@@ -80,7 +80,7 @@
 
         var userData = {
             'productId': 6,
-            'shopId': 10344
+            'shopDomain': "mk-10.shoplo.com"
         }
 
         $.post( "/ajax/up-sell/product", userData, function(ajaxResult) {

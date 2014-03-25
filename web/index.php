@@ -13,6 +13,7 @@ session_start();
 $app->mount('/', new \src\Controller\HomePageController());
 $app->mount('/callback', new \src\Controller\CallbackController());
 $app->mount('/add', new \src\Controller\AddController());
+$app->mount('/edit', new \src\Controller\EditController());
 $app->mount('/save', new \src\Controller\SaveController());
 $app->mount('/ajax', new \src\Controller\AjaxController());
 $app->mount('/delete', new \src\Controller\DeleteController());
