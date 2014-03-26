@@ -53,7 +53,7 @@ function getAppConfigured()
 //	$app->register(new Silex\Provider\SwiftmailerServiceProvider());
 
 	$app->register(new \FF\ServiceProvider\LessServiceProvider(), array(
-		'less.sources'     => array(__DIR__.'/../src/Resources/less/styles.less'),
+		'less.sources'     => array( __DIR__.'/../src/Resources/less/admin.less'),
 		'less.target'      => __DIR__.'/../web/css/styles.css',
 		'less.target_mode' => 0775,));
 
