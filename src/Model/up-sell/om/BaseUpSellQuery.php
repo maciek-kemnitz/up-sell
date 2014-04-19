@@ -34,6 +34,8 @@ use src\Model\UpSellQuery;
  * @method UpSellQuery orderByUsePriceRange($order = Criteria::ASC) Order by the use_price_range column
  * @method UpSellQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method UpSellQuery orderByStatus($order = Criteria::ASC) Order by the status column
+ * @method UpSellQuery orderByDiscountType($order = Criteria::ASC) Order by the discount_type column
+ * @method UpSellQuery orderByDiscountAmount($order = Criteria::ASC) Order by the discount_amount column
  *
  * @method UpSellQuery groupById() Group by the id column
  * @method UpSellQuery groupByShopDomain() Group by the shop_domain column
@@ -46,6 +48,8 @@ use src\Model\UpSellQuery;
  * @method UpSellQuery groupByUsePriceRange() Group by the use_price_range column
  * @method UpSellQuery groupByCreatedAt() Group by the created_at column
  * @method UpSellQuery groupByStatus() Group by the status column
+ * @method UpSellQuery groupByDiscountType() Group by the discount_type column
+ * @method UpSellQuery groupByDiscountAmount() Group by the discount_amount column
  *
  * @method UpSellQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method UpSellQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -72,6 +76,8 @@ use src\Model\UpSellQuery;
  * @method UpSell findOneByUsePriceRange(string $use_price_range) Return the first UpSell filtered by the use_price_range column
  * @method UpSell findOneByCreatedAt(string $created_at) Return the first UpSell filtered by the created_at column
  * @method UpSell findOneByStatus(string $status) Return the first UpSell filtered by the status column
+ * @method UpSell findOneByDiscountType(string $discount_type) Return the first UpSell filtered by the discount_type column
+ * @method UpSell findOneByDiscountAmount(double $discount_amount) Return the first UpSell filtered by the discount_amount column
  *
  * @method array findById(int $id) Return UpSell objects filtered by the id column
  * @method array findByShopDomain(string $shop_domain) Return UpSell objects filtered by the shop_domain column
@@ -84,6 +90,8 @@ use src\Model\UpSellQuery;
  * @method array findByUsePriceRange(string $use_price_range) Return UpSell objects filtered by the use_price_range column
  * @method array findByCreatedAt(string $created_at) Return UpSell objects filtered by the created_at column
  * @method array findByStatus(string $status) Return UpSell objects filtered by the status column
+ * @method array findByDiscountType(string $discount_type) Return UpSell objects filtered by the discount_type column
+ * @method array findByDiscountAmount(double $discount_amount) Return UpSell objects filtered by the discount_amount column
  *
  * @package    propel.generator.up-sell.om
  */
@@ -191,7 +199,7 @@ abstract class BaseUpSellQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `shop_domain`, `order`, `name`, `headline`, `description`, `price_from`, `price_to`, `use_price_range`, `created_at`, `status` FROM `up_sell` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `shop_domain`, `order`, `name`, `headline`, `description`, `price_from`, `price_to`, `use_price_range`, `created_at`, `status`, `discount_type`, `discount_amount` FROM `up_sell` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -663,6 +671,77 @@ abstract class BaseUpSellQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UpSellPeer::STATUS, $status, $comparison);
+    }
+
+    /**
+     * Filter the query on the discount_type column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDiscountType('fooValue');   // WHERE discount_type = 'fooValue'
+     * $query->filterByDiscountType('%fooValue%'); // WHERE discount_type LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $discountType The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return UpSellQuery The current query, for fluid interface
+     */
+    public function filterByDiscountType($discountType = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($discountType)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $discountType)) {
+                $discountType = str_replace('*', '%', $discountType);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(UpSellPeer::DISCOUNT_TYPE, $discountType, $comparison);
+    }
+
+    /**
+     * Filter the query on the discount_amount column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDiscountAmount(1234); // WHERE discount_amount = 1234
+     * $query->filterByDiscountAmount(array(12, 34)); // WHERE discount_amount IN (12, 34)
+     * $query->filterByDiscountAmount(array('min' => 12)); // WHERE discount_amount >= 12
+     * $query->filterByDiscountAmount(array('max' => 12)); // WHERE discount_amount <= 12
+     * </code>
+     *
+     * @param     mixed $discountAmount The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return UpSellQuery The current query, for fluid interface
+     */
+    public function filterByDiscountAmount($discountAmount = null, $comparison = null)
+    {
+        if (is_array($discountAmount)) {
+            $useMinMax = false;
+            if (isset($discountAmount['min'])) {
+                $this->addUsingAlias(UpSellPeer::DISCOUNT_AMOUNT, $discountAmount['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($discountAmount['max'])) {
+                $this->addUsingAlias(UpSellPeer::DISCOUNT_AMOUNT, $discountAmount['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(UpSellPeer::DISCOUNT_AMOUNT, $discountAmount, $comparison);
     }
 
     /**

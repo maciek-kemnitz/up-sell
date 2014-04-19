@@ -12,6 +12,7 @@ use src\Model\ProductInCart;
 use src\Model\ProductQuery;
 use src\Model\RelatedProduct;
 use src\Model\UpSell;
+use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
 use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -30,9 +31,12 @@ class SaveController implements ControllerProviderInterface
 			$description = $request->request->get('description');
 			$priceFrom = $request->request->get('price_from');
 			$priceTo = $request->request->get('price_to');
+			$priceRange = $request->request->get('price-range');
 			$productTrigger = $request->request->get('selected-product-trigger');
 			$upSellProducts = $request->request->get('up-sell-products');
 			$upSellId = $request->request->get('upSellId');
+			$discountType = $request->request->get('discount-type');
+			$discountAmount = $request->request->get('discount-amount');
 
 
 			/** @var ShoploApi $shoploApi */
@@ -67,11 +71,39 @@ class SaveController implements ControllerProviderInterface
 			$upSell->setName($name);
 			$upSell->setHeadline($headline);
 			$upSell->setDescription($description);
+			if ($discountType)
+			{
+				$upSell->setDiscountType($discountType);
 
-			if ($priceFrom || $priceTo)
+				if ($discountType == UpSellPeer::DISCOUNT_TYPE_NONE)
+				{
+					$upSell->setDiscountAmount(null);
+				}
+				else
+				{
+					$upSell->setDiscountAmount($discountAmount);
+				}
+
+			}
+
+			if (null != $priceFrom)
 			{
 				$upSell->setPriceFrom($priceFrom);
+
+			}
+
+			if (null != $priceTo)
+			{
 				$upSell->setPriceTo($priceTo);
+			}
+
+			if ($priceRange == 'on')
+			{
+				$upSell->setUsePriceRange(UpSellPeer::USE_PRICE_RANGE_1);
+			}
+			else
+			{
+				$upSell->setUsePriceRange(UpSellPeer::USE_PRICE_RANGE_0);
 			}
 
 			$currentUpSellCount = UpSellQuery::create()

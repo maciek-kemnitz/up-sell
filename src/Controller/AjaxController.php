@@ -75,6 +75,59 @@ class AjaxController implements ControllerProviderInterface
 
 		});
 
+		$controllers->post('/autocomplete', function (Request $request) use ($app)
+		{
+			$method = $request->query->get('method');
+			$resource = $request->query->get('resource');
+			$size = $request->query->get('size');
+			$query = $request->request->get('query');
+			$offset = $request->query->get('offset');
+			$limit = $request->query->get('limit');
+
+			$products = ProductQuery::create()
+							->filterByName('%'.$query.'%', \Criteria::LIKE)
+							->find();
+
+			$view = $app['twig']->render('autocomplete-products.html.twig', ['products'=>$products]);
+
+			$result = [
+				'status'	=> 'ok',
+				'html'		=> $view,
+			];
+
+
+
+			return new JsonResponse($result);
+		});
+
+		$controllers->post('/sort', function (Request $request) use ($app)
+		{
+			$upSellIds = $request->request->get('data');
+
+			/** @var \PropelObjectCollection $upSells */
+			$upSells = UpSellQuery::create()->findById($upSellIds);
+			$upSells = $upSells->getArrayCopy('id');
+			$orderIndex = 1;
+
+			foreach($upSellIds as $id)
+			{
+				/** @var UpSell $upSell */
+				$upSell = $upSells[$id];
+				$upSell->setOrder($orderIndex);
+				$upSell->save();
+
+				$orderIndex++;
+			}
+
+			$result = [
+				'status'	=> 'ok',
+			];
+
+
+
+			return new JsonResponse($result);
+		});
+
 		return $controllers;
 	}
 }

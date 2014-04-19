@@ -18,4 +18,19 @@ use src\Model\om\BaseProductInCart;
  */
 class ProductInCart extends BaseProductInCart
 {
+	/**
+	 * @return Product
+	 */
+	public function getProduct()
+	{
+		$upSell = $this->getUpSell();
+		$shopDomain = $upSell->getShopDomain();
+
+		$product = ProductQuery::create()
+						->filterByShopDomain($shopDomain)
+						->filterByShoploProductId($this->getProductId())
+						->findOne();
+
+		return $product;
+	}
 }

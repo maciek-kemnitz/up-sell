@@ -1,117 +1,333 @@
-
 <html>
 <head>
-    {#<link rel="shortcut icon" href="{{ app.request.basepath }}/img/favicon.ico" />#}
-    <link rel="stylesheet" type="text/css" href="{{ app.request.basepath }}/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="{{ app.request.basepath }}/css/styles.css">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/jquery-ui.min.js"></script>
-    <script src="{{ app.request.basepath }}/js/bootstrap.js"></script>
-    {#<script src="{{ app.request.basepath }}/js/common.js"></script>#}
-</head>
-<body>
-    <div class="container">
-        <div class="main">
-            <input type="submit" name="addToCard">
-            <div class="row headline">
-                <div class="span2">
-                    Product upsell
-                </div>
-                <div class="span2 offset8">
-                    <a href="/add" class="btn btn-inverse">Dodaj Ofertę</a>
-                </div>
-            </div>
-            <div class="row-fluid overview well">
-                <div class="span3">
-                    Wyświetleń
-                </div>
-                <div class="span3">
-                    Sprzedarz upsell
-                </div>
-                <div class="span3">
-                    Średnia wartość koszyka
-                </div>
-                <div class="span3">
-                    ostatnie 7 dni
-                </div>
-            </div>
-            <div class="row chart text-center">
-                upselling chart
-            </div>
-            <div class="row">
-                aktualna oferta
-            </div>
-            {% for upSell in uppSells %}
-            <div class="row upp-sell">
-                <div class="span2">
-                    {{ upSell.getName() }}
-                </div>
-                <div class="span1">
-                    20%
-                </div>
-                <div class="span3">
-                    Kategoria1 > Kategoria1.1
-                </div>
-                <div class="span2">
-                    {{ upSell.getCreatedAt() }}
-                </div>
-                <div class="span1 offset1">
-                    <a href="/edit/{{ upSell.getId() }}" class="btn btn-info">Edit</a>
-                </div>
-                <div class="span1">
-                    {% if upSell.isActive() %}
-                        <a href="/status/disable?up-sell-id={{ upSell.getId() }}" class="btn btn-warning">Disable</a>
-                    {% else %}
-                        <a href="/status/activate?up-sell-id={{ upSell.getId() }}" class="btn btn-success">Activate</a>
-                    {% endif %}
-                </div>
-                <div class="span1">
-                    <a href="/delete?up-sell-id={{ upSell.getId() }}" class="btn btn-danger">Delete</a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+    <link rel="stylesheet" type="text/css" href="http://www.shoplo.com/css/admin!admin-4486067.css">
 
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    {#<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>#}
+    {#<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/jquery-ui.min.js"></script>#}
+    {#<script src="{{ app.request.basepath }}/js/bootstrap.js"></script>#}
+</head>
+
+
+
+<body class="content-ready sidebar-collapsed" style="">
+
+<style>
+    .loader {
+        position: absolute;
+        left:50%;
+        top: 50%;
+        margin-left:-20px;
+    }
+
+    .sortable-placeholder{
+        background-color: #f2f7fa;
+        height: 20px;
+        padding: 25px 30px;
+        border-style: solid;
+        border-color: #dde0e8;
+        border-width: 1px;
+    }
+
+    .sorted-item {
+        background-color: #ffffff;
+        box-shadow: 1px 1px 5px #888888;
+    }
+
+    /*#up-sell-container {*/
+        /*display: block;*/
+    /*}*/
+</style>
+
+
+<section class="main-container">
+    <section class="content-container">
+        <section class="content-dashboard">
+            <article class="content">
+                <section class="scroll-area right-frame bottom-frame">
+                    <section class="box bottom-frame scroll-heading">
+                        <h2 class="pull-left">Product UpSell</h2>
+                        <form>
+                            <input type="submit" name="addToCard" value="nana" />
+                        </form>
+                        <section class="filters">
+
+                            <a class="btn-dark pull-right" data-icon="m" href="/add">Dodaj</a>
+                        </section>
+                    </section>
+                    <section class="scroll-content">
+                    {#<div class="" style="position: relative; width: auto;">#}
+                        {#<section class="" style=" width: auto; ">#}
+
+                            <section class="box variants clearfix">
+                                <h2 class="pull-left">Aktywne oferty</h2>
+                            </section>
+                            <section style="position: relative;">
+                                <ul id="sortable">
+                                    {% for upSell in uppSells %}
+                                        <li>
+                                            <ul class="table-columns three-in-row top-frame bottom-frame" data-up-sell-id="{{ upSell.getId() }}">
+                                                <li class="box ">
+                                                    {{ upSell.getName() }}
+                                                </li>
+                                                <li class="box ">
+                                                    Zniżka {{ upSell.getCreatedAt() }}
+                                                </li>
+                                                <li class="box ">
+                                                    <a href="/edit/{{ upSell.getId() }}">Edytuj</a>
+                                                    {% if upSell.isActive() %}
+                                                        <a href="/status/disable?up-sell-id={{ upSell.getId() }}" >Zatrzymaj</a>
+                                                    {% else %}
+                                                        <a href="/status/activate?up-sell-id={{ upSell.getId() }}" >Aktywuj</a>
+                                                    {% endif %}
+
+                                                    <a href="/delete?up-sell-id={{ upSell.getId() }}">Usuń</a>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="loader hide">
+                                    <img src="{{ app.request.basepath }}/img/loader.gif">
+                                </div>
+                            </section>
+
+
+                            <script>
+                                $(function() {
+                                    $( "#sortable" ).sortable();
+                                    $( "#sortable" ).disableSelection();
+                                });
+                            </script>
+
+                        </section>
+                </section>
+            </article>
+    </section>
+</section>
+
+
+</section>
+<script src="http://www.shoplo.com/js/admin!bootstrap-admin!bootstrap.select-admin!bootstrap.checkbox-admin!jquery.custom-admin!jquery.validate-admin!jquery.sortable-admin!jquery.slimscroll-admin!jquery.numberAnimate-admin!jquery.touchtoclick-admin!admin-admin!main-11240606.js"></script>
+<script src="http://www.shoplo.com/js/admin!autocompleter-0.js"></script>
+<script>
+    ADMIN.ROOT = 'local.up-sell.pl';
+    ADMIN.STATIC_ROOT = 'local.up-sell.pl';
+    ADMIN.USER = {
+        ID: '0',
+        TOKEN: '',
+        LANG: {% if js_dict is defined %}eval(js_dict){% else %}''{% endif %},
+        IC: {% if ins_com is defined and ins_com %}true{% else %}false{% endif %}
+    };
+    ADMIN.SHOP = {
+        CURRENCY: '{% if shop is defined and shop%}{{ shop.currency }}{% endif %}'
+    };
+
+    ADMIN.run();
+</script>
 <script type="text/javascript">
     $(function(){
+        $( "#sortable" ).sortable({
 
-        var uppSellContainer = '<div id="up-sell-container"></div>';
+            placeholder: "sortable-placeholder",
+            cursor: 'pointer',
 
-        var userData = {
-            'productId': 6,
-            'shopDomain': "mk-10.shoplo.com"
-        }
+            start: function( event, ui ) {
+              $(ui.item).addClass('left-frame');
+              $(ui.item).addClass('right-frame');
+              $(ui.item).addClass('sorted-item');
+            },
 
-        $.post( "/ajax/up-sell/product", userData, function(ajaxResult) {
+            stop: function( event, ui ) {
+                $(ui.item).removeClass('left-frame');
+                $(ui.item).removeClass('right-frame');
+                $(ui.item).removeClass('sorted-item');
+            },
+            update: function( event, ui ) {
+                var index = 1;
+                var data = [];
 
-            if (ajaxResult['status'] == 'ok')
-            {
-                $('body').append(uppSellContainer);
+                $('#sortable').fadeTo( "slow" , 0.2);
+                $('.loader').toggle('slow');
 
-//                console.log(ajaxResult['html']);
-                $('body').on('click','input[name="addToCard"]',function(){
-                    $('#up-sell-modal').css('display','block');
-                    $('#up-sell-modal').addClass('in');
 
-                    return false;
-                });
+                $("#sortable").find('ul').each(function(){
 
-                $('body').on('click','[data-dismiss="modal"]', function(){
-                    $('#up-sell-modal').removeClass('in');
-                    $('#up-sell-modal').css('display','none');
-                });
+                    data.push($(this).data('up-sell-id'));
 
-                $('#up-sell-container').html(ajaxResult['html']);
+                }).delay( 10000 );
+
+                var userData = {
+                    'data': data
+                };
+
+
+
+                $.post('/ajax/sort', userData, function (ajaxResult) {
+                        if(ajaxResult.status == 'ok'){
+                            setTimeout(function(){
+                                $('#sortable').fadeTo("slow", 1);
+                                $('.loader').toggle();
+                            }, 2000);
+
+                        }
+
+                }
+                , 'json');
             }
-            else if (ajaxResult['status'] == 'no up-sell')
-            {
-
-//                do nothing
-            }
-
-        }, 'json');
+        });
     });
 </script>
+    <script type="text/javascript">
+        $(function(){
+
+            var uppSellContainer = '<div class="in" id="up-sell-container"></div>';
+
+            var userData = {
+                'productId': 8,
+                'shopDomain': 'mk-10.shoplo.com',
+                'cartValue':1000,
+                'productPrice':100
+
+            }
+
+            $.post( "http://local.up-sell.pl/ajax/up-sell/product", userData, function(ajaxResult) {
+                if (ajaxResult['status'] == 'ok')
+                {
+                    $('body').append(uppSellContainer);
+
+                console.log(ajaxResult['html']);
+                    $('body').on('click','input[name="addToCard"]',function(){
+                        $('#up-sell-modal').css('display','block');
+                        $('#up-sell-modal').addClass('in');
+
+                        return false;
+                    });
+
+                    $('body').on('click','[data-dismiss="modal"]', function(){
+                        $('#up-sell-modal').removeClass('in');
+                        $('#up-sell-modal').css('display','none');
+                    });
+                    $('#up-sell-container').html(ajaxResult['html']);
+                }
+                else if (ajaxResult['status'] == 'no up-sell')
+                {
+
+//                do nothing
+                }
+
+            }, 'json');
+        });
+    </script>
 </body>
+
+
+
+{#<body>#}
+{#<div class="container">#}
+{#<div class="main">#}
+{#<input type="submit" name="addToCard">#}
+{#<div class="row headline">#}
+{#<div class="span2">#}
+{#Product upsell#}
+{#</div>#}
+{#<div class="span2 offset8">#}
+{#<a href="/add" class="btn btn-inverse">Dodaj Ofertę</a>#}
+{#</div>#}
+{#</div>#}
+{#<div class="row-fluid overview well">#}
+{#<div class="span3">#}
+{#Wyświetleń#}
+{#</div>#}
+{#<div class="span3">#}
+{#Sprzedarz upsell#}
+{#</div>#}
+{#<div class="span3">#}
+{#Średnia wartość koszyka#}
+{#</div>#}
+{#<div class="span3">#}
+{#ostatnie 7 dni#}
+{#</div>#}
+{#</div>#}
+{#<div class="row chart text-center">#}
+{#upselling chart#}
+{#</div>#}
+{#<div class="row">#}
+{#aktualna oferta#}
+{#</div>#}
+{#{% for upSell in uppSells %}#}
+{#<div class="row upp-sell">#}
+{#<div class="span2">#}
+{#{{ upSell.getName() }}#}
+{#</div>#}
+{#<div class="span1">#}
+{#20%#}
+{#</div>#}
+{#<div class="span3">#}
+{#Kategoria1 > Kategoria1.1#}
+{#</div>#}
+{#<div class="span2">#}
+{#{{ upSell.getCreatedAt() }}#}
+{#</div>#}
+{#<div class="span1 offset1">#}
+{#<a href="/edit/{{ upSell.getId() }}" class="btn btn-info">Edit</a>#}
+{#</div>#}
+{#<div class="span1">#}
+{#{% if upSell.isActive() %}#}
+{#<a href="/status/disable?up-sell-id={{ upSell.getId() }}" class="btn btn-warning">Disable</a>#}
+{#{% else %}#}
+{#<a href="/status/activate?up-sell-id={{ upSell.getId() }}" class="btn btn-success">Activate</a>#}
+{#{% endif %}#}
+{#</div>#}
+{#<div class="span1">#}
+{#<a href="/delete?up-sell-id={{ upSell.getId() }}" class="btn btn-danger">Delete</a>#}
+{#</div>#}
+{#</div>#}
+{#{% endfor %}#}
+{#</div>#}
+{#</div>#}
+
+{#<script type="text/javascript">#}
+{#$(function(){#}
+
+{#var uppSellContainer = '<div id="up-sell-container"></div>';#}
+
+{#var userData = {#}
+{#'productId': 6,#}
+{#'shopDomain': "mk-10.shoplo.com"#}
+{#}#}
+
+{#$.post( "/ajax/up-sell/product", userData, function(ajaxResult) {#}
+
+{#if (ajaxResult['status'] == 'ok')#}
+{#{#}
+{#$('body').append(uppSellContainer);#}
+
+{#//                console.log(ajaxResult['html']);#}
+{#$('body').on('click','input[name="addToCard"]',function(){#}
+{#$('#up-sell-modal').css('display','block');#}
+{#$('#up-sell-modal').addClass('in');#}
+
+{#return false;#}
+{#});#}
+
+{#$('body').on('click','[data-dismiss="modal"]', function(){#}
+{#$('#up-sell-modal').removeClass('in');#}
+{#$('#up-sell-modal').css('display','none');#}
+{#});#}
+
+{#$('#up-sell-container').html(ajaxResult['html']);#}
+{#}#}
+{#else if (ajaxResult['status'] == 'no up-sell')#}
+{#{#}
+
+{#//                do nothing#}
+{#}#}
+
+{#}, 'json');#}
+{#});#}
+{#</script>#}
+{#</body>#}
 </html>

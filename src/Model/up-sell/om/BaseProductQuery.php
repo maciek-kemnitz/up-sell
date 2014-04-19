@@ -26,6 +26,8 @@ use src\Model\ProductQuery;
  * @method ProductQuery orderByImgUrl($order = Criteria::ASC) Order by the img_url column
  * @method ProductQuery orderByOriginalPrice($order = Criteria::ASC) Order by the original_price column
  * @method ProductQuery orderByUrl($order = Criteria::ASC) Order by the url column
+ * @method ProductQuery orderByThumbnail($order = Criteria::ASC) Order by the thumbnail column
+ * @method ProductQuery orderBySku($order = Criteria::ASC) Order by the sku column
  *
  * @method ProductQuery groupById() Group by the id column
  * @method ProductQuery groupByShoploProductId() Group by the shoplo_product_id column
@@ -34,6 +36,8 @@ use src\Model\ProductQuery;
  * @method ProductQuery groupByImgUrl() Group by the img_url column
  * @method ProductQuery groupByOriginalPrice() Group by the original_price column
  * @method ProductQuery groupByUrl() Group by the url column
+ * @method ProductQuery groupByThumbnail() Group by the thumbnail column
+ * @method ProductQuery groupBySku() Group by the sku column
  *
  * @method ProductQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method ProductQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -46,16 +50,20 @@ use src\Model\ProductQuery;
  * @method Product findOneByShopDomain(string $shop_domain) Return the first Product filtered by the shop_domain column
  * @method Product findOneByName(string $name) Return the first Product filtered by the name column
  * @method Product findOneByImgUrl(string $img_url) Return the first Product filtered by the img_url column
- * @method Product findOneByOriginalPrice(string $original_price) Return the first Product filtered by the original_price column
+ * @method Product findOneByOriginalPrice(double $original_price) Return the first Product filtered by the original_price column
  * @method Product findOneByUrl(string $url) Return the first Product filtered by the url column
+ * @method Product findOneByThumbnail(string $thumbnail) Return the first Product filtered by the thumbnail column
+ * @method Product findOneBySku(double $sku) Return the first Product filtered by the sku column
  *
  * @method array findById(int $id) Return Product objects filtered by the id column
  * @method array findByShoploProductId(int $shoplo_product_id) Return Product objects filtered by the shoplo_product_id column
  * @method array findByShopDomain(string $shop_domain) Return Product objects filtered by the shop_domain column
  * @method array findByName(string $name) Return Product objects filtered by the name column
  * @method array findByImgUrl(string $img_url) Return Product objects filtered by the img_url column
- * @method array findByOriginalPrice(string $original_price) Return Product objects filtered by the original_price column
+ * @method array findByOriginalPrice(double $original_price) Return Product objects filtered by the original_price column
  * @method array findByUrl(string $url) Return Product objects filtered by the url column
+ * @method array findByThumbnail(string $thumbnail) Return Product objects filtered by the thumbnail column
+ * @method array findBySku(double $sku) Return Product objects filtered by the sku column
  *
  * @package    propel.generator.up-sell.om
  */
@@ -163,7 +171,7 @@ abstract class BaseProductQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `shoplo_product_id`, `shop_domain`, `name`, `img_url`, `original_price`, `url` FROM `product` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `shoplo_product_id`, `shop_domain`, `name`, `img_url`, `original_price`, `url`, `thumbnail`, `sku` FROM `product` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -492,6 +500,77 @@ abstract class BaseProductQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ProductPeer::URL, $url, $comparison);
+    }
+
+    /**
+     * Filter the query on the thumbnail column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByThumbnail('fooValue');   // WHERE thumbnail = 'fooValue'
+     * $query->filterByThumbnail('%fooValue%'); // WHERE thumbnail LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $thumbnail The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProductQuery The current query, for fluid interface
+     */
+    public function filterByThumbnail($thumbnail = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($thumbnail)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $thumbnail)) {
+                $thumbnail = str_replace('*', '%', $thumbnail);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(ProductPeer::THUMBNAIL, $thumbnail, $comparison);
+    }
+
+    /**
+     * Filter the query on the sku column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterBySku(1234); // WHERE sku = 1234
+     * $query->filterBySku(array(12, 34)); // WHERE sku IN (12, 34)
+     * $query->filterBySku(array('min' => 12)); // WHERE sku >= 12
+     * $query->filterBySku(array('max' => 12)); // WHERE sku <= 12
+     * </code>
+     *
+     * @param     mixed $sku The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProductQuery The current query, for fluid interface
+     */
+    public function filterBySku($sku = null, $comparison = null)
+    {
+        if (is_array($sku)) {
+            $useMinMax = false;
+            if (isset($sku['min'])) {
+                $this->addUsingAlias(ProductPeer::SKU, $sku['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($sku['max'])) {
+                $this->addUsingAlias(ProductPeer::SKU, $sku['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ProductPeer::SKU, $sku, $comparison);
     }
 
     /**

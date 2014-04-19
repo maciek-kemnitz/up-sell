@@ -61,6 +61,13 @@ class UpSellTableMap extends TableMap
   0 => 'active',
   1 => 'disabled',
 ));
+        $this->addColumn('discount_type', 'DiscountType', 'CHAR', true, null, 'none');
+        $this->getColumn('discount_type', false)->setValueSet(array (
+  0 => 'none',
+  1 => 'percent',
+  2 => 'amount',
+));
+        $this->addColumn('discount_amount', 'DiscountAmount', 'FLOAT', false, null, null);
         // validators
     } // initialize()
 

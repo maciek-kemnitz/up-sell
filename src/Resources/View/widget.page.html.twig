@@ -1,11 +1,172 @@
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+</head>
+<body>
 <style>
+
+    .muted {
+        color: #8b9ba1;
+    }
+
+    .pull-right {
+        float: right;
+    }
+
+    .btn-up-black {
+        -moz-border-radius: 2px;
+        -moz-box-shadow: #090808 0px 0px 0px;
+        -moz-transition: all 0.5s ease;
+        -ms-transition: all 0.5s ease;
+        -o-transition: all 0.5s ease;
+        -webkit-border-radius: 5px;
+        -webkit-box-shadow: #6E7849 0 0 10px;
+        -webkit-transition: all 0.5s ease;
+        background-color: #090808;
+        border-radius: 2px;
+        border: 0px solid #090808;
+        box-shadow: #090808 0px 0px 0px;
+        color: #ffffff;
+        display: inline-block;
+
+        margin: auto;
+        padding: 8px 17px;
+        text-decoration: none;
+        text-shadow: #000000 5px 5px 15px;
+        transition: all 0.5s ease;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .btn-up-black:hover {
+        opacity: 0.9;
+    }
+
+    .btn-up-gray {
+        -moz-border-radius: 2px;
+        -moz-box-shadow: #090808 0px 0px 0px;
+        -moz-transition: all 0.5s ease;
+        -ms-transition: all 0.5s ease;
+        -o-transition: all 0.5s ease;
+        -webkit-border-radius: 5px;
+        -webkit-box-shadow: #6E7849 0 0 10px;
+        -webkit-transition: all 0.5s ease;
+        background-color: #999999;
+        border-radius: 2px;
+        border: 0px solid #090808;
+        box-shadow: #090808 0px 0px 0px;
+        color: #ffffff;
+        display: inline-block;
+
+        margin: auto;
+        padding: 8px 17px;
+        text-decoration: none;
+        transition: all 0.5s ease;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .btn-up-gray:hover {
+        opacity: 0.9;
+    }
+
+
+
+
+    #up-sell-modal {
+        font-family: helvetica;
+        letter-spacing: -1px;
+    }
+
+    /*.modal-body {*/
+        /*overflow: hidden !important;*/
+    /*}*/
+
+    /*.modal-body div {*/
+        /*overflow: hidden;*/
+    /*}*/
+
+    .up-sell-content-inner {
+        margin-top: 63px;
+    }
+
+    /*.up-sell-heading {*/
+        /*margin-bottom: 63px;*/
+    /*}*/
+
+    .up-sell-heading h1 {
+        margin-top: 0px;
+        margin-bottom: 5px;
+
+    }
+
+    .clearfix{
+        *zoom:1;
+    }
+    .clearfix:before, .clearfix:after {
+        display:table;
+        content:"";
+        line-height:0;
+    }
+    .clearfix:after {
+        clear:both;
+    }
+
+    .up-sell-img {
+        float: left;
+        margin-left: 25px;
+    }
+
+    .up-sell-description-container {
+        margin-left: 305px;
+    }
+
+    .product-name {
+        margin-bottom: 10px;
+        margin-top: 0px;
+        padding-top: 10px;
+    }
+
+    del {
+        font-size: 18px;
+        font-weight: bold;
+        display: block;
+    }
+
+    .up-price {
+        margin: 15px 0;
+    }
+
+    .up-price h2 {
+        margin: 0;
+    }
+
+    .up-sell-bottom {
+        padding-top: 15px;
+        margin-top: 50px;
+        /*width: 100%;*/
+        border-top: solid 1px #CCCCCC;
+    }
+
+    .to-basket {
+        margin-right: 5px;
+        font-size: 12px;
+    }
+
     .modal {
         position: fixed;
-        top: 10%;
-        left: 50%;
+        top: 5%;
+        /*left: 10%;*/
+        max-width: 900px;
         z-index: 1050;
-        width: 560px;
-        margin-left: -280px;
+        /*width: 560px;*/
+        /*width: 800px;*/
+        width: 80%;
+        /*height: 80%;*/
+        /*margin-left: -280px;*/
+        /*margin-left: -335px;*/
         background-color: #ffffff;
         border: 1px solid #999;
         border: 1px solid rgba(0, 0, 0, 0.3);
@@ -20,6 +181,7 @@
         -webkit-background-clip: padding-box;
         -moz-background-clip: padding-box;
         background-clip: padding-box;
+        padding: 20px 40px;
     }
 
     .modal.fade {
@@ -35,23 +197,20 @@
     }
 
     .modal-header {
-        padding: 9px 15px;
-        border-bottom: 1px solid #eee;
+        padding-top: 20px;
+        /*border-bottom: 1px solid #eee;*/
     }
 
-    .modal-header .close {
-        margin-top: 2px;
-    }
 
-    .modal-header h3 {
-        margin: 0;
-        line-height: 30px;
-    }
+    /*.modal-header h3 {*/
+        /*margin: 0;*/
+        /*line-height: 30px;*/
+    /*}*/
 
     .modal-body {
         position: relative;
         max-height: 400px;
-        padding: 15px;
+
         overflow-y: auto;
     }
 
@@ -97,254 +256,215 @@
     .modal-footer .btn-block + .btn-block {
         margin-left: 0;
     }
+
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1040;
+        background-color: #B2B2B2;
+    }
+
+    .modal-backdrop.fade {
+        opacity: 0;
+    }
+
+    .modal-backdrop,
+    .modal-backdrop.fade.in {
+        opacity: 0.8;
+        filter: alpha(opacity=80);
+    }
+
+    .up-sell-multi {
+        margin: 30px auto;
+        text-align: center;
+        padding: 0;
+        margin: 30px 0 0 0;
+        /*width: 60%;*/
+
+    }
+
+    .up-sell-multi .up-sell-description-container {
+        text-align: center;
+        margin: 10px 0 0 0;
+    }
+
+    .up-sell-multi del {
+        display: inline;
+        margin-right: 10px;
+    }
+
+    .multi-item {
+        text-align: center;
+        display: inline-block;
+        width: 30%;
+        /*float: left;*/
+        /*margin: 0 50px;*/
+    }
+
+    .multi-item .product-name {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .multi-item select {
+        display: block;
+        margin: 10px auto;
+    }
+
+
 </style>
+<div style="width: 400px; height: 400px">
+    elgakdgla<br>
+    elgakdgla<br>
+    elgakdgla<br>
+    elgakdgla<br>
+    elgakdgla<br>
+    elgakdgla<br>
+</div>
 
-<div id="up-sell-modal" class="modal hide fade">
+<div id="up-sell-modal" class="modal hide fade in">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>{{ upSell.getHeadline() }}</h3>
-    </div>
-    <div class="modal-body">
-        <p>{{ upSell.getDescription() }}</p>
-        <div>
-            {% for product in products %}
-                <div>
-                    <img src="{{ product.getImgUrl() }}"/>
-                    <h4>{{ product.getName() }}</h4>
-                    <h4>Price: <span class="muted">{{ product.getOriginalPrice() }}</span></h4>
-                </div>
-
-            {% endfor %}
+        <div class="up-sell-heading">
+            <h1>{{ upSell.getHeadline() }}</h1>
+            <small>{{ upSell.getDescription() }}</small>
         </div>
     </div>
-    <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">Close</a>
-        <a href="#" class="btn btn-primary">Save changes</a>
+    <div class="modal-body">
+        <div class="up-sell-content clearfix">
+            {% for product in products %}
+            {% if products.count() == 1 %}
+                <ul class="up-sell-multi">
+                    <li class="multi-item">
+                        <div >
+                            <img width="180px" height="210px" src="{{ product.getImgUrl() }}"/>
+                        </div>
+                        <div class="up-sell-description-container">
+
+                                <span class="product-name">
+                                {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...' : product.getName()  }}
+                            </span>
+
+                            <div class="up-price">
+                                <del class="muted">34,00 zł</del>
+                                <strong >17,00 zł</strong>
+                            </div>
+
+                            <select>
+                                <option value="nana">nana</option>
+                                <option value="nana">nana</option>
+                                <option value="nana">nana</option>
+                            </select>
+                            <button class="btn-up-black">Do koszyka</button>
+                        </div>
+                    </li>
+                    <li class="multi-item">
+                        <div >
+                            <img width="180px" height="210px" src="{{ product.getImgUrl() }}"/>
+                        </div>
+                        <div class="up-sell-description-container">
+
+                            <span class="product-name">
+                                {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...' : product.getName()  }}
+                            </span>
+
+                            <div class="up-price">
+                                <del class="muted">34,00 zł</del>
+                                <strong >17,00 zł</strong>
+                            </div>
+                            <select>
+                                <option value="nana">nana</option>
+                                <option value="nana">nana</option>
+                                <option value="nana">nana</option>
+                            </select>
+                            <button class="btn-up-black">Do koszyka</button>
+                        </div>
+                    </li>
+                    <li class="multi-item">
+                        <div >
+                            <img width="180px" height="210px" src="{{ product.getImgUrl() }}"/>
+                        </div>
+                        <div class="up-sell-description-container">
+
+                            <span class="product-name">
+                                {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...' : product.getName()  }}
+                            </span>
+
+                            <div class="up-price">
+                                <del class="muted">34,00 zł</del>
+                                &nbsp;&nbsp;
+                                <strong >17,00 zł</strong>
+                            </div>
+                            <select>
+                                <option value="nana">nana</option>
+                                <option value="nana">nana</option>
+                                <option value="nana">nana</option>
+                            </select>
+                            <button class="btn-up-black">Do koszyka</button>
+
+                        </div>
+                    </li>
+                </ul>
+            {% else %}
+                <div class="up-sell-content-inner">
+                    <div class="up-sell-img">
+                        <img width="240px" height="280px" src="{{ product.getImgUrl() }}"/>
+                    </div>
+                    <div class="up-sell-description-container">
+                        <h2 class=" product-name">
+                            {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...' : product.getName()  }}
+                        </h2>
+                        <small class="muted">
+                            {% set desc = 'OFFER TYPE 1: This is an example of an offer that gets triggered by clicking "Add to Cart" on a specific product, or products in a group such as a Collection, Type or Brand. OFFER TYPE 1: This is an example of an offer that gets triggered by clicking "Add to Cart" on a specific product, or products in a group such as a Collection, Type or Brand. OFFER TYPE 1: This is an example of an offer that gets triggered by clicking "Add to Cart" on a specific product, or products in a group such as a Collection, Type or Brand.' %}
+                            {{ desc|length > 200 ? desc|slice(0, 200) ~ '...' : desc  }}
+                        </small>
+                        <div class="up-price">
+                            <del class="muted ">34,00 zł</del>
+                            <h2>17,00 zł</h2>
+                        </div>
+
+                        <button class="btn-up-black">Do koszyka</button>
+                        <select>
+                            <option value="nana">nana</option>
+                            <option value="nana">nana</option>
+                            <option value="nana">nana</option>
+                        </select>
+
+                    </div>
+                </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+    </div>
+    <div class="up-sell-bottom clearfix">
+        <div class="pull-right">
+            <span class="muted to-basket" data-dismiss="modal">Przejdź od razu do koszyka »</span>
+            <button class="btn-up-gray" data-dismiss="modal">Nie dziękuję!</button>
+        </div>
     </div>
 </div>
-    {#<h4>{{ id }}</h4>#}
-    {#<h4>{{ up_sell_id }}</h4>#}
+<div class="modal-backdrop fade in"></div>
 
+<script type="text/javascript">
+    $(function(){
 
+        var screenWidth = $(window).width();
+        var modalWidth = screenWidth * 0.8;
+        var paddingLeft = 40;
 
-{#<script type="text/javascript">#}
-{#var Modal = function (element, options) {#}
-    {#this.options = options#}
-    {#this.$element = $(element)#}
-            {#.delegate('[data-dismiss="modal"]', 'click.dismiss.modal', $.proxy(this.hide, this))#}
-    {#this.options.remote && this.$element.find('.modal-body').load(this.options.remote)#}
-{#}#}
+        if (modalWidth > 900)
+        {
+            modalWidth = 900;
+        }
 
-{#Modal.prototype = {#}
+        var modalLeftMargin = (screenWidth - modalWidth)/2 - paddingLeft;
 
-    {#constructor: Modal#}
+        $('#up-sell-modal').css('margin-left', modalLeftMargin + 'px');
 
-    {#, toggle: function () {#}
-        {#return this[!this.isShown ? 'show' : 'hide']()#}
-    {#}#}
-
-    {#, show: function () {#}
-        {#var that = this#}
-                {#, e = $.Event('show')#}
-
-        {#this.$element.trigger(e)#}
-
-        {#if (this.isShown || e.isDefaultPrevented()) return#}
-
-        {#this.isShown = true#}
-
-        {#this.escape()#}
-
-        {#this.backdrop(function () {#}
-            {#var transition = $.support.transition && that.$element.hasClass('fade')#}
-
-            {#if (!that.$element.parent().length) {#}
-                {#that.$element.appendTo(document.body) //don't move modals dom position#}
-            {#}#}
-
-            {#that.$element.show()#}
-
-            {#if (transition) {#}
-                {#that.$element[0].offsetWidth // force reflow#}
-            {#}#}
-
-            {#that.$element#}
-                    {#.addClass('in')#}
-                    {#.attr('aria-hidden', false)#}
-
-            {#that.enforceFocus()#}
-
-            {#transition ?#}
-                    {#that.$element.one($.support.transition.end, function () { that.$element.focus().trigger('shown') }) :#}
-                    {#that.$element.focus().trigger('shown')#}
-
-        {#})#}
-    {#}#}
-
-    {#, hide: function (e) {#}
-        {#e && e.preventDefault()#}
-
-        {#var that = this#}
-
-        {#e = $.Event('hide')#}
-
-        {#this.$element.trigger(e)#}
-
-        {#if (!this.isShown || e.isDefaultPrevented()) return#}
-
-        {#this.isShown = false#}
-
-        {#this.escape()#}
-
-        {#$(document).off('focusin.modal')#}
-
-        {#this.$element#}
-                {#.removeClass('in')#}
-                {#.attr('aria-hidden', true)#}
-
-        {#$.support.transition && this.$element.hasClass('fade') ?#}
-                {#this.hideWithTransition() :#}
-                {#this.hideModal()#}
-    {#}#}
-
-    {#, enforceFocus: function () {#}
-        {#var that = this#}
-        {#$(document).on('focusin.modal', function (e) {#}
-            {#if (that.$element[0] !== e.target && !that.$element.has(e.target).length) {#}
-                {#that.$element.focus()#}
-            {#}#}
-        {#})#}
-    {#}#}
-
-    {#, escape: function () {#}
-        {#var that = this#}
-        {#if (this.isShown && this.options.keyboard) {#}
-            {#this.$element.on('keyup.dismiss.modal', function ( e ) {#}
-                {#e.which == 27 && that.hide()#}
-            {#})#}
-        {#} else if (!this.isShown) {#}
-            {#this.$element.off('keyup.dismiss.modal')#}
-        {#}#}
-    {#}#}
-
-    {#, hideWithTransition: function () {#}
-        {#var that = this#}
-                {#, timeout = setTimeout(function () {#}
-                    {#that.$element.off($.support.transition.end)#}
-                    {#that.hideModal()#}
-                {#}, 500)#}
-
-        {#this.$element.one($.support.transition.end, function () {#}
-            {#clearTimeout(timeout)#}
-            {#that.hideModal()#}
-        {#})#}
-    {#}#}
-
-    {#, hideModal: function () {#}
-        {#var that = this#}
-        {#this.$element.hide()#}
-        {#this.backdrop(function () {#}
-            {#that.removeBackdrop()#}
-            {#that.$element.trigger('hidden')#}
-        {#})#}
-    {#}#}
-
-    {#, removeBackdrop: function () {#}
-        {#this.$backdrop && this.$backdrop.remove()#}
-        {#this.$backdrop = null#}
-    {#}#}
-
-    {#, backdrop: function (callback) {#}
-        {#var that = this#}
-                {#, animate = this.$element.hasClass('fade') ? 'fade' : ''#}
-
-        {#if (this.isShown && this.options.backdrop) {#}
-            {#var doAnimate = $.support.transition && animate#}
-
-            {#this.$backdrop = $('<div class="modal-backdrop ' + animate + '" />')#}
-                    {#.appendTo(document.body)#}
-
-            {#this.$backdrop.click(#}
-                    {#this.options.backdrop == 'static' ?#}
-                            {#$.proxy(this.$element[0].focus, this.$element[0])#}
-                            {#: $.proxy(this.hide, this)#}
-            {#)#}
-
-            {#if (doAnimate) this.$backdrop[0].offsetWidth // force reflow#}
-
-            {#this.$backdrop.addClass('in')#}
-
-            {#if (!callback) return#}
-
-            {#doAnimate ?#}
-                    {#this.$backdrop.one($.support.transition.end, callback) :#}
-                    {#callback()#}
-
-        {#} else if (!this.isShown && this.$backdrop) {#}
-            {#this.$backdrop.removeClass('in')#}
-
-            {#$.support.transition && this.$element.hasClass('fade')?#}
-                    {#this.$backdrop.one($.support.transition.end, callback) :#}
-                    {#callback()#}
-
-        {#} else if (callback) {#}
-            {#callback()#}
-        {#}#}
-    {#}#}
-{#}#}
-
-
-{#/* MODAL PLUGIN DEFINITION#}
- {#* ======================= */#}
-
-{#var old = $.fn.modal#}
-
-{#$.fn.modal = function (option) {#}
-    {#return this.each(function () {#}
-        {#var $this = $(this)#}
-                {#, data = $this.data('modal')#}
-                {#, options = $.extend({}, $.fn.modal.defaults, $this.data(), typeof option == 'object' && option)#}
-        {#if (!data) $this.data('modal', (data = new Modal(this, options)))#}
-        {#if (typeof option == 'string') data[option]()#}
-        {#else if (options.show) data.show()#}
-    {#})#}
-{#}#}
-
-{#$.fn.modal.defaults = {#}
-    {#backdrop: true#}
-    {#, keyboard: true#}
-    {#, show: true#}
-{#}#}
-
-{#$.fn.modal.Constructor = Modal#}
-
-
-{#/* MODAL NO CONFLICT#}
- {#* ================= */#}
-
-{#$.fn.modal.noConflict = function () {#}
-    {#$.fn.modal = old#}
-    {#return this#}
-{#}#}
-
-
-{#/* MODAL DATA-API#}
- {#* ============== */#}
-
-{#$(document).on('click.modal.data-api', '[data-toggle="modal"]', function (e) {#}
-    {#var $this = $(this)#}
-            {#, href = $this.attr('href')#}
-            {#, $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) //strip for ie7#}
-            {#, option = $target.data('modal') ? 'toggle' : $.extend({ remote:!/#/.test(href) && href }, $target.data(), $this.data())#}
-
-    {#e.preventDefault()#}
-
-    {#$target#}
-            {#.modal(option)#}
-            {#.one('hide', function () {#}
-                {#$this.focus()#}
-            {#})#}
-{#})#}
-
-{#}(window.jQuery);#}
-{#</script>#}
+    });
+</script>
+</body>
+</html>

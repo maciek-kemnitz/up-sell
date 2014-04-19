@@ -7,11 +7,15 @@
     <link rel="stylesheet" type="text/css" href="http://swiatmat.pl/css/fonts!admin-3376.css">
     <link rel="stylesheet" type="text/css" href="http://www.shoplo.com/css/admin!admin-4486067.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/autosize.js/1.17.1/autosize-min.js"></script>
+    <script src="http://www.shoplo.com/js/admin!admin-3376.js"></script>
+
+
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/jquery-ui.min.js"></script>
     <script src="{{ app.request.basepath }}/js/bootstrap.js"></script>
     {#<script src="{{ app.request.basepath }}/js/common.js"></script>#}
 </head>
-<body class="content-ready" style="overflow: visible;">
+<body class="sidebar-collapsed">
 
 <style>
     .close {
@@ -24,246 +28,260 @@
         opacity: 0.2;
         filter: alpha(opacity=20);
     }
+
+    .space-right {
+        margin-right: 20px;
+    }
+
+    .space-top {
+        padding-top: 3px;
+    }
+
+    .autocompleter-area {
+        width: 100%;
+        height: 80px;
+        border: 1px solid #1C1F27;
+        border-top: none;
+        position: absolute;
+        background-color: white;
+        left: -1px;
+        z-index: 10;
+    }
+
+    .with-autocompleter-open {
+        border-top: 1px solid #1C1F27;
+        border-left: 1px solid #1C1F27;
+        border-right: 1px solid #1C1F27;
+        width: 100%;
+        border-bottom: 1px solid #D5DAE2;
+    }
 </style>
+
 <section class="main-container">
 
 <section class="content-container">
-    <section class="content-pages">
+    <section class="content-settings">
         <article class="content">
-            <section class="scroll-area right-frame bottom-frame scroll-rendered">
-                <section class="box bottom-frame scroll-heading clearfix">
-                    <h2 class="pull-left">
-                        {#<a href="http://mk-10.shoplo.com/admin/layout/pages"><span class="muted">Strony » </span></a>#}
-                        Dodaj ofertę Upsell
-                    </h2>
+            <section class="scroll-area right-frame bottom-frame">
+                <section class="box bottom-frame scroll-heading">
+                    <h2>Dodaj ofertę</h2>
                 </section>
-                <div class="slimScrollDiv" style="position: relative; overflow: visible; width: auto; height: 1160px;"><section class="scroll-content" style="overflow: visible; width: auto; height: 68px;">
-                        <form action="/save/" method="post" novalidate="novalidate">
-                            <table class="tabular">
-                                <tbody>
+                <section class="scroll-content">
+                    <form action="/save/" method="post">
+                        {% if upSell is defined %}<input name="upSellId" type="hidden" value="{{ upSell.getId() }}">{% endif %}
+                        <table class="tabular">
+                            <tbody>
                                 <tr>
-                                    <td class="box bottom-frame right-frame left-column valign-top">
-                                        <h3>Ustawienia główne</h3>
-                                    </td>
-                                    <td class="bottom-frame valign-top">
-                                        <section class="control-group bottom box bottom-frame clearfix">
-                                            <ul class="table-columns">
-                                                <li>
-                                                    <label class="control-label bottom pull-left" for="pageTitle">Nazwa kampanii</label>
-                                                </li>
-                                                <li>
-                                                    <input name="name" type="text" class="pull-right was-required" placeholder="Type something…" required="required" {% if upSell is defined %}value="{{ upSell.getName() }}"{% endif %}>
-                                                    {#<input type="text" name="title" value="" id="pageTitle" class="pull-right was-required" data-error-message="To pole jest wymagane">#}
-                                                </li>
-                                            </ul>
-                                        </section>
-
-                                        <section class="control-group bottom box bottom-frame clearfix">
-                                            <ul class="table-columns">
-                                                <li>
-                                                    <label class="control-label bottom pull-left" for="pageUrl">Nagłówek oferty</label>
-                                                </li>
-
-                                                <li>
-                                                    <input name="headline" type="text" class="pull-right" placeholder="Type something…" required="required" {% if upSell is defined %}value="{{ upSell.getHeadLine() }}"{% endif %}
-                                                    {#<input type="text" name="url" value="" id="pageUrl" class="pull-right">#}
-                                                </li>
-                                            </ul>
-                                        </section>
-
-                                        <section class="control-group bottom box clearfix">
-                                            <ul class="table-columns">
-                                                <li>
-                                                    <label class="control-label bottom pull-left" for="pageView">Opis oferty</label>
-                                                </li>
-
-                                                <li>
-                                                    <textarea name="description" class="pull-right" required="required" style="width: 400px; height: 100px">{% if upSell is defined %}{{ upSell.getDescription() }}{% endif %}</textarea>
-                                                    {#<select name="visibility" id="pageView" class="pull-right visibility-select" style="display: none;">#}
-                                                        {#<option data-icon="#" data-icon-class="option-icon labelGreen" value="1" selected="selected">widoczna</option>#}
-                                                        {#<option data-icon="#" data-icon-class="option-icon labelRed" value="0">ukryta</option>#}
-                                                    {#</select><div class="bootstrap-select pull-right visibility-select"><button type="button" class="dropdown-toggle btn-dark" data-toggle="dropdown" data-id="pageView"><div class="filter-option pull-left"><i class="option-icon labelGreen" data-icon="#"></i> widoczna</div><i data-icon="5"></i></button><div class="dropdown-menu open"><ul class="inner" role="menu"><li rel="0" class="selected"><a tabindex="0" class="" style=""><i data-icon="#" class="option-icon labelGreen"></i> <span class="text">widoczna</span></a></li><li rel="1"><a tabindex="0" class="" style=""><i data-icon="#" class="option-icon labelRed"></i> <span class="text">ukryta</span></a></li></ul></div></div>#}
-                                                </li>
-                                            </ul>
-                                        </section>
-                                    </td>
-                                </tr>
-
-
-                                {#<label class="checkbox">#}
-                                {#<input id="price-range" name="price-range" type="checkbox" checked="checked"> Check me out#}
-                                {#</label>#}
-                                {#<div id="price-range-container">#}
-                                {#<div class="input-prepend">#}
-                                {#<span class="add-on">PLN</span>#}
-                                {#<input name="price_from" class="span2" id="prependedInput" type="text" {% if upSell is defined and upSell.usePriceRane() %}value="{{ upSell.getPriceFrom() }}"{% endif %}>#}
-                                {#</div>#}
-                                {#<div class="input-prepend">#}
-                                {#<span class="add-on">PLN</span>#}
-                                {#<input name="price_to" class="span2" id="prependedInput" type="text" {% if upSell is defined and upSell.usePriceRane() %}value="{{ upSell.getPriceTo() }}"{% endif %}>#}
-                                {#</div>#}
-                                {#</div>#}
-
-                                <tr>
-                                    <td class="box bottom-frame right-frame left-column valign-top">
-                                        <h3>Wybierz kiedy oferta upsell ma się pojawić</h3>
-                                    </td>
-
-                                    <td class="bottom-frame  valign-top">
-                                        <section class="control-group bottom box bottom-frame clearfix">
-                                            <ul class="table-columns">
-                                                <li>
-                                                    <label class="control-label bottom pull-left" for="pageTitle">
-                                                        <div class="prettycheckbox">
-                                                            <input type="checkbox" id="price-range" name="price-range" checked="checked" style="display: none;">
-                                                            <span class="checked"></span>
-                                                        </div>
-                                                        Pokaż ofertę gdy suma koszyka wynosi
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <div class="input-prepend pull-right">
-                                                        <span class="add-on">$</span>
-                                                        <input name="price_to" class="span2" id="prependedInput"  type="text" style="height: 30px; "
-                                                               {% if upSell is defined and upSell.usePriceRane() %}value="{{ upSell.getPriceTo() }}"{% endif %}>
-                                                    </div>
-                                                    <span class="pull-right" style="padding: 5px 10px;">do</span>
-                                                    <div class="input-prepend pull-right">
-                                                        <span class="add-on">$</span>
-                                                        <input name="price_from" class="span2" id="prependedInput" type="text" style="height: 30px;"
-                                                               {% if upSell is defined and upSell.usePriceRane() %}value="{{ upSell.getPriceFrom() }}"{% endif %}>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </section>
-
-                                        <section class="control-group bottom box  clearfix">
-
-                                            <label class="control-label" for="pageTitle">
-                                                <div class="prettycheckbox">
-                                                    <input type="checkbox" id="" name="cos" checked="checked" style="display: none;">
-                                                    <span class="checked"></span>
-                                                </div>
-                                                Pokaż ofertę gdy w koszyku znajduję się konkretny produkt
-                                            </label>
-                                            <div style="border: 1px solid #D5DAE2; padding: 10px; background-color: #F5F5F5">
-                                                {#<div style="border: 1px solid #D5DAE2">#}
-                                                    <input type="text" id="name" name="title" value="Bugatti Veyron" data-error-message="To pole jest wymagane" class="was-required" style="width: 100%; border: 1px solid #D5DAE2">
-                                                {#</div>#}
-                                            </div>
-
-
-                                            <div style="margin-top: 20px;">
-                                                <div class="pull-left" style="border: 1px solid #D5DAE2; margin: 0 20 20 0px;">
-                                                    <a class="close" style="margin-right: 5px" aria-hidden="true">×</a>
-                                                    <div style="padding: 15px">
-
-                                                        <div class="clearfix"></div>
-                                                        <img src="http://static.shoplo.com/2568/products/th160/aaag/8-bugatti_v.jpg">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-                                        </section>
-
-                                        {#<div class="redactor_box"><ul class="redactor_toolbar"><li><a href="javascript:void(null);" title="HTML" class="redactor_btn_html" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Formatting" class="redactor_btn_formatting" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Bold" class="redactor_btn_bold" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Italic" class="redactor_btn_italic" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Deleted" class="redactor_btn_deleted" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="• Unordered List" class="redactor_btn_unorderedlist" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="1. Ordered List" class="redactor_btn_orderedlist" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="&lt; Outdent" class="redactor_btn_outdent" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="&gt; Indent" class="redactor_btn_indent" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Insert Image" class="redactor_btn_image" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Insert Video" class="redactor_btn_video" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Table" class="redactor_btn_table" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Link" class="redactor_btn_link" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Font Color" class="redactor_btn_fontcolor" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Back Color" class="redactor_btn_backcolor" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Alignment" class="redactor_btn_alignment" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Insert Horizontal Rule" class="redactor_btn_horizontalrule" tabindex="-1"></a></li></ul><div class="redactor_wysiwyg redactor_textarea-content redactor_editor" contenteditable="true" dir="ltr"><p><br></p></div><textarea name="content" id="content" class="wysiwyg textarea-content" style="display: none; overflow: hidden; word-wrap: break-word; resize: none; height: 100px;"></textarea></div>#}
-                                    </td>
+                                    {% include 'main-settings.block.html.twig' with {'upSell': upSell is defined ? upSell : null} %}
                                 </tr>
                                 <tr>
-                                    <td class="box bottom-frame right-frame left-column valign-top">
-                                        <h3>Produkty, które chcesz upsellować</h3>
-                                    </td>
-
-                                    <td class="bottom-frame  valign-top">
-                                        <section class="control-group bottom box bottom-frame clearfix">
-                                            <ul class="table-columns">
-                                                <li>
-                                                    <label class="control-label bottom pull-left" for="pageTitle">
-                                                        Wybierz zniżkę
-                                                    </label>
-                                                </li>
-                                                <li>
-                                                    <select name="checkout_lang" class="pull-right to-right" id="checkout-lang" style="display: none;">
-                                                        <option value="pt_BR" data="">Brasil</option>
-                                                        <option value="de_DE" data="">Deutsch</option>
-                                                        <option value="en_GB" data="">English</option>
-                                                    </select>
-                                                    <div class="bootstrap-select pull-right to-right">
-                                                        <button type="button" class="dropdown-toggle btn-dark" data-toggle="dropdown" data-id="checkout-lang">
-                                                            <div class="filter-option pull-left">Polski</div>
-                                                            <i data-icon="5"></i>
-                                                        </button>
-                                                        <div class="dropdown-menu open">
-                                                            <ul class="inner" role="menu">
-                                                                <li rel="0">
-                                                                    <a tabindex="0" class="" style="">
-                                                                        <span class="text">Brasil</span>
-                                                                    </a>
-                                                                </li>
-                                                                <li rel="1">
-                                                                    <a tabindex="0" class="" style=""><span class="text">Deutsch</span></a></li>
-                                                                <li rel="2"><a tabindex="0" class="" style=""><span class="text">English</span></a></li>
-                                                                <li rel="3"><a tabindex="0" class="" style=""><span class="text">Norsk</span></a></li>
-                                                                <li rel="4" class="selected"><a tabindex="0" class="" style=""><span class="text">Polski</span></a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </section>
-
-                                        <section class="control-group bottom box clearfix">
-
-                                            <label class="control-label" for="pageTitle">
-                                                Wybierz produkty
-                                            </label>
-                                            <div style="border: 1px solid #D5DAE2; padding: 10px; background-color: #F5F5F5">
-                                                {#<div style="border: 1px solid #D5DAE2">#}
-                                                <input type="text" id="name" name="title" value="Bugatti Veyron" data-error-message="To pole jest wymagane" class="was-required" style="width: 100%; border: 1px solid #D5DAE2">
-                                                {#</div>#}
-                                            </div>
-
-
-                                            <div style="margin-top: 20px;">
-                                                <div class="pull-left" style="border: 1px solid #D5DAE2; margin: 0 20 20 0px;">
-                                                    <a class="close" style="margin-right: 5px" aria-hidden="true">×</a>
-                                                    <div style="padding: 15px">
-
-                                                        <div class="clearfix"></div>
-                                                        <img src="http://static.shoplo.com/2568/products/th160/aaag/8-bugatti_v.jpg">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-                                        </section>
-
-                                        {#<div class="redactor_box"><ul class="redactor_toolbar"><li><a href="javascript:void(null);" title="HTML" class="redactor_btn_html" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Formatting" class="redactor_btn_formatting" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Bold" class="redactor_btn_bold" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Italic" class="redactor_btn_italic" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Deleted" class="redactor_btn_deleted" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="• Unordered List" class="redactor_btn_unorderedlist" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="1. Ordered List" class="redactor_btn_orderedlist" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="&lt; Outdent" class="redactor_btn_outdent" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="&gt; Indent" class="redactor_btn_indent" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Insert Image" class="redactor_btn_image" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Insert Video" class="redactor_btn_video" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Table" class="redactor_btn_table" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Link" class="redactor_btn_link" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Font Color" class="redactor_btn_fontcolor" tabindex="-1"></a></li><li><a href="javascript:void(null);" title="Back Color" class="redactor_btn_backcolor" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Alignment" class="redactor_btn_alignment" tabindex="-1"></a></li><li class="redactor_separator"></li><li><a href="javascript:void(null);" title="Insert Horizontal Rule" class="redactor_btn_horizontalrule" tabindex="-1"></a></li></ul><div class="redactor_wysiwyg redactor_textarea-content redactor_editor" contenteditable="true" dir="ltr"><p><br></p></div><textarea name="content" id="content" class="wysiwyg textarea-content" style="display: none; overflow: hidden; word-wrap: break-word; resize: none; height: 100px;"></textarea></div>#}
-                                    </td>
+                                    {% include 'when-settings.block.html.twig' with {'upSell': upSell is defined ? upSell : null} %}
                                 </tr>
+                                <tr>
+                                    {% include 'up-sell-settings.block.html.twig' with {'upSell': upSell is defined ? upSell : null} %}
+                                </tr>
+                            </tbody>
+                        </table>
 
-                                </tbody>
-                            </table>
-
-                            <section class="buttons-bar active">
-                                <section class="box buttons">
-                                    <button type="submit" class="btn-accept" data-icon="'">Zapisz zmiany</button>
-                                    <button type="reset" class="btn-cancel" data-icon="!">Anuluj</button>
-                                </section>
+                        <section class="buttons-bar">
+                            <section class="box buttons">
+                                <button type="submit" class="btn-accept" data-icon="'">Zapisz zmiany</button>
+                                <button type="reset" class="btn-cancel" data-icon="!">Anuluj</button>
                             </section>
-                        </form>
-                    </section>
-                <div class="slimScrollBar" style="background-color: rgb(170, 170, 170); width: 7px; position: absolute; top: 0px; opacity: 0.4; border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; z-index: 99; right: 0px; height: 30px; display: none; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 0px; background-position: initial initial; background-repeat: initial initial;"></div></div>
+                        </section>
+                    </form>
+                </section>
             </section>
         </article>
     </section>
 </section>
-
-
 </section>
+<div id="testModal" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Modal header</h3>
+    </div>
+    <div class="modal-body">
+        <p>One fine body…</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn">Close</a>
+        <a href="#" class="btn btn-primary">Save changes</a>
+    </div>
+<script src="http://www.shoplo.com/js/admin!bootstrap-admin!bootstrap.select-admin!bootstrap.checkbox-admin!jquery.custom-admin!jquery.validate-admin!jquery.sortable-admin!jquery.slimscroll-admin!jquery.numberAnimate-admin!jquery.touchtoclick-admin!admin-admin!main-11240606.js"></script>
+<script src="http://www.shoplo.com/js/admin!autocompleter-0.js"></script>
+<script>
+    ADMIN.ROOT = 'local.up-sell.pl';
+    ADMIN.STATIC_ROOT = 'local.up-sell.pl';
+    ADMIN.USER = {
+        ID: '0',
+        TOKEN: '',
+        LANG: {% if js_dict is defined %}eval(js_dict){% else %}''{% endif %},
+        IC: {% if ins_com is defined and ins_com %}true{% else %}false{% endif %}
+    };
+    ADMIN.SHOP = {
+        CURRENCY: '{% if shop is defined and shop%}{{ shop.currency }}{% endif %}'
+    };
+
+    ADMIN.run();
+</script>
+<script type="text/javascript">
+    $(function(){
+        $('#price-range-label').click(function() {
+
+            if ($("input[name='price-range']").is(':checked'))
+            {
+                $("input[name='price_from']").removeAttr('disabled');
+                $("input[name='price_to']").removeAttr('disabled');
+
+            }
+            else
+            {
+                $("input[name='price_from']").attr('disabled', 'disabled');
+                $("input[name='price_to']").attr('disabled', 'disabled');
+            }
+        });
+
+        $('#select-discount').change(function(){
+            var selected = $('#select-discount option:selected').val();
+            var html = '';
+            switch(selected)
+            {
+                case 'percent':
+                        html = $('<div class="hide"><span class="add-on">%</span><input name="discount-amount" type="text" style="height: 30px;"></div>');
+                        $('.discount-container').html(html);
+                        html.toggle();
+                        break;
+
+                case 'amount':
+                        html = $('<div class="hide"><span class="add-on">$</span><input name="discount-amount" type="text" style="height: 30px;"</div>');
+                        $('.discount-container').html(html);
+                        html.toggle();
+                        break;
+
+                case 'none':
+                    $('.discount-container').html('');
+
+            }
+        });
+
+        $('#related-ac').keyup(function(){
+
+            if ($(this).val())
+            {
+                $('#related-ac-result-container').removeClass('hide');
+                $(this).css('border-color','#1c1f27');
+                var query = $(this).val();
+
+                var userData = {
+                    'query': query
+                };
+
+                $.post('/ajax/autocomplete', userData, function (ajaxResult) {
+                            if(ajaxResult.status == 'ok'){
+                                $('#related-ac-result-container').find('.autocompleter-list').html(ajaxResult.html);
+                            }
+                        }
+                        , 'json');
+            }
+            else
+            {
+                $(this).css('border-color','');
+                $('#related-ac-result-container').addClass('hide');
+            }
+        });
+
+        $('#up-sell-ac').keyup(function(){
+
+            if ($(this).val())
+            {
+                $('#up-sell-ac-result-container').removeClass('hide');
+                $(this).css('border-color','#1c1f27');
+                var query = $(this).val();
+
+                var userData = {
+                    'query': query
+                };
+
+                $.post('/ajax/autocomplete', userData, function (ajaxResult) {
+                            if(ajaxResult.status == 'ok'){
+                                $('#up-sell-ac-result-container').find('.autocompleter-list').html(ajaxResult.html);
+                            }
+                        }
+                        , 'json');
+            }
+            else
+            {
+                $(this).css('border-color','');
+                $('#up-sell-ac-result-container').addClass('hide');
+            }
+        });
+
+        $('#related-ac-result-container').on('click', 'li.item', function(){
+            var imgSrc = $(this).data('thumbnail');
+            var name = $(this).data('name');
+            var productId = $(this).data('id');
+
+            $('#related-ac').css('border-color','');
+            $('#related-ac-result-container').addClass('hide');
+            $('#related').find('ul.photos.products').append('<li class="with-handle with-meta preloaded" data-id="8"><a class="delete" data-icon="!"></a><span class="thumb-100 fade in" style="margin-top: 51px;"><img src="'+imgSrc+'"></span><section class="meta"><span class="text">'+ $.trim(name)+'</span></section><input type="hidden" name="selected-product-trigger[]" value="'+productId+'"></li>');
+            $('#related-ac').val('');
+        });
+
+        $('#up-sell-ac-result-container').on('click', 'li.item', function(){
+            var imgSrc = $(this).data('thumbnail');
+            var name = $(this).data('name');
+            var productId = $(this).data('id');
+
+            $('#up-sell-ac').css('border-color','');
+            $('#up-sell-ac-result-container').addClass('hide');
+            $('#up-sell').find('ul.photos.products').append('<li class="with-handle with-meta preloaded" data-id="8"><a class="delete" data-icon="!"></a><span class="thumb-100 fade in" style="margin-top: 51px;"><img src="'+imgSrc+'"></span><section class="meta"><span class="text">'+ $.trim(name)+'</span></section><input type="hidden" name="up-sell-products[]" value="'+productId+'"></li>');
+            $('#up-sell-ac').val('');
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    $(function(){
+
+        var uppSellContainer = '<div id="up-sell-container"></div>';
+
+        var userData = {
+            'productId': {$product->id},
+            'shopId': 10344,
+            'cartValue':{$cart->total_price},
+            'productPrice':100
+
+        }
+
+        $.post( "http://up-sell.mkemnitz.linuxpl.info/ajax/up-sell/product", userData, function(ajaxResult) {
+            if (ajaxResult['status'] == 'ok')
+            {
+                $('body').append(uppSellContainer);
+
+//                console.log(ajaxResult['html']);
+                $('body').on('click','input[name="addToCard"]',function(){
+                    $('#up-sell-modal').css('display','block');
+                    $('#up-sell-modal').addClass('in');
+
+                    return false;
+                });
+
+                $('body').on('click','[data-dismiss="modal"]', function(){
+                    $('#up-sell-modal').removeClass('in');
+                    $('#up-sell-modal').css('display','none');
+                });
+                $('#up-sell-container').html(ajaxResult['html']);
+            }
+            else if (ajaxResult['status'] == 'no up-sell')
+            {
+
+//                do nothing
+            }
+
+        }, 'json');
+    });
+</script>
 </body>
 {#<body>#}
     {#<div class="container">#}
@@ -333,34 +351,6 @@
             {#<button type="submit" class="btn">Submit</button>#}
         {#</form>#}
     {#</div>#}
-    {#<script type="text/javascript">#}
-        {#$(function(){#}
-           {#$('#price-range').click(function() {#}
-              {#if ($(this).is(':checked'))#}
-              {#{#}
-                  {#$('#price-range-container').removeClass('hide');#}
 
-              {#}#}
-              {#else#}
-              {#{#}
-                  {#$('#price-range-container').addClass('hide');#}
-              {#}#}
-           {#});#}
-
-            {#$('#enable-in-cart').click(function() {#}
-                {#if ($(this).is(':checked'))#}
-                {#{#}
-                    {#$('#cart-container').removeClass('hide');#}
-
-                {#}#}
-                {#else#}
-                {#{#}
-                    {#$('#cart-container').addClass('hide');#}
-                {#}#}
-            {#});#}
-
-
-        {#});#}
-    {#</script>#}
 {#</body>#}
 </html>

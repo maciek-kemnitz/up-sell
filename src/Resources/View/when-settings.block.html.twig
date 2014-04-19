@@ -1,0 +1,68 @@
+<td class="box bottom-frame right-frame left-column valign-top">
+    <h3>Wybierz kiedy oferta upsell ma się pojawić</h3>
+</td>
+<td class="bottom-frame  valign-top">
+    <section class="control-group bottom box bottom-frame clearfix">
+        <ul class="table-columns">
+            <li>
+                <label class="control-label bottom pull-left" id="price-range-label" for="pageTitle">
+                    <div class="prettycheckbox">
+                        <input type="checkbox" name="price-range" {% if upSell != null and upSell.usePriceRange() %}checked="checked"{% endif %}/>
+                    </div>
+                    Pokaż ofertę gdy suma koszyka wynosi
+                </label>
+            </li>
+            <li>
+                <div class="input-prepend pull-right">
+                    <span class="add-on">$</span>
+                    <input name="price_to" class="span2" id="prependedInput"  type="text" style="height: 30px;" {% if upSell is not defined or (upSell != null and not upSell.usePriceRange()) %} disabled=disabled{% endif %}
+                            {% if upSell != null and upSell.usePriceRange() %} value="{{ upSell.getPriceTo() }}"{% endif %}>
+                </div>
+                <span class="pull-right" style="padding: 5px 10px;">do</span>
+                <div class="input-prepend pull-right">
+                    <span class="add-on">$</span>
+                    <input name="price_from" class="span2" id="prependedInput" type="text" style="height: 30px;" {% if upSell is not defined or (upSell != null and not upSell.usePriceRange()) %} disabled=disabled{% endif %}
+                            {% if upSell != null and upSell.usePriceRange() %} value="{{ upSell.getPriceFrom() }}"{% endif %}>
+                </div>
+            </li>
+        </ul>
+    </section>
+    <section id="related" class="control-group bottom box  clearfix">
+
+        <label class="control-label" for="pageTitle">
+            <div class="prettycheckbox">
+                <input type="checkbox" name="cos" checked="checked"/>
+            </div>
+            Pokaż ofertę gdy w koszyku znajduję się konkretny produkt
+        </label>
+        <section class="controls box gray top-frame bottom-frame left-frame right-frame with-autocompleter">
+            <section class="autocompleter">
+                <input type="text" id="related-ac" autocomplete="off" placeholder="Zacznij wpisywać nazwę produktu..." />
+
+                <section id="related-ac-result-container" class="autocompleter-scroll hide">
+                    <ul class="autocompleter-list">
+
+                    </ul>
+                </section>
+            </section>
+        </section>
+        <section class="control-group box">
+            <ul class="grid horizontal photos products  prevent-ajax">
+                {% if upSell != null %}
+                    {% for productInCart in upSell.getProductInCarts() %}
+                        {% set product = productInCart.getProduct() %}
+                        <li class="with-handle with-meta preloaded" data-id="8">
+                            <a class="delete" data-icon="!"></a>
+                            <span class="thumb-100 fade in" style="margin-top: 51px;">
+                                <img src="{{ product.getThumbnail() }}">
+                            </span>
+                            <section class="meta"><span class="text">{{ product.getName() }}</span>
+                            </section>
+                            <input type="hidden" name="selected-product-trigger[]" value="{{ product.getShoploProductId() }}">
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </section>
+    </section>
+</td>

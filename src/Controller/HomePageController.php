@@ -25,9 +25,18 @@ class HomePageController implements ControllerProviderInterface
 
 			$upSells = UpSellQuery::create()
 								->filterByShopDomain($shoploApi->shop->retrieve()['domain'])
+								->orderByOrder()
 								->find();
 
 			return $app['twig']->render('home.page.html.twig', ['product'=>$shoploApi->product->retrieve(), 'uppSells' => $upSells]);
+
+		});
+
+		$controllers->get('/modal', function (Request $request) use ($app)
+		{
+
+			$upSell = UpSellQuery::create()->findPk(35);
+			return $app['twig']->render('widget.page.html.twig', ['upSell' => $upSell, 'products' => $upSell->getProducts()]);
 
 		});
 

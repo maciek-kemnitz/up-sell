@@ -8,6 +8,9 @@
                     <dsn>mysql:host=local.phpmyadmin.pl;dbname=shoplo_up_sell</dsn>
                     <user>root</user>
                     <password>maciekmarekmama</password>
+                    <settings>
+                        <setting id="charset">utf8</setting>
+                    </settings>
                 </connection>
             </datasource>
         </datasources>

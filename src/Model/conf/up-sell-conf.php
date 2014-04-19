@@ -12,6 +12,13 @@ $conf = array (
         'dsn' => 'mysql:host=local.phpmyadmin.pl;dbname=shoplo_up_sell',
         'user' => 'root',
         'password' => 'maciekmarekmama',
+        'settings' => 
+        array (
+          'charset' => 
+          array (
+            'value' => 'utf8',
+          ),
+        ),
       ),
     ),
     'default' => 'up-sell',

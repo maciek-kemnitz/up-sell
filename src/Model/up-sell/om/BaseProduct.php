@@ -75,7 +75,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
     /**
      * The value for the original_price field.
-     * @var        string
+     * @var        double
      */
     protected $original_price;
 
@@ -84,6 +84,18 @@ abstract class BaseProduct extends BaseObject implements Persistent
      * @var        string
      */
     protected $url;
+
+    /**
+     * The value for the thumbnail field.
+     * @var        string
+     */
+    protected $thumbnail;
+
+    /**
+     * The value for the sku field.
+     * @var        double
+     */
+    protected $sku;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -163,7 +175,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
     /**
      * Get the [original_price] column value.
      *
-     * @return string
+     * @return double
      */
     public function getOriginalPrice()
     {
@@ -180,6 +192,28 @@ abstract class BaseProduct extends BaseObject implements Persistent
     {
 
         return $this->url;
+    }
+
+    /**
+     * Get the [thumbnail] column value.
+     *
+     * @return string
+     */
+    public function getThumbnail()
+    {
+
+        return $this->thumbnail;
+    }
+
+    /**
+     * Get the [sku] column value.
+     *
+     * @return double
+     */
+    public function getSku()
+    {
+
+        return $this->sku;
     }
 
     /**
@@ -290,13 +324,13 @@ abstract class BaseProduct extends BaseObject implements Persistent
     /**
      * Set the value of [original_price] column.
      *
-     * @param  string $v new value
+     * @param  double $v new value
      * @return Product The current object (for fluent API support)
      */
     public function setOriginalPrice($v)
     {
         if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
+            $v = (double) $v;
         }
 
         if ($this->original_price !== $v) {
@@ -328,6 +362,48 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
         return $this;
     } // setUrl()
+
+    /**
+     * Set the value of [thumbnail] column.
+     *
+     * @param  string $v new value
+     * @return Product The current object (for fluent API support)
+     */
+    public function setThumbnail($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->thumbnail !== $v) {
+            $this->thumbnail = $v;
+            $this->modifiedColumns[] = ProductPeer::THUMBNAIL;
+        }
+
+
+        return $this;
+    } // setThumbnail()
+
+    /**
+     * Set the value of [sku] column.
+     *
+     * @param  double $v new value
+     * @return Product The current object (for fluent API support)
+     */
+    public function setSku($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->sku !== $v) {
+            $this->sku = $v;
+            $this->modifiedColumns[] = ProductPeer::SKU;
+        }
+
+
+        return $this;
+    } // setSku()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -366,8 +442,10 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $this->shop_domain = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
             $this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->img_url = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->original_price = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->original_price = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
             $this->url = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->thumbnail = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->sku = ($row[$startcol + 8] !== null) ? (double) $row[$startcol + 8] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -377,7 +455,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 7; // 7 = ProductPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = ProductPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Product object", $e);
@@ -583,6 +661,10 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
+        $this->modifiedColumns[] = ProductPeer::ID;
+        if (null !== $this->id) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . ProductPeer::ID . ')');
+        }
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(ProductPeer::ID)) {
@@ -605,6 +687,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
         }
         if ($this->isColumnModified(ProductPeer::URL)) {
             $modifiedColumns[':p' . $index++]  = '`url`';
+        }
+        if ($this->isColumnModified(ProductPeer::THUMBNAIL)) {
+            $modifiedColumns[':p' . $index++]  = '`thumbnail`';
+        }
+        if ($this->isColumnModified(ProductPeer::SKU)) {
+            $modifiedColumns[':p' . $index++]  = '`sku`';
         }
 
         $sql = sprintf(
@@ -638,6 +726,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
                     case '`url`':
                         $stmt->bindValue($identifier, $this->url, PDO::PARAM_STR);
                         break;
+                    case '`thumbnail`':
+                        $stmt->bindValue($identifier, $this->thumbnail, PDO::PARAM_STR);
+                        break;
+                    case '`sku`':
+                        $stmt->bindValue($identifier, $this->sku, PDO::PARAM_STR);
+                        break;
                 }
             }
             $stmt->execute();
@@ -645,6 +739,13 @@ abstract class BaseProduct extends BaseObject implements Persistent
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
         }
+
+        try {
+            $pk = $con->lastInsertId();
+        } catch (Exception $e) {
+            throw new PropelException('Unable to get autoincrement id.', $e);
+        }
+        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -786,6 +887,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
             case 6:
                 return $this->getUrl();
                 break;
+            case 7:
+                return $this->getThumbnail();
+                break;
+            case 8:
+                return $this->getSku();
+                break;
             default:
                 return null;
                 break;
@@ -821,6 +928,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $keys[4] => $this->getImgUrl(),
             $keys[5] => $this->getOriginalPrice(),
             $keys[6] => $this->getUrl(),
+            $keys[7] => $this->getThumbnail(),
+            $keys[8] => $this->getSku(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -881,6 +990,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
             case 6:
                 $this->setUrl($value);
                 break;
+            case 7:
+                $this->setThumbnail($value);
+                break;
+            case 8:
+                $this->setSku($value);
+                break;
         } // switch()
     }
 
@@ -912,6 +1027,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if (array_key_exists($keys[4], $arr)) $this->setImgUrl($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setOriginalPrice($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setUrl($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setThumbnail($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setSku($arr[$keys[8]]);
     }
 
     /**
@@ -930,6 +1047,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductPeer::IMG_URL)) $criteria->add(ProductPeer::IMG_URL, $this->img_url);
         if ($this->isColumnModified(ProductPeer::ORIGINAL_PRICE)) $criteria->add(ProductPeer::ORIGINAL_PRICE, $this->original_price);
         if ($this->isColumnModified(ProductPeer::URL)) $criteria->add(ProductPeer::URL, $this->url);
+        if ($this->isColumnModified(ProductPeer::THUMBNAIL)) $criteria->add(ProductPeer::THUMBNAIL, $this->thumbnail);
+        if ($this->isColumnModified(ProductPeer::SKU)) $criteria->add(ProductPeer::SKU, $this->sku);
 
         return $criteria;
     }
@@ -999,6 +1118,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $copyObj->setImgUrl($this->getImgUrl());
         $copyObj->setOriginalPrice($this->getOriginalPrice());
         $copyObj->setUrl($this->getUrl());
+        $copyObj->setThumbnail($this->getThumbnail());
+        $copyObj->setSku($this->getSku());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1057,6 +1178,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $this->img_url = null;
         $this->original_price = null;
         $this->url = null;
+        $this->thumbnail = null;
+        $this->sku = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

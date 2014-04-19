@@ -27,13 +27,14 @@ class UpSell extends BaseUpSell
 		$relatedProductIds = $this->getRelatedProducts()->toKeyValue('productId', 'productId');
 
 		$products = ProductQuery::create()
-						->findByShopDomain($this->getShopDomain())
+						->filterByShopDomain($this->getShopDomain())
 						->filterByShoploProductId($relatedProductIds)
 						->find();
 
 		return $products;
 
 	}
+	
 
 	/**
 	 * @return bool
@@ -43,7 +44,7 @@ class UpSell extends BaseUpSell
 		return $this->getStatus() == UpSellPeer::STATUS_ACTIVE;
 	}
 
-	public function usePriceRane()
+	public function usePriceRange()
 	{
 		return $this->getUsePriceRange() == UpSellPeer::USE_PRICE_RANGE_1;
 	}

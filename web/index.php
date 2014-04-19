@@ -3,7 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 require_once __DIR__.'/../src/Config/config.php';
 
-
+mb_internal_encoding("UTF-8");
 Propel::init(__DIR__."/../src/Model/conf/up-sell-conf.php");
 
 $app = getAppConfigured();

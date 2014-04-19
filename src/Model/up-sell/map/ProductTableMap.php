@@ -40,15 +40,17 @@ class ProductTableMap extends TableMap
         $this->setPhpName('Product');
         $this->setClassname('src\\Model\\Product');
         $this->setPackage('up-sell');
-        $this->setUseIdGenerator(false);
+        $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('shoplo_product_id', 'ShoploProductId', 'INTEGER', true, null, null);
         $this->addColumn('shop_domain', 'ShopDomain', 'VARCHAR', true, 255, null);
         $this->addColumn('name', 'Name', 'LONGVARCHAR', true, null, null);
         $this->addColumn('img_url', 'ImgUrl', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('original_price', 'OriginalPrice', 'DECIMAL', true, 10, null);
+        $this->addColumn('original_price', 'OriginalPrice', 'FLOAT', true, null, null);
         $this->addColumn('url', 'Url', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('thumbnail', 'Thumbnail', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('sku', 'Sku', 'FLOAT', false, null, null);
         // validators
     } // initialize()
 
