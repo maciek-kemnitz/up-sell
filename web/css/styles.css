@@ -1,0 +1,155 @@
+body { background:url(../img/bg.png); }
+.headline { padding:50px 0px; }
+.chart { padding:60px 0px; }
+@import "../bootstrap/bootstrap.less";
+@import "bootstrap.customs.less";
+@import "login.less";
+@import "popover.notifications.less";
+@import "content.less";
+@import "dashboard.less";
+@import "orders.less";
+@import "order.less";
+@import "products.less";
+@import "product.less";
+@import "categories.less";
+@import "collections.less";
+@import "vendors.less";
+@import "clients.less";
+@import "client.less";
+@import "actions.bar.less";
+@import "upload.less";
+@import "settings.less";
+@import "theme.less";
+@import "editor.less";
+@import "banners.less";
+@import "pages.less";
+@import "import.csv.less";
+@import "account.less";
+@import "apps.less";
+@import "autocompleter.less";
+@import "aviary.less";
+html, body { height:100%; }
+body {
+  overflow:hidden;
+  background-image:url('../img/admin/loader.gif');
+  background-repeat:no-repeat;
+  background-position:center;
+}
+body.content-ready { background-image:none; }
+body.content-ready .main-container aside.sidebar .animation-container .main-menu, body.content-ready .main-container aside.sidebar .animation-container .settings-menu { position:absolute; }
+body.ajax-in-progress, body.ajax-in-progress a, body.ajax-in-progress a[disabled], body.ajax-in-progress button, body.ajax-in-progress button[disabled], body.ajax-in-progress tr[data-url] { cursor:wait !important; }
+body a, body button { -webkit-tap-highlight-color:rgba(0,0,0,0); }
+.table-columns {
+  display:table;
+  width:100%;
+  white-space:nowrap;
+}
+.table-columns.text-wrap { white-space:normal; }
+.table-columns > li {
+  display:table-cell;
+  vertical-align:middle;
+}
+.table-columns > li.with-thumb-40 .table-columns > li.thumb { width:55px; }
+.table-columns > li.with-thumb-50 .table-columns > li.thumb { width:65px; }
+.table-columns.two-in-row > li { width:50%; }
+.table-columns.three-in-row > li { width:33.33%; }
+.table-columns.four-in-row > li { width:25%; }
+.table-columns.five-in-row > li { width:20%; }
+.handle {
+  display:inline-block;
+  border-style:solid;
+  border-color:#f5f6f8;
+  border-width:0;
+  cursor:move;
+}
+.handle span {
+  display:block;
+  background:url('../img/admin/handle.png');
+  background-size:7px;
+}
+.notification-counter {
+  position:absolute;
+  right:20px;
+  background-color:#333745;
+  display:inline-block;
+  padding:0 5px;
+  min-width:17px;
+  font-size:12px;
+  text-align:center;
+  white-space:normal;
+}
+.notification-counter.red { background-color:#f55161; }
+.main-container {
+  @import "sidebar.less";
+  @import "labels.less";
+  -webkit-backface-visibility:hidden;
+  position:relative;
+  display:table;
+  height:100%;
+  width:100%;
+  left:0;
+  max-width:2000px;
+}
+.main-container.animate { left:-100%; }
+.main-container:after {
+  display:table-cell;
+  content:'';
+  width:30px;
+}
+.main-container .template { display:none !important; }
+.main-container .scroll-heading {
+  z-index:10;
+  position:relative;
+}
+.main-container [data-icon="v"] { font-size:12px; }
+.main-container [data-icon="k"] { cursor:help; }
+.main-container [data-icon="k"]:before {
+  color:#484b58;
+  font-size:16px;
+  margin:0 10px 0 5px;
+  top:1px;
+}
+.main-container [data-icon="k"]:hover:before { color:#fff; }
+.main-container .stock-quantity {
+  font-size:18px;
+  padding-left:10px;
+  padding-right:10px;
+}
+.main-container .apps .logo {
+  display:inline-block;
+  text-align:center;
+  margin-right:8px;
+}
+.main-container .apps .logo img { display:inline-block; }
+.main-container .apps .name {
+  display:inline-block;
+  max-width:160px;
+}
+.main-container #switch-to-old-panel {
+  position:fixed;
+  top:0;
+  right:0;
+  z-index:10;
+  padding:1px 8px;
+  display:inline-block;
+  background:#bfdbe9;
+  color:#1c1f27;
+  font-weight:bold;
+  text-transform:uppercase;
+  font-size:11px;
+}
+#redactor_modal select { display:inline-block; }
+.device-orientation-info { padding-top:100px; }
+.device-orientation-info i[data-icon] {
+  font-size:140px;
+  color:#dce6ec;
+}
+.device-orientation-info h2 { margin:25px 0; }
+.device-orientation-info p { margin-bottom:25px; }
+@media only screen and (max-width: 768px) {
+  .main-container { display:none; }
+  .device-orientation-info { display:block; }
+}
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+  .main-container:after { display:none; }
+}
