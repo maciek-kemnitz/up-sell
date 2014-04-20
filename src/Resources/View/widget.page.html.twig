@@ -321,9 +321,9 @@
     </div>
     <div class="modal-body">
         <div class="up-sell-content clearfix">
-            {% for product in products %}
-            {% if products.count() == 1 %}
+            {% if products.count() > 1 %}
                 <ul class="up-sell-multi">
+                {% for product in products %}
                     <li class="multi-item">
                         <div >
                             <img width="180px" height="210px" src="{{ product.getImgUrl() }}"/>
@@ -347,54 +347,10 @@
                             <button class="btn-up-black">Do koszyka</button>
                         </div>
                     </li>
-                    <li class="multi-item">
-                        <div >
-                            <img width="180px" height="210px" src="{{ product.getImgUrl() }}"/>
-                        </div>
-                        <div class="up-sell-description-container">
-
-                            <span class="product-name">
-                                {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...' : product.getName()  }}
-                            </span>
-
-                            <div class="up-price">
-                                <del class="muted">34,00 zł</del>
-                                <strong >17,00 zł</strong>
-                            </div>
-                            <select>
-                                <option value="nana">nana</option>
-                                <option value="nana">nana</option>
-                                <option value="nana">nana</option>
-                            </select>
-                            <button class="btn-up-black">Do koszyka</button>
-                        </div>
-                    </li>
-                    <li class="multi-item">
-                        <div >
-                            <img width="180px" height="210px" src="{{ product.getImgUrl() }}"/>
-                        </div>
-                        <div class="up-sell-description-container">
-
-                            <span class="product-name">
-                                {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...' : product.getName()  }}
-                            </span>
-
-                            <div class="up-price">
-                                <del class="muted">34,00 zł</del>
-                                &nbsp;&nbsp;
-                                <strong >17,00 zł</strong>
-                            </div>
-                            <select>
-                                <option value="nana">nana</option>
-                                <option value="nana">nana</option>
-                                <option value="nana">nana</option>
-                            </select>
-                            <button class="btn-up-black">Do koszyka</button>
-
-                        </div>
-                    </li>
+                {% endfor %}
                 </ul>
             {% else %}
+                {% for product in products %}
                 <div class="up-sell-content-inner">
                     <div class="up-sell-img">
                         <img width="240px" height="280px" src="{{ product.getImgUrl() }}"/>
@@ -421,8 +377,8 @@
 
                     </div>
                 </div>
+                {% endfor %}
             {% endif %}
-            {% endfor %}
         </div>
 
     </div>
