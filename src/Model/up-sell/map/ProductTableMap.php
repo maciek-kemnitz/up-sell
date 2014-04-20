@@ -46,6 +46,7 @@ class ProductTableMap extends TableMap
         $this->addColumn('shoplo_product_id', 'ShoploProductId', 'INTEGER', true, null, null);
         $this->addColumn('shop_domain', 'ShopDomain', 'VARCHAR', true, 255, null);
         $this->addColumn('name', 'Name', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
         $this->addColumn('img_url', 'ImgUrl', 'LONGVARCHAR', true, null, null);
         $this->addColumn('original_price', 'OriginalPrice', 'FLOAT', true, null, null);
         $this->addColumn('url', 'Url', 'LONGVARCHAR', true, null, null);

@@ -329,7 +329,6 @@
                             <img width="180px" height="210px" src="{{ product.getImgUrl() }}"/>
                         </div>
                         <div class="up-sell-description-container">
-
                                 <span class="product-name">
                                 {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...' : product.getName()  }}
                             </span>
@@ -360,12 +359,13 @@
                             {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...' : product.getName()  }}
                         </h2>
                         <small class="muted">
-                            {% set desc = 'OFFER TYPE 1: This is an example of an offer that gets triggered by clicking "Add to Cart" on a specific product, or products in a group such as a Collection, Type or Brand. OFFER TYPE 1: This is an example of an offer that gets triggered by clicking "Add to Cart" on a specific product, or products in a group such as a Collection, Type or Brand. OFFER TYPE 1: This is an example of an offer that gets triggered by clicking "Add to Cart" on a specific product, or products in a group such as a Collection, Type or Brand.' %}
-                            {{ desc|length > 200 ? desc|slice(0, 200) ~ '...' : desc  }}
+                            {% if product.getDescription() != null %}
+                                {{ product.getDescription()|length > 200 ? product.getDescription()|slice(0, 200) ~ '...' : product.getDescription()  }}
+                            {% endif %}
                         </small>
                         <div class="up-price">
                             <del class="muted ">34,00 zł</del>
-                            <h2>17,00 zł</h2>
+                            <h2>{{ product.getOriginalPrice }} zł</h2>
                         </div>
 
                         <button class="btn-up-black">Do koszyka</button>

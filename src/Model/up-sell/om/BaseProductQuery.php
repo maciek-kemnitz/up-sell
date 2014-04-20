@@ -23,6 +23,7 @@ use src\Model\ProductQuery;
  * @method ProductQuery orderByShoploProductId($order = Criteria::ASC) Order by the shoplo_product_id column
  * @method ProductQuery orderByShopDomain($order = Criteria::ASC) Order by the shop_domain column
  * @method ProductQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method ProductQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method ProductQuery orderByImgUrl($order = Criteria::ASC) Order by the img_url column
  * @method ProductQuery orderByOriginalPrice($order = Criteria::ASC) Order by the original_price column
  * @method ProductQuery orderByUrl($order = Criteria::ASC) Order by the url column
@@ -33,6 +34,7 @@ use src\Model\ProductQuery;
  * @method ProductQuery groupByShoploProductId() Group by the shoplo_product_id column
  * @method ProductQuery groupByShopDomain() Group by the shop_domain column
  * @method ProductQuery groupByName() Group by the name column
+ * @method ProductQuery groupByDescription() Group by the description column
  * @method ProductQuery groupByImgUrl() Group by the img_url column
  * @method ProductQuery groupByOriginalPrice() Group by the original_price column
  * @method ProductQuery groupByUrl() Group by the url column
@@ -49,6 +51,7 @@ use src\Model\ProductQuery;
  * @method Product findOneByShoploProductId(int $shoplo_product_id) Return the first Product filtered by the shoplo_product_id column
  * @method Product findOneByShopDomain(string $shop_domain) Return the first Product filtered by the shop_domain column
  * @method Product findOneByName(string $name) Return the first Product filtered by the name column
+ * @method Product findOneByDescription(string $description) Return the first Product filtered by the description column
  * @method Product findOneByImgUrl(string $img_url) Return the first Product filtered by the img_url column
  * @method Product findOneByOriginalPrice(double $original_price) Return the first Product filtered by the original_price column
  * @method Product findOneByUrl(string $url) Return the first Product filtered by the url column
@@ -59,6 +62,7 @@ use src\Model\ProductQuery;
  * @method array findByShoploProductId(int $shoplo_product_id) Return Product objects filtered by the shoplo_product_id column
  * @method array findByShopDomain(string $shop_domain) Return Product objects filtered by the shop_domain column
  * @method array findByName(string $name) Return Product objects filtered by the name column
+ * @method array findByDescription(string $description) Return Product objects filtered by the description column
  * @method array findByImgUrl(string $img_url) Return Product objects filtered by the img_url column
  * @method array findByOriginalPrice(double $original_price) Return Product objects filtered by the original_price column
  * @method array findByUrl(string $url) Return Product objects filtered by the url column
@@ -171,7 +175,7 @@ abstract class BaseProductQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `shoplo_product_id`, `shop_domain`, `name`, `img_url`, `original_price`, `url`, `thumbnail`, `sku` FROM `product` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `shoplo_product_id`, `shop_domain`, `name`, `description`, `img_url`, `original_price`, `url`, `thumbnail`, `sku` FROM `product` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -400,6 +404,35 @@ abstract class BaseProductQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ProductPeer::NAME, $name, $comparison);
+    }
+
+    /**
+     * Filter the query on the description column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDescription('fooValue');   // WHERE description = 'fooValue'
+     * $query->filterByDescription('%fooValue%'); // WHERE description LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $description The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProductQuery The current query, for fluid interface
+     */
+    public function filterByDescription($description = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($description)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $description)) {
+                $description = str_replace('*', '%', $description);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(ProductPeer::DESCRIPTION, $description, $comparison);
     }
 
     /**

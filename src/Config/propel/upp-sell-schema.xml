@@ -7,6 +7,7 @@
         <column name="shoplo_product_id" type="INTEGER" required="true"/>
         <column name="shop_domain" type="VARCHAR" size="255" required="true"/>
         <column name="name"  type="LONGVARCHAR" required="true"/>
+        <column name="description"  type="LONGVARCHAR" required="false"/>
         <column name="img_url"  type="LONGVARCHAR" required="true"/>
         <column name="original_price"  type="FLOAT" required="true"/>
         <column name="url" type="LONGVARCHAR" required="true"/>
