@@ -1,0 +1,103 @@
+.login-overlay {
+    .transition(top 0.5s);
+    .translate3d(0,0,0);
+
+    &.animate {
+        top: 100%;
+    }
+
+    .login-content {
+        @contentWidth: 330px;
+
+        .align-center;
+        .center-block;
+
+        width: @contentWidth;
+
+        .logo {
+            .slogan {
+                font-size: 9px;
+                margin-top: -5px;
+            }
+        }
+
+        .login-form {
+            margin: 75px 0;
+
+            h3 {
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+
+            input,
+            button {
+                .box-sizing(border-box);
+
+                width: 100%;
+            }
+
+            fieldset {
+                position: relative;
+
+                &:before {
+                    font-size: 32px;
+                    color: @basicNavyBlue;
+                    position: absolute;
+                    top: 16px;
+                    left: 24px;
+                }
+
+                .tooltip {
+                    white-space: nowrap;
+                }
+            }
+
+            input {
+                height: 65px;
+                line-height: 65px;
+                font-size: 25px;
+                padding-left: 80px;
+                padding-right: 10px;
+            }
+
+            input[type="email"] {
+                .border-radius(@buttonBorderRadius @buttonBorderRadius 0 0);
+            }
+
+            input[type="password"] {
+                .border-radius(0 0 @buttonBorderRadius @buttonBorderRadius);
+
+                margin-top: -1px;
+            }
+
+            button {
+                font-size: 16px;
+                margin-top: 20px;
+                height: 50px;
+            }
+        }
+
+        .ipad-logo,
+        .iphone-logo {
+            visibility: hidden;
+        }
+
+        .forgot-password {
+            font-size: 13px;
+            width: @contentWidth;
+            bottom: 10px;
+            font-weight: 600;
+            position: absolute;
+        }
+    }
+}
+
+/* IPAD */
+
+@media only screen
+and (device-width: 768px)
+and (device-height: 1024px) {
+    .ipad-logo {
+        visibility: visible !important;
+    }
+}

@@ -1,0 +1,57 @@
+.content-clients {
+    .content {
+        .items-list {
+            .checkbox {
+                padding-right: 25px !important;
+            }
+
+            .client {
+                padding-right: 35px !important;
+            }
+
+            td,
+            th {
+                &.localization {
+                    min-width: 90px;
+                    padding-right: 20px;
+                    color: @grayLight;
+                }
+
+                &.orders {
+                    min-width: 55px;
+                    color: @grayLight;
+                    padding-right: 45px;
+                }
+
+                &.discount {
+                    min-width: 65px;
+                    color: @grayLight;
+                }
+
+                &.price {
+                    min-width: 100px;
+                    font-size: 18px;
+                }
+            }
+
+            &.sort {
+                .client a {
+                    margin-left: 55px;
+                }
+            }
+        }
+    }
+
+    /* IPAD PORTRAIT */
+
+    @media only screen
+    and (max-width: 768px) {
+        .items-list {
+            .box {
+                &.price {
+                    padding-left: 0 !important;
+                }
+            }
+        }
+    }
+}

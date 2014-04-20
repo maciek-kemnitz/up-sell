@@ -1,0 +1,135 @@
+.autocompleter {
+    position: relative;
+
+    input[type="text"] {
+        .box-sizing(border-box);
+        .size(32px,100%);
+
+        padding-right: 32px;
+    }
+
+    .clear-autocompleter {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 24px;
+        padding: 5px 10px;
+    }
+
+    .autocompleter-scroll {
+        position: absolute;
+        top: 31px;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+
+        &.simple {
+            .slimScrollDiv {
+                &,
+                .autocompleter-list {
+                    max-height: 227px !important;
+                }
+            }
+
+            .autocompleter-list > li {
+                font-size: 22px;
+                padding: 8px 10px;
+
+                li {
+                    line-height: 1.3em;
+
+                    &.name {
+                        .text-overflow;
+
+                        max-width: 640px;
+                    }
+
+                    &.model {
+                        text-align: right;
+                    }
+                }
+            }
+        }
+
+        .slimScrollDiv {
+            &,
+            .autocompleter-list {
+                max-height: 250px !important;
+                height: auto !important;
+            }
+        }
+
+        .autocompleter-list {
+            .border-radius(0 0 @buttonBorderRadius @buttonBorderRadius);
+            .box-sizing(border-box);
+
+            border: 1px solid @basicNavyBlue;
+            border-top: 0;
+            background-color: #fff;
+            overflow: hidden;
+
+            & > li {
+                padding: 14px 20px;
+                border-top: 1px solid @frameColor;
+                cursor: pointer;
+
+                .table-columns > li {
+                     &.name {
+                         width: 480px;
+
+                         p.name {
+                             .text-overflow;
+
+                             font-weight: bold;
+                             width: 415px;
+                         }
+                     }
+
+                     &.model {
+                         width: 230px;
+                         color: @basicGray;
+                     }
+
+                     &.action {
+                         width: 65px;
+                         text-align: right;
+
+                         .add {
+                             display: inline-block;
+                         }
+
+                         .chosen {
+                             .hide;
+                         }
+                     }
+                }
+
+                &.focus {
+                    background-color: @basicNavyBlue;
+
+                    .name {
+                        color: #fff;
+                    }
+                }
+
+                &.chosen {
+                    .action {
+                        .add {
+                            display: none !important;
+                        }
+
+                        .chosen {
+                            display: inline-block !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.show-list {
+        input[type="text"] {
+            border-color: @basicNavyBlue;
+        }
+    }
+}

@@ -1,0 +1,280 @@
+.content-account {
+    .account-info {
+        h1 {
+            line-height: 1.2em;
+        }
+    }
+
+    .control-group.usage,
+    .control-group.card-info {
+        margin-left: 50px;
+    }
+
+    .control-group.card-info {
+        .btn-light {
+            img {
+                margin: 0 5px 0 -5px;
+            }
+        }
+    }
+
+    .controls .control-label {
+        margin-left: 10px;
+        display: inline-block;
+        position: relative;
+        top: 1px;
+    }
+
+    .progress-bar {
+        .border-radius(7px);
+        .size(14px,330px);
+
+        display: inline-block;
+        background-color: #fff;
+        position: relative;
+        top: 3px;
+        text-align: left;
+        overflow: hidden;
+        margin: 0 10px;
+
+        .progress {
+            height: 14px;
+            display: inline-block;
+            background-color: @basicGreen;
+            position: relative;
+            top: -1px;
+        }
+    }
+
+    .items-list {
+        margin-bottom: 40px;
+
+        &.invoices {
+            .action {
+                width: 20px;
+            }
+        }
+
+        &.users {
+            th,
+            td {
+                font-size: 13px;
+            }
+
+            th {
+                padding: 20px 0;
+            }
+
+            .permission {
+                min-width: 80px;
+            }
+        }
+
+        &.frequency {
+            margin-bottom: 20px;
+
+            td {
+                cursor: pointer;
+
+                .info {
+                    display: block;
+                    margin-top: 5px;
+                    color: @basicLightGray;
+                }
+
+                del {
+                    display: block;
+                    color: @basicRed;
+                    font-size: 13px;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                }
+
+                &.name b,
+                &.price {
+                    font-size: 22px;
+                    font-weight: bold;
+                }
+            }
+
+            & > tbody > tr > td {
+                padding: 12px 0 !important;
+            }
+        }
+    }
+
+    .payment-types {
+        text-align: center;
+
+        li {
+            display: inline-block;
+            margin: 10px 15px;
+            cursor: pointer;
+
+            small {
+                font-size: 9px;
+                text-transform: uppercase;
+                color: @grayLight;
+            }
+
+            .logo {
+                .size(90px,240px);
+
+                border: 2px solid #e4e4e4;
+                position: relative;
+
+                .prettycheckbox {
+                    display: none;
+                    position: absolute;
+                    top: -15px;
+                    right: -12px;
+                    border: 3px solid #fff;
+                    height: 18px;
+                }
+
+                img {
+                    max-height: 20px;
+                    margin-top: 35px;
+                }
+            }
+
+            &.selected {
+                small {
+                    color: @grayDark;
+                }
+
+                .logo {
+                    border-color: #cee08a;
+
+                    .prettycheckbox {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+
+    .card-data,
+    .bank-data,
+    .discount-data {
+        text-align: center;
+
+        .centered {
+            display: inline-block;
+
+            label,
+            .bootstrap-select {
+                text-align: left;
+            }
+
+            .discount-code {
+                line-height: 38px;
+            }
+        }
+    }
+
+    .secured {
+        color: @basicLightGray;
+        font-size: 13px;
+        margin-top: 20px;
+    }
+
+    #cvc {
+        width: 30px;
+    }
+
+    #expiration-month + .bootstrap-select {
+        margin-right: 10px;
+    }
+
+    #bank + .bootstrap-select {
+        width: 250px;
+
+        .filter-option {
+            width: 200px;
+        }
+    }
+
+    i[data-icon="w"] {
+        color: @basicLightGray;
+        font-size: 30px;
+        margin-top: 27px;
+        display: inline-block;
+    }
+
+    #client-company-name,
+    #post-name {
+        width: 470px;
+    }
+
+    #client-number,
+    #post-number {
+        width: 50px;
+    }
+
+    #client-city,
+    #post-city {
+        width: 150px;
+    }
+
+    #client-zip-code,
+    #post-zip-code {
+        width: 70px;
+    }
+
+    #post-phone,
+    #post-fax,
+    #contact-phone {
+        width: 110px;
+    }
+
+    #client-nip,
+    #client-bank-name {
+        width: 170px;
+    }
+
+    #client-bank-account {
+        width: 300px;
+    }
+
+    #contact-position {
+        width: 280px;
+    }
+
+    .main-actions {
+        .pull-left;
+
+        margin-right: 12px;
+    }
+
+    /* IPAD LANDSCAPE */
+
+    @media only screen
+    and (min-width: 769px)
+    and (max-width: 1024px) {
+        .main-actions {
+            float: none;
+            margin-bottom: 12px;
+        }
+    }
+}
+
+#change-login-layer {
+    #login {
+        width: 270px;
+    }
+}
+
+#change-language-layer {
+    width: 310px;
+
+    form {
+        min-height: 280px;
+    }
+}
+
+#invite-user-layer {
+    #name {
+        width: 290px
+    }
+}

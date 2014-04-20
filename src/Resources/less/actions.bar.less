@@ -1,0 +1,57 @@
+.actions-bar {
+    .box-sizing(border-box);
+    .transition(~'bottom 0.2s, opacity 0.2s');
+    .opacity(0);
+
+    z-index: 10;
+    position: absolute;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    background-color: @basicLightYellow;
+    color: @grayDark;
+    font-weight: bold;
+
+    &.active {
+        .opacity(100);
+
+        bottom: 0;
+    }
+
+    td {
+        &.checkbox {
+            width: 16px;
+        }
+
+        &.actions {
+            overflow: visible !important;
+
+            .bootstrap-select {
+                display: inline-block;
+                margin-left: 15px;
+                width: 150px;
+
+                .filter-option {
+                    max-width: 105px;
+                }
+
+                &.hide {
+                    display: none;
+                }
+            }
+
+            input[type="text"] {
+                margin-left: 15px;
+                width: 80px;
+            }
+
+            .btn-accept {
+                margin-left: 15px;
+            }
+        }
+    }
+
+    .close {
+        .pull-right;
+    }
+}

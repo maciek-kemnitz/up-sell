@@ -1,0 +1,91 @@
+.content-orders {
+    .content {
+        .items-list {
+            .box {
+                &.status {
+                    padding-right: 15px;
+                }
+
+                &.number {
+                    padding-right: 30px;
+                }
+
+                &.date {
+                    padding-right: 40px;
+
+                    time {
+                        color: #777;
+                    }
+                }
+
+                &.customer {
+                    padding-right: 30px;
+                }
+
+                &.shipment {
+                    padding-right: 70px;
+                }
+
+                &.price {
+                    font-size: 18px;
+                }
+            }
+        }
+
+        .status-select {
+            .inner > li > a {
+                padding-right: 30px;
+                position: relative;
+
+                .notification-counter {
+                    right: 8px;
+                }
+            }
+        }
+    }
+
+    /* IPAD */
+
+    @media only screen
+    and (max-width: 1024) {
+        .filters {
+            .date-select {
+                width: 125px !important;
+            }
+        }
+    }
+
+    /* IPAD PORTRAIT */
+
+    @media only screen
+    and (max-width: 768px) {
+        .filters {
+            .apps-dropdown {
+                display: none;
+            }
+        }
+
+        .items-list {
+            .box {
+                &.shipment {
+                    max-width: 100px !important;
+                }
+            }
+        }
+    }
+
+    /* IPAD LANDSCAPE */
+
+    @media only screen
+    and (min-width: 769px)
+    and (max-width: 1024px) {
+        .items-list {
+            .box {
+                &.shipment {
+                    max-width: 100px !important;
+                    padding-right: 30px !important;
+                }
+            }
+        }
+    }
+}

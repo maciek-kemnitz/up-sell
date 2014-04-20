@@ -1,0 +1,100 @@
+.content-products {
+    .content {
+        .items-list {
+            .checkbox {
+                padding-right: 25px !important;
+            }
+
+            .product {
+                padding-right: 35px !important;
+            }
+
+            td,
+            th {
+                &.model {
+                    color: @basicGray;
+                    padding-right: 50px;
+                    max-width: 70px;
+                }
+
+                &.model-toggle {
+                    padding-right: 55px;
+                }
+
+                &.stock {
+                    min-width: 70px;
+                }
+
+                &.price {
+                    font-size: 18px;
+                }
+            }
+
+            &.sort {
+                .product a {
+                    margin-left: 55px;
+                }
+            }
+        }
+    }
+
+    /* IPAD */
+
+    @media only screen
+    and (max-width: 1024px) {
+        .filters {
+            .date-select {
+                width: 125px !important;
+            }
+        }
+    }
+
+
+    /* IPAD PORTRAIT */
+
+    @media only screen
+    and (max-width: 768px) {
+        .items-list {
+            .box {
+                &.shipment {
+                    max-width: 100px !important;
+                }
+
+                &.model {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    /* IPAD LANDSCAPE */
+
+    @media only screen
+    and (min-width: 769px)
+    and (max-width: 1024px) {
+        .items-list {
+            .box {
+                &.model {
+                    padding-right: 20px !important;
+                }
+
+                &.shipment {
+                    max-width: 100px !important;
+                    padding-right: 30px !important;
+                }
+
+                &.model-toggle {
+                    padding-right: 30px !important;
+                }
+
+                &.stock {
+                    padding-right: 0 !important;
+                }
+
+                &.price {
+                    padding-left: 30px !important;
+                }
+            }
+        }
+    }
+}

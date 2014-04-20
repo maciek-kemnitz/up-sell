@@ -1,0 +1,181 @@
+.content-customer {
+    display: table;
+    width: 100%;
+
+    .content {
+        display: table-cell;
+        vertical-align: top;
+    }
+
+    .items-list {
+        .box {
+            &.status {
+                padding-right: 15px;
+            }
+
+            &.number {
+                padding-right: 30px;
+            }
+
+            &.date {
+                padding-right: 40px;
+
+                time {
+                    color: #777;
+                }
+            }
+
+            &.shipment {
+                padding-right: 50px;
+                max-width: 260px;
+            }
+
+            &.price {
+                font-size: 18px;
+            }
+        }
+    }
+
+    .orders,
+    .history {
+        margin-top: 40px;
+    }
+
+    .notes {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .right-sidebar {
+        .filters {
+            margin-top: 20px;
+
+            & + h5 {
+                margin-top: 30px;
+            }
+        }
+
+        .next-to {
+            max-width: 180px;
+        }
+    }
+
+    /* IPAD PORTRAIT */
+
+    @media only screen
+    and (max-width: 768px) {
+        .right-sidebar {
+            display: none !important;
+        }
+    }
+
+    /* IPAD LANDSCAPE */
+
+    @media only screen
+    and (min-width: 769px)
+    and (max-width: 1024px) {
+        .items-list {
+            .box {
+                &.number,
+                &.date,
+                &.shipment {
+                    padding-right: 10px;
+                }
+
+                &.shipment {
+                    max-width: 100px;
+                }
+
+                &.price {
+                    padding-left: 10px;
+                }
+            }
+        }
+    }
+
+    &.client-add {
+        .basic-info {
+            padding: 55px 30px 55px 0;
+
+            .main-photo {
+                width: 330px;
+
+                i[data-icon="j"] {
+                    color: #e7e7e7;
+                    font-size: 95px;
+                    display: inline-block;
+                    margin-bottom: 15px;
+                }
+
+                .thumb-100.hide {
+                    display: none;
+                }
+            }
+        }
+
+        #client-name,
+        #client-surname {
+            .box-sizing(border-box);
+            .size(43px,100%);
+
+            font-size: 22px;
+            margin-bottom: 8px;
+            line-height: 43px;
+        }
+
+        #client-email,
+        #client-street,
+        #client-city,
+        #shipping-name,
+        #shipping-surname,
+        #shipping-street,
+        #shipping-city,
+        #commpany-name,
+        #company-street,
+        #company-city {
+            .box-sizing(border-box);
+            .size(33px,100%);
+        }
+
+        #company-name {
+            width: 400px;
+        }
+
+        .table-columns > li {
+            &.name {
+                width: 30%;
+                padding-right: 20px;
+            }
+
+            &.first-name {
+                width: 40%;
+                padding-right: 20px;
+            }
+
+            &.surname {
+                width: 50%;
+            }
+
+            &.email {
+                width: 45%;
+                padding-right: 20px;
+            }
+
+            &.number,
+            &.zip-code {
+                width: 160px;
+                padding-left: 20px;
+            }
+        }
+    }
+}
+
+#send-message-layer {
+    #subject {
+        width: 350px
+    }
+
+    #content {
+        .size(200px,500px);
+    }
+}

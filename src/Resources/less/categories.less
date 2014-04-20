@@ -1,0 +1,273 @@
+.content-categories {
+    .content {
+        .items-list {
+            .checkbox {
+                padding-right: 25px !important;
+            }
+
+            td,
+            th {
+                &.category {
+                    .name {
+                        font-weight: bold;
+                    }
+                }
+
+                &.stock {
+                    padding-left: 20px;
+                }
+            }
+        }
+    }
+}
+
+.categories-tree,
+.jstree-container-ul {
+    #hover-style {
+        border: 2px solid @basicLightGray;
+
+        .action,
+        .handle {
+            visibility: visible;
+        }
+    }
+
+    & > li,
+    & > li > .jstree-anchor > .item,
+    #jstree-dnd > .item {
+        & > .prettycheckbox {
+            margin-right: 10px;
+            position: relative;
+            top: -1px;
+        }
+
+        & > label {
+            .bottom;
+
+            font-size: 18px;
+            color: @grayDark;
+            font-weight: bold;
+
+            &:last-child {
+                &:after {
+                    content: '';
+                    display: block;
+                    height: 20px;
+                    border-left: 1px solid @frameColor;
+                    margin: 6px 0 5px -18px;
+                }
+            }
+        }
+
+        label {
+            display: inline-block;
+        }
+
+        [class^="submenu"],
+        .jstree-children {
+            margin: 6px 0 7px 8px;
+            border-left: 1px solid @frameColor;
+            padding-left: 17px;
+
+            .prettycheckbox {
+                margin-right: 7px;
+            }
+
+            &:empty {
+                .top;
+                .bottom;
+            }
+        }
+    }
+
+    &.single #jstree-dnd .item {
+        .prettycheckbox {
+            margin-right: 7px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: normal;
+        }
+    }
+
+    #jstree-dnd {
+        width: 100%;
+
+        .item {
+            .box-shadow(2px 2px 0 rgba(0,0,0,0.4));
+            #hover-style;
+
+            background: #fff;
+        }
+    }
+
+    #jstree-marker-line {
+        border-top: 2px solid @basicGreen;
+        margin: 2px 0;
+    }
+
+    ul > li:first-child {
+        #jstree-marker-line:nth-child(2) {
+            margin-bottom: 4px;
+        }
+    }
+
+    .jstree-anchor {
+        display: block;
+    }
+
+    #jstree-marker-line ~ .jstree-anchor {
+        .item.jstree-dragover {
+            border-color: transparent;
+
+            .prettycheckbox {
+                visibility: visible;
+            }
+        }
+    }
+
+    .item {
+        .clearfix;
+        .border-radius(@buttonBorderRadius);
+
+        border: 2px solid transparent;
+        padding: 2px 0 2px 6px;
+        margin: -6px 0 -7px -8px;
+
+        &.jstree-dragover {
+            border-color: @basicGreen;
+
+            .prettycheckbox {
+                visibility: hidden;
+            }
+        }
+
+        .prettycheckbox {
+            .pull-left;
+
+            cursor: default;
+        }
+
+        label {
+            .bottom;
+            .pull-left;
+        }
+
+        .action {
+            visibility: hidden;
+            padding-top: 2px;
+
+            span {
+                cursor: pointer;
+                color: @basicLightGray;
+                margin: 0 9px;
+
+                &:hover {
+                    color: @basicNavyBlue;
+                }
+            }
+        }
+
+        .handle {
+            .left-frame;
+
+            visibility: hidden;
+            padding: 4px;
+            margin: -2px 0;
+
+            span {
+                height: 18px;
+            }
+        }
+
+        &:hover {
+            #hover-style;
+        }
+    }
+
+    .jstree-node {
+        &.jstree-open,
+        &.jstree-closed {
+            & > .jstree-anchor > .item > .prettycheckbox {
+                span {
+                    &:after {
+                        font-family: 'shoplo';
+                        text-transform: lowercase;
+                        content: 'c';
+                        speak: none;
+                        font-weight: normal;
+                        line-height: 1;
+                        position: relative;
+                        -webkit-font-smoothing: antialiased;
+                        color: @frameColor;
+                        font-size: 16px;
+                    }
+
+                    &:before {
+                        .square(16px);
+
+                        font-family: 'Open Sans', Arial, sans-serif;
+                        font-weight: bold;
+                        font-size: 17px;
+                        position: absolute;
+                        text-align: center;
+                        content: '';
+                    }
+                }
+            }
+        }
+
+        &.jstree-open > .jstree-anchor > .item > .prettycheckbox span:before {
+            content: '–';
+            top: -2px;
+        }
+
+        &.jstree-closed > .jstree-anchor > .item > .prettycheckbox span:before {
+            content: '+';
+        }
+    }
+}
+
+#add-category-layer {
+    width: 930px;
+
+    form {
+        min-height: 760px;
+    }
+
+    #category-description,
+    #page-description {
+        .box-sizing(border-box);
+        .size(100px,100%);
+    }
+
+    #page-url {
+        width: 520px;
+    }
+
+    #page-title {
+        width: 580px;
+    }
+
+    #page-keywords{
+        width: 620px;
+    }
+}
+
+//#jstree-marker {
+//    position: absolute;
+//    top: 0;
+//    left: 0;
+//    margin: 0;
+//    padding: 0;
+//    border-right: 0;
+//    border-top: 5px solid transparent;
+//    border-bottom: 5px solid transparent;
+//    border-left: 5px solid;
+//    width:0;
+//    height:0;
+//    font-size:0;
+//    line-height:0;
+//}
+//

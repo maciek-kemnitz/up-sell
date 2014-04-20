@@ -1,0 +1,51 @@
+.avpw_is_fullscreen {
+    .avpw *,
+    .avpw_slider_label {
+        font-family: 'Open Sans', sans-serif !important;
+        color: #8e8f93;
+    }
+
+    #avpw_controls {
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        border: 0 !important;
+
+        #avpw_tool_content_header,
+        #avpw_tool_content_wrapper,
+        #avpw_footer {
+            background: @basicNavyBlue;
+        }
+
+        #avpw_canvas_embed {
+            background: #fff;
+        }
+
+        .avpw_scroll_page {
+            text-align: center;
+        }
+
+        .avpw_primary_button,
+        .avpw_button {
+            .border-radius(2px);
+
+            font-weight: bold;
+            border: 0;
+        }
+
+        .avpw_primary_button {
+            background: @basicLightGreen !important;
+            color: @basicNavyBlue !important;
+        }
+
+        .avpw_button:not(.avpw_history_button) {
+            background: @basicRed;
+            color: #fff;
+        }
+
+        .avpw_history_button:not(.avpw_history_disabled) {
+            background: @basicLightGray;
+        }
+    }
+}

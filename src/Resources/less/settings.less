@@ -1,0 +1,279 @@
+.content-settings {
+    .items-list {
+        &.domains {
+            margin: 40px 0;
+        }
+
+        &.notifications {
+            margin-top: 40px;
+
+            .email {
+                padding-right: 25px;
+            }
+        }
+
+        &.email-templates {
+            margin-bottom: 40px;
+
+            .use .btn-lightgreen {
+                .text-overflow;
+
+                width: 250px;
+                margin-right: 10px;
+            }
+        }
+
+        &.payments {
+            margin-bottom: 40px;
+
+            .properties {
+                color: @basicGray;
+
+                .btn-light {
+                    margin-right: 40px;
+
+                    &.inactive {
+                        margin-right: 0;
+                        width: 500px;
+                    }
+                }
+            }
+        }
+
+        .is-main {
+            margin-left: 20px;
+        }
+
+        th,
+        td {
+            &.symbol {
+                padding-right: 25px !important;
+            }
+
+            &.symbol,
+            &.exchange {
+                color: @basicGray;
+            }
+        }
+    }
+
+    .tabular {
+        &.main-payments {
+            img {
+                height: 38px;
+            }
+        }
+    }
+
+    .table-columns {
+        & > li.variables-column {
+            width: 150px;
+            white-space: normal;
+        }
+    }
+
+    .variables {
+        .slimScrollDiv {
+            height: 269px !important;
+        }
+
+        .controls {
+            .border-radius(2px);
+            .size(237px !important,150px !important);
+
+            border: 1px solid @frameColor;
+            font-size: 12px;
+            padding: 15px 20px;
+            background-color: #f8f8f8;
+
+            .see-variables {
+                .box-sizing(border-box);
+
+                display: block;
+                position: relative;
+                height: 100%;
+                padding-top: 71px;
+                text-align: center;
+                color: #aaa;
+                left: 0;
+                top: 0;
+                text-transform: uppercase;
+                font-weight: bold;
+                font-size: 11px;
+                white-space: normal;
+
+                &:before {
+                    font-size: 35px;
+                    color: #ccc;
+                    margin-bottom: 12px;
+                    display: block;
+                }
+
+                &.hide {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .tabular {
+        &.main-shippings {
+            td.bottom-frame:last-child {
+                section.bottom-frame:last-child {
+                    border-bottom: 0 !important;
+                }
+            }
+        }
+    }
+
+    .email-notification:before {
+        color: @basicLightGray;
+        margin-left: 15px;
+        font-size: 16px;
+        top: 3px;
+    }
+
+    #custom_script {
+        .size(260px,560px);
+    }
+
+    #password_msg {
+        .box-sizing(border-box);
+        .size(100%,400px);
+    }
+
+    &.payment-edit {
+        .tabular {
+            input[type="text"] {
+                width: 300px;
+            }
+        }
+    }
+}
+
+#add-currency-layer {
+    width: 600px;
+
+    #symbol {
+        width: 70px;
+    }
+
+    #rateOfExchange {
+        width: 135px;
+    }
+}
+
+#add-tax-layer {
+    width: 600px;
+
+    #tax-value {
+        width: 70px;
+    }
+}
+
+#add-domain-layer {
+    width: 500px;
+}
+
+#add-notification-layer {
+    width: 500px;
+
+    #body {
+        .box-sizing(border-box);
+        .size(150px,100%);
+    }
+}
+
+#add-email-template-layer {
+    right: 0;
+
+    #name {
+        width: 460px;
+        margin-bottom: 30px;
+    }
+
+    #subject {
+        width: 650px;
+    }
+
+    .filters-bar {
+        .border-radius(2px);
+
+        margin: 10px 0 30px;
+
+        .action-section {
+            margin-bottom: 10px;
+        }
+    }
+}
+
+#add-email-template-layer,
+#add-payment-layer {
+    #content {
+        .size(260px,100%);
+    }
+}
+
+#add-payment-layer {
+    #name {
+        width: 550px;
+    }
+
+    #from,
+    #to {
+        width: 45px;
+    }
+
+    #from {
+        margin-right: 20px;
+    }
+
+    .alert {
+        margin-top: 10px;
+    }
+
+    .methods {
+        label {
+            margin: 0 50px 10px 0;
+        }
+    }
+}
+
+#add-shipping-country-layer,
+#add-shipping-world-layer {
+    #name {
+        width: 350px;
+    }
+
+    #localSupplierFrom,
+    #localSupplierTo,
+    #localSupplierFrom2,
+    #localSupplierTo2 {
+        width: 45px;
+    }
+
+    #localSupplierPrice,
+    #localSupplierPrice2 {
+        width: 60px;
+    }
+
+    .methods {
+        label {
+            margin: 0 50px 10px 0;
+        }
+    }
+}
+
+#add-status-layer {
+    width: 500px;
+
+    form {
+        min-height: 600px;
+    }
+
+    .status-select {
+        ul {
+            max-height: 420px !important;
+        }
+    }
+}
