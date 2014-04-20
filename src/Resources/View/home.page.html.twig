@@ -193,7 +193,7 @@
 
             }
 
-            $.post( "http://local.up-sell.pl/ajax/up-sell/product", userData, function(ajaxResult) {
+            $.post( "http://"+window.location.hostname+"/ajax/up-sell/product", userData, function(ajaxResult) {
                 if (ajaxResult['status'] == 'ok')
                 {
                     $('body').append(uppSellContainer);
