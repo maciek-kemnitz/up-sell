@@ -368,7 +368,7 @@
                             <h2>{{ product.getOriginalPrice }} zł</h2>
                         </div>
 
-                        <button class="btn-up-black">Do koszyka</button>
+                        <button class="btn-up-black" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
                         <select>
                             <option value="nana">nana</option>
                             <option value="nana">nana</option>
@@ -409,5 +409,23 @@
 
 //        {adres_sklepu}/ajax?method=shop.cart.addToCart&id=ID_WARIANTU
     });
+
+
+
+    $.post('/ajax/facility/next-visits', userData, function (ajaxResult) {
+
+                $('.visit-dates').each(function () {
+                    var doctorId = $(this).data('doctor-id')
+                    $('.slider-container', this).html(ajaxResult[doctorId])
+                    $('.loader').hide()
+
+                    // reload some scripts
+                    _verticalMiddle('.next-term', '.visit-dates-container', 10)
+                    _verticalMiddle('.no-visits', '.visit-dates-container', 10)
+                    _showMore()
+                })
+            }
+            , 'json')
+
 </script>
 
