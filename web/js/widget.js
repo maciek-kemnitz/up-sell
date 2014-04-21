@@ -24,12 +24,9 @@ $(function () {
 
                 var productId = $(this).parent('form').find('input[name="id"]').val();
                 var productData = {
-                  id: productId
+                  'id': productId
                 };
-                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
-                    console.log(ajaxResult);
-                });
-
+                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData);
 
                 return false;
             });
