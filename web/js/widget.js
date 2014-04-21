@@ -38,8 +38,10 @@ $(function () {
                     'id': productId
                 };
 
-                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData);
-                window.location.href = "http://" + window.location.hostname + "/koszyk";
+                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
+                    window.location.href = "http://" + window.location.hostname + "/koszyk";
+                });
+
             });
 
             $('body').on('click', '[data-dismiss="modal"]', function () {
