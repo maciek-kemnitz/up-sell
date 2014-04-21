@@ -22,7 +22,7 @@ $(function () {
                 $('#up-sell-modal').css('display', 'block');
                 $('#up-sell-modal').addClass('in');
 
-                var productId = $(this).parent('form').find('input[name="id"]').val();
+                var productId = $(this).parent('form').get(0).find('input[name="id"]').val();
                 console.log(productId);
                 var productData = {
                   'id': productId
