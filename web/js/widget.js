@@ -31,6 +31,17 @@ $(function () {
                 return false;
             });
 
+            $('body').on('click', 'button.up-sell-add-to-cart', function () {
+
+                var productId = $(this).data('product-id');
+                var productData = {
+                    'id': productId
+                };
+
+                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData);
+                window.location.href = "http://" + window.location.hostname + "/koszyk";
+            });
+
             $('body').on('click', '[data-dismiss="modal"]', function () {
                 $('#up-sell-modal').removeClass('in');
                 $('#up-sell-modal').css('display', 'none');
