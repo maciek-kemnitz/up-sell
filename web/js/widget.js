@@ -22,6 +22,14 @@ $(function () {
                 $('#up-sell-modal').css('display', 'block');
                 $('#up-sell-modal').addClass('in');
 
+                var productId = $(this).parent('form').find('input[name="id"]').val();
+                var productData = {
+                  id: productId
+                };
+                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
+                    console.log(ajaxResult);
+                });
+
 
                 return false;
             });
