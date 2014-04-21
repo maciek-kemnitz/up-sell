@@ -24,7 +24,7 @@ $(function () {
 
                 var form = $(this).parent('form');
                 var input = $(this).parent('form').find('input[name="id"]');
-                var productId = $(this).parent('form').find('input[name="id"]').val();
+                var productId = $(this).parent('form').find('input[name="id"]').attr('type');
                 console.log(form);
                 console.log(input);
                 console.log(productId);
