@@ -64,10 +64,18 @@ class AjaxController implements ControllerProviderInterface
 			/** @var UpSell $upSellByRelation */
 			$upSellByRelation = $uppSells->getFirst();
 
+			/** @var Product[] $upSellProducts */
+			$upSellProducts = $upSellByRelation->getProducts();
+			$variants = [];
+			foreach ($upSellProducts as $product)
+			{
+
+				$variants[$product->getId()] = json_decode($product->getVariants(), true);
+			}
 
 			$data = [
 				"status" => "ok",
-				"html"	=> $app['twig']->render('widget.page.html.twig', ['upSell' => $upSellByRelation, 'products' => $upSellByRelation->getProducts()]),
+				"html"	=> $app['twig']->render('widget.page.html.twig', ['upSell' => $upSellByRelation, 'products' => $upSellByRelation->getProducts(), 'variants' => $variants]),
 
 			];
 
