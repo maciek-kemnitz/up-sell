@@ -13,6 +13,7 @@
         <column name="url" type="LONGVARCHAR" required="true"/>
         <column name="thumbnail" type="LONGVARCHAR" required="false"/>
         <column name="sku" type="FLOAT" required="false"/>
+        <column name="variants" type="LONGVARCHAR" required="false"/>
         <unique name="shoplo_product_id">
             <unique-column name="shoplo_product_id"/>
             <unique-column name="shop_domain"/>

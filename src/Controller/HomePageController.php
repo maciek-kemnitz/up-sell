@@ -7,6 +7,8 @@ use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 
+use src\Model\Product;
+use src\Model\ProductQuery;
 use src\Model\UpSellQuery;
 use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -34,9 +36,21 @@ class HomePageController implements ControllerProviderInterface
 
 		$controllers->get('/modal', function (Request $request) use ($app)
 		{
+			/** @var ShoploApi $shoploApi */
+			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
 
-			$upSell = UpSellQuery::create()->findPk(35);
-			return $app['twig']->render('widget.page.html.twig', ['upSell' => $upSell, 'products' => $upSell->getProducts()]);
+			$upSell = UpSellQuery::create()->findPk(37);
+
+			/** @var Product[] $upSellProducts */
+			$upSellProducts = $upSell->getProducts();
+			$variants = [];
+			foreach ($upSellProducts as $product)
+			{
+
+				$variants[$product->getId()] = json_decode($product->getVariants(), true);
+			}
+
+			return $app['twig']->render('widget.page.html.twig', ['upSell' => $upSell, 'products' => $upSell->getProducts(), 'variants' => $variants]);
 
 		});
 

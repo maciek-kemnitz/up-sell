@@ -29,6 +29,7 @@ use src\Model\ProductQuery;
  * @method ProductQuery orderByUrl($order = Criteria::ASC) Order by the url column
  * @method ProductQuery orderByThumbnail($order = Criteria::ASC) Order by the thumbnail column
  * @method ProductQuery orderBySku($order = Criteria::ASC) Order by the sku column
+ * @method ProductQuery orderByVariants($order = Criteria::ASC) Order by the variants column
  *
  * @method ProductQuery groupById() Group by the id column
  * @method ProductQuery groupByShoploProductId() Group by the shoplo_product_id column
@@ -40,6 +41,7 @@ use src\Model\ProductQuery;
  * @method ProductQuery groupByUrl() Group by the url column
  * @method ProductQuery groupByThumbnail() Group by the thumbnail column
  * @method ProductQuery groupBySku() Group by the sku column
+ * @method ProductQuery groupByVariants() Group by the variants column
  *
  * @method ProductQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method ProductQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -57,6 +59,7 @@ use src\Model\ProductQuery;
  * @method Product findOneByUrl(string $url) Return the first Product filtered by the url column
  * @method Product findOneByThumbnail(string $thumbnail) Return the first Product filtered by the thumbnail column
  * @method Product findOneBySku(double $sku) Return the first Product filtered by the sku column
+ * @method Product findOneByVariants(string $variants) Return the first Product filtered by the variants column
  *
  * @method array findById(int $id) Return Product objects filtered by the id column
  * @method array findByShoploProductId(int $shoplo_product_id) Return Product objects filtered by the shoplo_product_id column
@@ -68,6 +71,7 @@ use src\Model\ProductQuery;
  * @method array findByUrl(string $url) Return Product objects filtered by the url column
  * @method array findByThumbnail(string $thumbnail) Return Product objects filtered by the thumbnail column
  * @method array findBySku(double $sku) Return Product objects filtered by the sku column
+ * @method array findByVariants(string $variants) Return Product objects filtered by the variants column
  *
  * @package    propel.generator.up-sell.om
  */
@@ -175,7 +179,7 @@ abstract class BaseProductQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `shoplo_product_id`, `shop_domain`, `name`, `description`, `img_url`, `original_price`, `url`, `thumbnail`, `sku` FROM `product` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `shoplo_product_id`, `shop_domain`, `name`, `description`, `img_url`, `original_price`, `url`, `thumbnail`, `sku`, `variants` FROM `product` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -604,6 +608,35 @@ abstract class BaseProductQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ProductPeer::SKU, $sku, $comparison);
+    }
+
+    /**
+     * Filter the query on the variants column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByVariants('fooValue');   // WHERE variants = 'fooValue'
+     * $query->filterByVariants('%fooValue%'); // WHERE variants LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $variants The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProductQuery The current query, for fluid interface
+     */
+    public function filterByVariants($variants = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($variants)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $variants)) {
+                $variants = str_replace('*', '%', $variants);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(ProductPeer::VARIANTS, $variants, $comparison);
     }
 
     /**

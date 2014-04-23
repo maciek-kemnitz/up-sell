@@ -29,51 +29,37 @@ class AddController implements ControllerProviderInterface
 			/** @var ShoploApi $shoploApi */
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
 			$shopDomain = $shoploApi->shop->retrieve()['domain'];
+			$productCount = $shoploApi->product->count();
 
-			$products = $shoploApi->product->retrieve();
-			$products = $products['products'];
+			$pageCount = $productCount['count']/100;
 
-
-			$productIds = array_keys($products);
-
-			/** @var \PropelObjectCollection $ownedIds */
-			$ownedProducts = ProductQuery::create()
-							->filterByShopDomain($shopDomain)
-							->filterByShoploProductId($productIds)
-							->find();
-
-			$ownedIds = $ownedProducts->toKeyValue('shoploProductId', 'shoploProductId');
-
-
-			$missingProductIds = array_diff($productIds, $ownedIds);
-
-
-			foreach($missingProductIds as $productId)
+			$pageCount = ceil($pageCount);
+			for($i=0; $i <= $pageCount; $i++)
 			{
-				$product = new Product();
-				$product->setShopDomain($shopDomain);
-				$product->setShoploProductId($productId);
-				$product->setName($products[$productId]['name']);
+				$products = $shoploApi->product->retrieve(0,0,0,["page"=>$i, "limit"=>100 ]);
+				$products = $products['products'];
 
-				$images = $products[$productId]['images'];
 
-				if (count($images))
+				$productIds = array_keys($products);
+
+				/** @var \PropelObjectCollection $ownedIds */
+				$ownedProducts = ProductQuery::create()
+					->filterByShopDomain($shopDomain)
+					->filterByShoploProductId($productIds)
+					->find();
+
+				$ownedIds = $ownedProducts->toKeyValue('shoploProductId', 'shoploProductId');
+
+
+				$missingProductIds = array_diff($productIds, $ownedIds);
+
+
+				foreach($missingProductIds as $productId)
 				{
-					$firstImage = reset($images);
-					$product->setImgUrl($firstImage['src']);
+					$product = Product::getProductFromArray($products[$productId], $shopDomain);
 				}
-
-				$product->setThumbnail($products[$productId]['thumbnail']);
-
-				$variants = $products[$productId]['variants'];
-				$firstVariant = reset($variants);
-
-				$product->setOriginalPrice($firstVariant['price']);
-				$product->setUrl($products[$productId]['url']);
-				$product->setSku($firstVariant['sku']);
-				$product->save();
-
 			}
+
 
 			$upSell = null;
 

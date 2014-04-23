@@ -36,13 +36,13 @@ abstract class BaseProductPeer
     const TM_CLASS = 'src\\Model\\map\\ProductTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 10;
+    const NUM_COLUMNS = 11;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 10;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /** the column name for the id field */
     const ID = 'product.id';
@@ -74,6 +74,9 @@ abstract class BaseProductPeer
     /** the column name for the sku field */
     const SKU = 'product.sku';
 
+    /** the column name for the variants field */
+    const VARIANTS = 'product.variants';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -93,12 +96,12 @@ abstract class BaseProductPeer
      * e.g. ProductPeer::$fieldNames[ProductPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'ShoploProductId', 'ShopDomain', 'Name', 'Description', 'ImgUrl', 'OriginalPrice', 'Url', 'Thumbnail', 'Sku', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shoploProductId', 'shopDomain', 'name', 'description', 'imgUrl', 'originalPrice', 'url', 'thumbnail', 'sku', ),
-        BasePeer::TYPE_COLNAME => array (ProductPeer::ID, ProductPeer::SHOPLO_PRODUCT_ID, ProductPeer::SHOP_DOMAIN, ProductPeer::NAME, ProductPeer::DESCRIPTION, ProductPeer::IMG_URL, ProductPeer::ORIGINAL_PRICE, ProductPeer::URL, ProductPeer::THUMBNAIL, ProductPeer::SKU, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOPLO_PRODUCT_ID', 'SHOP_DOMAIN', 'NAME', 'DESCRIPTION', 'IMG_URL', 'ORIGINAL_PRICE', 'URL', 'THUMBNAIL', 'SKU', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'shoplo_product_id', 'shop_domain', 'name', 'description', 'img_url', 'original_price', 'url', 'thumbnail', 'sku', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'ShoploProductId', 'ShopDomain', 'Name', 'Description', 'ImgUrl', 'OriginalPrice', 'Url', 'Thumbnail', 'Sku', 'Variants', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shoploProductId', 'shopDomain', 'name', 'description', 'imgUrl', 'originalPrice', 'url', 'thumbnail', 'sku', 'variants', ),
+        BasePeer::TYPE_COLNAME => array (ProductPeer::ID, ProductPeer::SHOPLO_PRODUCT_ID, ProductPeer::SHOP_DOMAIN, ProductPeer::NAME, ProductPeer::DESCRIPTION, ProductPeer::IMG_URL, ProductPeer::ORIGINAL_PRICE, ProductPeer::URL, ProductPeer::THUMBNAIL, ProductPeer::SKU, ProductPeer::VARIANTS, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOPLO_PRODUCT_ID', 'SHOP_DOMAIN', 'NAME', 'DESCRIPTION', 'IMG_URL', 'ORIGINAL_PRICE', 'URL', 'THUMBNAIL', 'SKU', 'VARIANTS', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'shoplo_product_id', 'shop_domain', 'name', 'description', 'img_url', 'original_price', 'url', 'thumbnail', 'sku', 'variants', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -108,12 +111,12 @@ abstract class BaseProductPeer
      * e.g. ProductPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShoploProductId' => 1, 'ShopDomain' => 2, 'Name' => 3, 'Description' => 4, 'ImgUrl' => 5, 'OriginalPrice' => 6, 'Url' => 7, 'Thumbnail' => 8, 'Sku' => 9, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shoploProductId' => 1, 'shopDomain' => 2, 'name' => 3, 'description' => 4, 'imgUrl' => 5, 'originalPrice' => 6, 'url' => 7, 'thumbnail' => 8, 'sku' => 9, ),
-        BasePeer::TYPE_COLNAME => array (ProductPeer::ID => 0, ProductPeer::SHOPLO_PRODUCT_ID => 1, ProductPeer::SHOP_DOMAIN => 2, ProductPeer::NAME => 3, ProductPeer::DESCRIPTION => 4, ProductPeer::IMG_URL => 5, ProductPeer::ORIGINAL_PRICE => 6, ProductPeer::URL => 7, ProductPeer::THUMBNAIL => 8, ProductPeer::SKU => 9, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOPLO_PRODUCT_ID' => 1, 'SHOP_DOMAIN' => 2, 'NAME' => 3, 'DESCRIPTION' => 4, 'IMG_URL' => 5, 'ORIGINAL_PRICE' => 6, 'URL' => 7, 'THUMBNAIL' => 8, 'SKU' => 9, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shoplo_product_id' => 1, 'shop_domain' => 2, 'name' => 3, 'description' => 4, 'img_url' => 5, 'original_price' => 6, 'url' => 7, 'thumbnail' => 8, 'sku' => 9, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShoploProductId' => 1, 'ShopDomain' => 2, 'Name' => 3, 'Description' => 4, 'ImgUrl' => 5, 'OriginalPrice' => 6, 'Url' => 7, 'Thumbnail' => 8, 'Sku' => 9, 'Variants' => 10, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shoploProductId' => 1, 'shopDomain' => 2, 'name' => 3, 'description' => 4, 'imgUrl' => 5, 'originalPrice' => 6, 'url' => 7, 'thumbnail' => 8, 'sku' => 9, 'variants' => 10, ),
+        BasePeer::TYPE_COLNAME => array (ProductPeer::ID => 0, ProductPeer::SHOPLO_PRODUCT_ID => 1, ProductPeer::SHOP_DOMAIN => 2, ProductPeer::NAME => 3, ProductPeer::DESCRIPTION => 4, ProductPeer::IMG_URL => 5, ProductPeer::ORIGINAL_PRICE => 6, ProductPeer::URL => 7, ProductPeer::THUMBNAIL => 8, ProductPeer::SKU => 9, ProductPeer::VARIANTS => 10, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOPLO_PRODUCT_ID' => 1, 'SHOP_DOMAIN' => 2, 'NAME' => 3, 'DESCRIPTION' => 4, 'IMG_URL' => 5, 'ORIGINAL_PRICE' => 6, 'URL' => 7, 'THUMBNAIL' => 8, 'SKU' => 9, 'VARIANTS' => 10, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shoplo_product_id' => 1, 'shop_domain' => 2, 'name' => 3, 'description' => 4, 'img_url' => 5, 'original_price' => 6, 'url' => 7, 'thumbnail' => 8, 'sku' => 9, 'variants' => 10, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -197,6 +200,7 @@ abstract class BaseProductPeer
             $criteria->addSelectColumn(ProductPeer::URL);
             $criteria->addSelectColumn(ProductPeer::THUMBNAIL);
             $criteria->addSelectColumn(ProductPeer::SKU);
+            $criteria->addSelectColumn(ProductPeer::VARIANTS);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.shoplo_product_id');
@@ -208,6 +212,7 @@ abstract class BaseProductPeer
             $criteria->addSelectColumn($alias . '.url');
             $criteria->addSelectColumn($alias . '.thumbnail');
             $criteria->addSelectColumn($alias . '.sku');
+            $criteria->addSelectColumn($alias . '.variants');
         }
     }
 

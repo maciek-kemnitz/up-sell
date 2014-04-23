@@ -104,6 +104,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
     protected $sku;
 
     /**
+     * The value for the variants field.
+     * @var        string
+     */
+    protected $variants;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -231,6 +237,17 @@ abstract class BaseProduct extends BaseObject implements Persistent
     {
 
         return $this->sku;
+    }
+
+    /**
+     * Get the [variants] column value.
+     *
+     * @return string
+     */
+    public function getVariants()
+    {
+
+        return $this->variants;
     }
 
     /**
@@ -444,6 +461,27 @@ abstract class BaseProduct extends BaseObject implements Persistent
     } // setSku()
 
     /**
+     * Set the value of [variants] column.
+     *
+     * @param  string $v new value
+     * @return Product The current object (for fluent API support)
+     */
+    public function setVariants($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->variants !== $v) {
+            $this->variants = $v;
+            $this->modifiedColumns[] = ProductPeer::VARIANTS;
+        }
+
+
+        return $this;
+    } // setVariants()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -485,6 +523,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $this->url = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
             $this->thumbnail = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->sku = ($row[$startcol + 9] !== null) ? (double) $row[$startcol + 9] : null;
+            $this->variants = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -494,7 +533,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 10; // 10 = ProductPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = ProductPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Product object", $e);
@@ -736,6 +775,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductPeer::SKU)) {
             $modifiedColumns[':p' . $index++]  = '`sku`';
         }
+        if ($this->isColumnModified(ProductPeer::VARIANTS)) {
+            $modifiedColumns[':p' . $index++]  = '`variants`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `product` (%s) VALUES (%s)',
@@ -776,6 +818,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
                         break;
                     case '`sku`':
                         $stmt->bindValue($identifier, $this->sku, PDO::PARAM_STR);
+                        break;
+                    case '`variants`':
+                        $stmt->bindValue($identifier, $this->variants, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -941,6 +986,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
             case 9:
                 return $this->getSku();
                 break;
+            case 10:
+                return $this->getVariants();
+                break;
             default:
                 return null;
                 break;
@@ -979,6 +1027,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $keys[7] => $this->getUrl(),
             $keys[8] => $this->getThumbnail(),
             $keys[9] => $this->getSku(),
+            $keys[10] => $this->getVariants(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1048,6 +1097,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
             case 9:
                 $this->setSku($value);
                 break;
+            case 10:
+                $this->setVariants($value);
+                break;
         } // switch()
     }
 
@@ -1082,6 +1134,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if (array_key_exists($keys[7], $arr)) $this->setUrl($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setThumbnail($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setSku($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setVariants($arr[$keys[10]]);
     }
 
     /**
@@ -1103,6 +1156,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductPeer::URL)) $criteria->add(ProductPeer::URL, $this->url);
         if ($this->isColumnModified(ProductPeer::THUMBNAIL)) $criteria->add(ProductPeer::THUMBNAIL, $this->thumbnail);
         if ($this->isColumnModified(ProductPeer::SKU)) $criteria->add(ProductPeer::SKU, $this->sku);
+        if ($this->isColumnModified(ProductPeer::VARIANTS)) $criteria->add(ProductPeer::VARIANTS, $this->variants);
 
         return $criteria;
     }
@@ -1175,6 +1229,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $copyObj->setUrl($this->getUrl());
         $copyObj->setThumbnail($this->getThumbnail());
         $copyObj->setSku($this->getSku());
+        $copyObj->setVariants($this->getVariants());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1236,6 +1291,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $this->url = null;
         $this->thumbnail = null;
         $this->sku = null;
+        $this->variants = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

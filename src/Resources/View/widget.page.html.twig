@@ -337,12 +337,13 @@
                                 <del class="muted">34,00 zł</del>
                                 <strong >17,00 zł</strong>
                             </div>
-
-                            <select>
-                                <option value="nana">nana</option>
-                                <option value="nana">nana</option>
-                                <option value="nana">nana</option>
-                            </select>
+                            {% if product.getId() in variants|keys %}
+                                <select>
+                                    {% for key, variant in variants[product.getId()] %}
+                                        <option value="{{ key }}">{{ variant }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
                             <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
                         </div>
                     </li>
@@ -369,11 +370,13 @@
                         </div>
 
                         <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
-                        <select>
-                            <option value="nana">nana</option>
-                            <option value="nana">nana</option>
-                            <option value="nana">nana</option>
-                        </select>
+                        {% if product.getId() in variants|keys %}
+                            <select>
+                                {% for key, variant in variants[product.getId()] %}
+                                    <option value="{{ key }}">{{ variant }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
 
                     </div>
                 </div>
@@ -389,7 +392,7 @@
         </div>
     </div>
 </div>
-<div class="modal-backdrop fade in hide"></div>
+{#<div class="modal-backdrop fade in hide"></div>#}
 
 <script type="text/javascript">
     $(function(){
@@ -406,26 +409,10 @@
         var modalLeftMargin = (screenWidth - modalWidth)/2 - paddingLeft;
 
         $('#up-sell-modal').css('margin-left', modalLeftMargin + 'px');
-
-//        {adres_sklepu}/ajax?method=shop.cart.addToCart&id=ID_WARIANTU
     });
 
 
 
-    $.post('/ajax/facility/next-visits', userData, function (ajaxResult) {
-
-                $('.visit-dates').each(function () {
-                    var doctorId = $(this).data('doctor-id')
-                    $('.slider-container', this).html(ajaxResult[doctorId])
-                    $('.loader').hide()
-
-                    // reload some scripts
-                    _verticalMiddle('.next-term', '.visit-dates-container', 10)
-                    _verticalMiddle('.no-visits', '.visit-dates-container', 10)
-                    _showMore()
-                })
-            }
-            , 'json')
 
 </script>
 

@@ -18,4 +18,70 @@ use src\Model\om\BaseProduct;
  */
 class Product extends BaseProduct
 {
+	static function getProductFromArray($data, $shopDomain)
+	{
+		$product = new Product();
+		$product->setShopDomain($shopDomain);
+		$product->setShoploProductId($data['id']);
+		$product->setName($data['name']);
+
+		$images = $data['images'];
+
+		if (count($images))
+		{
+			$firstImage = reset($images);
+			$product->setImgUrl($firstImage['src']);
+		}
+
+		$product->setThumbnail($data['thumbnail']);
+
+		$variants = $data['variants'];
+		unset($variants[0]);
+
+		$variantsData = [];
+		if (count($variants) > 0)
+		{
+			foreach ($variants as $variant)
+			{
+				$propertyArray = null;
+
+				if ($variant['property_name_1'] != null && $variant['property_name_1'] != '')
+				{
+					$propertyArray[] = $variant['property_name_1'];
+				}
+
+				if ($variant['property_name_2'] != null && $variant['property_name_2'] != '')
+				{
+					$propertyArray[] = $variant['property_name_2'];
+				}
+
+				if ($variant['property_name_3'] != null && $variant['property_name_3'] != '')
+				{
+					$propertyArray[] = $variant['property_name_3'];
+				}
+
+				if (count($propertyArray) > 0)
+				{
+					$variantsData[$variant['id']] = implode('-', $propertyArray);
+				}
+			}
+		}
+
+		if (count($variantsData) > 0)
+		{
+			$variantsData = json_encode($variantsData);
+		}
+		else
+		{
+			$variantsData = null;
+		}
+		$product->setVariants($variantsData);
+
+		$product->setOriginalPrice($firstVariant['price']);
+		$product->setUrl($data['url']);
+		$product->setSku($firstVariant['sku']);
+		$product->save();
+
+		return $product;
+	}
 }
