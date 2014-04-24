@@ -35,19 +35,20 @@ $(function () {
 
                 var productId = $(this).data('product-id');
                 alert(productId);
+                console.log(productId);
                 if ($('#variant-select').length > 0)
                 {
                     productId = $('#aioConceptName').find(":selected").val()
                 }
                 alert(productId);
-
+                console.log(productId);
                 var productData = {
                     'id': productId
                 };
-
-                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
-                    window.location.href = "http://" + window.location.hostname + "/koszyk";
-                });
+                return false;
+//                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
+//                    window.location.href = "http://" + window.location.hostname + "/koszyk";
+//                });
 
             });
 
