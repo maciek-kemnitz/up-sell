@@ -34,22 +34,20 @@ $(function () {
             $('body').on('click', 'button.up-sell-add-to-cart', function () {
 
                 var productId = $(this).data('product-id');
-                alert(productId);
-                console.log(productId);
+
                 if ($('#variant-select').length > 0)
                 {
                     productId = $('#variant-select').find(":selected").val()
                 }
-                alert(productId);
-                console.log(productId);
+
                 var productData = {
                     'id': productId
                 };
-                return false;
 
-//                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function// (ajaxResult) {
-//                    window.location.href = "http://" + window.location.hostna//me + "/koszyk";
-//                });
+
+                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
+                    window.location.href = "http://" + window.location.hostname + "/koszyk";
+                });
 
             });
 
