@@ -34,6 +34,7 @@ class Product extends BaseProduct
 		}
 
 		$product->setThumbnail($data['thumbnail']);
+		$product->setDescription($data['description']);
 
 		$variants = $data['variants'];
 		$firstVariant = reset($variants);

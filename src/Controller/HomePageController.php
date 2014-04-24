@@ -37,8 +37,9 @@ class HomePageController implements ControllerProviderInterface
 		$controllers->get('/modal', function (Request $request) use ($app)
 		{
 			/** @var ShoploApi $shoploApi */
-			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
-
+//			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
+//			$product = $shoploApi->product->retrieve(68);
+//			var_dump($product['products']);
 			$upSell = UpSellQuery::create()->findPk(37);
 
 			/** @var Product[] $upSellProducts */
