@@ -38,7 +38,7 @@ $(function () {
                 console.log(productId);
                 if ($('#variant-select').length > 0)
                 {
-                    productId = $('#aioConceptName').find(":selected").val()
+                    productId = $('#aioConceptName').val()
                 }
                 alert(productId);
                 console.log(productId);
