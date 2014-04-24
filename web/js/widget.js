@@ -38,7 +38,7 @@ $(function () {
                 console.log(productId);
                 if ($('#variant-select').length > 0)
                 {
-                    productId = $('#aioConceptName').val()
+                    productId = $('#variant-select').val()
                 }
                 alert(productId);
                 console.log(productId);
