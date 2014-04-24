@@ -338,9 +338,13 @@
                                 <strong >17,00 zł</strong>
                             </div>
                             {% if product.getId() in variants|keys %}
-                                <select>
+                                <select name="variant-id" id="variant-select">
                                     {% for key, variant in variants[product.getId()] %}
-                                        <option value="{{ key }}">{{ variant }}</option>
+                                        {% if loop.first %}
+                                            <option value="{{ key }}" selected>{{ variant }}</option>
+                                        {% else %}
+                                            <option value="{{ key }}">{{ variant }}</option>
+                                        {% endif %}
                                     {% endfor %}
                                 </select>
                             {% endif %}
@@ -371,9 +375,13 @@
 
                         <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
                         {% if product.getId() in variants|keys %}
-                            <select>
+                            <select name="variant-id" id="variant-select">
                                 {% for key, variant in variants[product.getId()] %}
-                                    <option value="{{ key }}">{{ variant }}</option>
+                                    {% if loop.first %}
+                                        <option value="{{ key }}" selected>{{ variant }}</option>
+                                    {% else %}
+                                        <option value="{{ key }}">{{ variant }}</option>
+                                    {% endif %}
                                 {% endfor %}
                             </select>
                         {% endif %}

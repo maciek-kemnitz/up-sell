@@ -34,6 +34,11 @@ $(function () {
             $('body').on('click', 'button.up-sell-add-to-cart', function () {
 
                 var productId = $(this).data('product-id');
+                if ($('#variant-select').length > 0)
+                {
+                    productId = $('#aioConceptName').find(":selected").val()
+                }
+
                 var productData = {
                     'id': productId
                 };
