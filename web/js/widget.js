@@ -34,10 +34,12 @@ $(function () {
             $('body').on('click', 'button.up-sell-add-to-cart', function () {
 
                 var productId = $(this).data('product-id');
+                alert(productId);
                 if ($('#variant-select').length > 0)
                 {
                     productId = $('#aioConceptName').find(":selected").val()
                 }
+                alert(productId);
 
                 var productData = {
                     'id': productId
