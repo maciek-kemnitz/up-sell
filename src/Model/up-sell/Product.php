@@ -36,7 +36,8 @@ class Product extends BaseProduct
 		$product->setThumbnail($data['thumbnail']);
 
 		$variants = $data['variants'];
-		unset($variants[0]);
+		$firstVariant = reset($variants);
+		$product->setOriginalPrice($firstVariant['price']);
 
 		$variantsData = [];
 		if (count($variants) > 0)
@@ -44,6 +45,11 @@ class Product extends BaseProduct
 			foreach ($variants as $variant)
 			{
 				$propertyArray = null;
+
+				if (false == intval($variant['availability']) || $variant['id'] == $data['id'])
+				{
+					continue;
+				}
 
 				if ($variant['property_name_1'] != null && $variant['property_name_1'] != '')
 				{
@@ -77,7 +83,7 @@ class Product extends BaseProduct
 		}
 		$product->setVariants($variantsData);
 
-		$product->setOriginalPrice($firstVariant['price']);
+
 		$product->setUrl($data['url']);
 		$product->setSku($firstVariant['sku']);
 		$product->save();
