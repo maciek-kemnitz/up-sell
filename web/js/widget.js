@@ -2,7 +2,7 @@ $(function () {
 
     var uppSellContainer = '<div id="up-sell-container"></div>';
 
-    $.post("http://up-sell.mkemnitz.linuxpl.info/ajax/up-sell/product", userData, function (ajaxResult) {
+    $.post("http://up-sell.pl/ajax/up-sell/product", userData, function (ajaxResult) {
         if (ajaxResult['status'] == 'ok') {
             $('body').append(uppSellContainer);
 
