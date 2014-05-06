@@ -41,7 +41,7 @@ class SaveController implements ControllerProviderInterface
 
 			/** @var ShoploApi $shoploApi */
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
-			$shopDomain = $shoploApi->shop->retrieve()['domain'];
+			$shopDomain = $shoploApi->shop->retrieve()['permanent_domain'];
 
 
 			if ($upSellId)
@@ -56,7 +56,7 @@ class SaveController implements ControllerProviderInterface
 
 				$shop = $shoploApi->shop->retrieve();
 
-				if ($shop['domain'] != $shopDomain)
+				if ($shop['permanent_domain'] != $shopDomain)
 				{
 					throw new AccessDeniedHttpException();
 				}

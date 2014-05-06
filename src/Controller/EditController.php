@@ -35,7 +35,7 @@ class EditController implements ControllerProviderInterface
 
 			$shop = $shoploApi->shop->retrieve();
 
-			if ($shop['domain'] != $upSell->getShopDomain())
+			if ($shop['permanent_domain'] != $upSell->getShopDomain())
 			{
 				throw new AccessDeniedHttpException();
 			}

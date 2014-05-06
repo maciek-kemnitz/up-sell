@@ -42,7 +42,7 @@ class DeleteController implements ControllerProviderInterface
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
 			$shop = $shoploApi->shop->retrieve();
 
-			if ($shop['domain'] != $upSell->getShopDomain())
+			if ($shop['permanent_domain'] != $upSell->getShopDomain())
 			{
 				throw new AccessDeniedHttpException();
 			}

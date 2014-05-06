@@ -95,7 +95,7 @@ class AjaxController implements ControllerProviderInterface
 
 			/** @var ShoploApi $shoploApi */
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
-			$shopDomain = $shoploApi->shop->retrieve()['domain'];
+			$shopDomain = $shoploApi->shop->retrieve()['permanent_domain'];
 
 			$products = ProductQuery::create()
 							->filterByName('%'.$query.'%', \Criteria::LIKE)

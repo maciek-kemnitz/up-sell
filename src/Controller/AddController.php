@@ -28,7 +28,7 @@ class AddController implements ControllerProviderInterface
 
 			/** @var ShoploApi $shoploApi */
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
-			$shopDomain = $shoploApi->shop->retrieve()['domain'];
+			$shopDomain = $shoploApi->shop->retrieve()['permanent_domain'];
 			$productCount = $shoploApi->product->count();
 
 			$pageCount = $productCount['count']/100;

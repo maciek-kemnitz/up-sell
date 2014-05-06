@@ -25,8 +25,9 @@ class HomePageController implements ControllerProviderInterface
 			/** @var ShoploApi $shoploApi */
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
 			$shop = $shoploApi->shop->retrieve();
+
 			$upSells = UpSellQuery::create()
-								->filterByShopDomain($shop['domain'])
+								->filterByShopDomain($shop['permanent_domain'])
 								->orderByOrder()
 								->find();
 
