@@ -13,6 +13,7 @@ use src\Model\RelatedProduct;
 use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
+use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -92,8 +93,13 @@ class AjaxController implements ControllerProviderInterface
 			$offset = $request->query->get('offset');
 			$limit = $request->query->get('limit');
 
+			/** @var ShoploApi $shoploApi */
+			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
+			$shopDomain = $shoploApi->shop->retrieve()['domain'];
+
 			$products = ProductQuery::create()
 							->filterByName('%'.$query.'%', \Criteria::LIKE)
+							->filterByShopDomain($shopDomain)
 							->find();
 
 			$view = $app['twig']->render('autocomplete-products.html.twig', ['products'=>$products]);
