@@ -17,7 +17,7 @@ $(function () {
             var modalLeftMargin = (screenWidth - modalWidth) / 2 - paddingLeft;
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
 
-            $('body').on('click', 'input[name="addToCard"]', function () {
+            $('body').bind('click', 'input[name="addToCard"]', function () {
                 $('#up-sell-modal').addClass('modalMargin');
                 $('#up-sell-modal').css('display', 'block');
                 $('#up-sell-modal').addClass('in');
@@ -31,7 +31,7 @@ $(function () {
                 return false;
             });
 
-            $('body').on('click', 'button.up-sell-add-to-cart', function () {
+            $('body').bind('click', 'button.up-sell-add-to-cart', function () {
 
                 var productId = $(this).data('product-id');
 
@@ -51,7 +51,7 @@ $(function () {
 
             });
 
-            $('body').on('click', '[data-dismiss="modal"]', function () {
+            $('body').bind('click', '[data-dismiss="modal"]', function () {
                 $('#up-sell-modal').removeClass('in');
                 $('#up-sell-modal').css('display', 'none');
                 if ($(this).hasClass("to-basket")) {
