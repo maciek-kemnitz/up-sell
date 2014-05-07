@@ -98,8 +98,9 @@ class AjaxController implements ControllerProviderInterface
 			$shopDomain = $shoploApi->shop->retrieve()['permanent_domain'];
 
 			$products = ProductQuery::create()
-							->filterByName('%'.$query.'%', \Criteria::LIKE)
+							->filterByName($query.'%', \Criteria::LIKE)
 							->filterByShopDomain($shopDomain)
+							->limit(20)
 							->find();
 
 			$view = $app['twig']->render('autocomplete-products.html.twig', ['products'=>$products]);
@@ -107,6 +108,7 @@ class AjaxController implements ControllerProviderInterface
 			$result = [
 				'status'	=> 'ok',
 				'html'		=> $view,
+				'cnt'		=> $products->count()
 			];
 
 
