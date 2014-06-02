@@ -336,8 +336,8 @@
                             <div class="up-price">
                                 <h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
                             </div>
-                            {{ dump(variants) }}
-                            {% if product.getId() in variants|keys and variants[product.getId()] not null %}
+
+                            {% if product.getId() in variants|keys and variants[product.getId()] is not null %}
                                 <select name="variant-id" id="variant-select">
                                     {% for key, variant in variants[product.getId()] %}
                                         {% if loop.first %}
@@ -373,7 +373,7 @@
                         </div>
 
                         <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
-                        {% if product.getId() in variants|keys and variants[product.getId()] not null %}
+                        {% if product.getId() in variants|keys and variants[product.getId()] is not null %}
                             <select name="variant-id" id="variant-select">
                                 {% for key, variant in variants[product.getId()] %}
                                     {% if loop.first %}
