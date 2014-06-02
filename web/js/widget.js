@@ -52,7 +52,7 @@ $(function () {
 
             });
 
-            $('[data-dismiss="modal"]').bind('click', function () {
+            $('body').delegate('[data-dismiss="modal"]', 'click', function () {
                 console.log('dismis-modal click');
                 $('#up-sell-modal').removeClass('in');
                 $('#up-sell-modal').css('display', 'none');
