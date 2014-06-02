@@ -18,6 +18,7 @@ $(function () {
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
 
             $('input[name="addToCard"]').bind('click', function () {
+                console.log('addtocard click');
                 $('#up-sell-modal').addClass('modalMargin');
                 $('#up-sell-modal').css('display', 'block');
                 $('#up-sell-modal').addClass('in');
@@ -32,7 +33,7 @@ $(function () {
             });
 
             $('button.up-sell-add-to-cart').bind('click', function () {
-
+                console.log('du[a');
                 var productId = $(this).data('product-id');
 
                 if ($('#variant-select').length > 0)
@@ -52,6 +53,7 @@ $(function () {
             });
 
             $('[data-dismiss="modal"]').bind('click', function () {
+                console.log('dismis-modal click');
                 $('#up-sell-modal').removeClass('in');
                 $('#up-sell-modal').css('display', 'none');
                 if ($(this).hasClass("to-basket")) {
