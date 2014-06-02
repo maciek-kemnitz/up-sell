@@ -33,7 +33,7 @@ $(function () {
             });
 
             $('body').delegate('button.up-sell-add-to-cart', 'click', function () {
-                console.log('du[a');
+
                 var productId = $(this).data('product-id');
 
                 if ($('#variant-select').length > 0)
@@ -47,13 +47,13 @@ $(function () {
 
 
                 $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
-                    window.location.href = "http://" + window.location.hostname + "/koszyk";
+//                    window.location.href = "http://" + window.location.hostname + "/koszyk";
                 });
 
             });
 
             $('body').delegate('[data-dismiss="modal"]', 'click', function () {
-                console.log('dismis-modal click');
+
                 $('#up-sell-modal').removeClass('in');
                 $('#up-sell-modal').css('display', 'none');
                 if ($(this).hasClass("to-basket")) {
