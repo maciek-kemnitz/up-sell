@@ -338,6 +338,8 @@
                             </div>
                             {% if product.getId() in variants|keys %}
                                 <select name="variant-id" id="variant-select">
+
+                                    console.log(variants[{{ product.getId()]}});
                                     {% for key, variant in variants[product.getId()] %}
                                         {% if loop.first %}
                                             <option value="{{ key }}" selected>{{ variant }}</option>
