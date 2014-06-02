@@ -334,7 +334,7 @@
                             </span>
 
                             <div class="up-price">
-                                <strong >17,00 zł</strong>
+                                <h2>{{ product.getOriginalPrice }} zł</h2>
                             </div>
                             {% if product.getId() in variants|keys %}
                                 <select name="variant-id" id="variant-select">
