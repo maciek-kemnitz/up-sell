@@ -334,7 +334,7 @@
                             </span>
 
                             <div class="up-price">
-                                <h2>{{ product.getOriginalPrice }} zł</h2>
+                                <h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
                             </div>
                             {% if product.getId() in variants|keys %}
                                 <select name="variant-id" id="variant-select">
@@ -368,7 +368,7 @@
                             {% endif %}
                         </small>
                         <div class="up-price">
-                            <h2>{{ product.getOriginalPrice }} zł</h2>
+                            <h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
                         </div>
 
                         <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
