@@ -336,7 +336,7 @@
                             <div class="up-price">
                                 <h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
                             </div>
-                            console.log({{ variants|count }});
+                            console.log({{ variants|lenght }});
                             {% if product.getId() in variants|keys %}
                                 <select name="variant-id" id="variant-select">
                                     {% for key, variant in variants[product.getId()] %}
