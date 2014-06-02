@@ -38,7 +38,7 @@ class Product extends BaseProduct
 
 		$variants = $data['variants'];
 		$firstVariant = reset($variants);
-		$product->setOriginalPrice($firstVariant['price']);
+		$product->setOriginalPrice($firstVariant['price']/100);
 
 		$variantsData = [];
 		if (count($variants) > 0)
