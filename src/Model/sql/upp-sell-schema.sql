@@ -15,11 +15,13 @@ CREATE TABLE `product`
     `shoplo_product_id` INTEGER NOT NULL,
     `shop_domain` VARCHAR(255) NOT NULL,
     `name` TEXT NOT NULL,
+    `description` TEXT,
     `img_url` TEXT NOT NULL,
     `original_price` FLOAT NOT NULL,
     `url` TEXT NOT NULL,
     `thumbnail` TEXT,
     `sku` FLOAT,
+    `variants` TEXT,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `shoplo_product_id` (`shoplo_product_id`, `shop_domain`)
 ) ENGINE=InnoDB CHARACTER SET='utf8';

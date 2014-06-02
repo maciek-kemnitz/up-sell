@@ -15,11 +15,13 @@ CREATE TABLE `product`
     `shoplo_product_id` INTEGER NOT NULL,
     `shop_domain` VARCHAR(255) NOT NULL,
     `name` TEXT NOT NULL,
+    `description` TEXT,
     `img_url` TEXT NOT NULL,
-    `original_price` FLOAT NOT NULL,
+    `original_price` DOUBLE NOT NULL,
     `url` TEXT NOT NULL,
     `thumbnail` TEXT,
     `sku` FLOAT,
+    `variants` TEXT,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `shoplo_product_id` (`shoplo_product_id`, `shop_domain`)
 ) ENGINE=InnoDB CHARACTER SET='utf8';
@@ -74,13 +76,13 @@ CREATE TABLE `up_sell`
     `name` VARCHAR(255) NOT NULL,
     `headline` TEXT NOT NULL,
     `description` TEXT NOT NULL,
-    `price_from` FLOAT,
-    `price_to` FLOAT,
+    `price_from` DOUBLE,
+    `price_to` DOUBLE,
     `use_price_range` enum('0','1') DEFAULT '1' NOT NULL,
     `created_at` DATETIME NOT NULL,
     `status` enum('active','disabled') DEFAULT 'active' NOT NULL,
     `discount_type` enum('none','percent','amount') DEFAULT 'none' NOT NULL,
-    `discount_amount` FLOAT,
+    `discount_amount` DOUBLE,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARACTER SET='utf8';
 

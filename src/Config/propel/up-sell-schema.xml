@@ -9,7 +9,7 @@
         <column name="name"  type="LONGVARCHAR" required="true"/>
         <column name="description"  type="LONGVARCHAR" required="false"/>
         <column name="img_url"  type="LONGVARCHAR" required="true"/>
-        <column name="original_price"  type="FLOAT" required="true"/>
+        <column name="original_price"  type="DOUBLE" required="true"/>
         <column name="url" type="LONGVARCHAR" required="true"/>
         <column name="thumbnail" type="LONGVARCHAR" required="false"/>
         <column name="sku" type="FLOAT" required="false"/>
@@ -60,13 +60,13 @@
         <column name="name"  type="VARCHAR" size="255" required="true"/>
         <column name="headline"  type="LONGVARCHAR" required="true"/>
         <column name="description"  type="LONGVARCHAR" required="true"/>
-        <column name="price_from"  type="FLOAT" required="false"/>
-        <column name="price_to"  type="FLOAT" required="false"/>
+        <column name="price_from"  type="DOUBLE" required="false"/>
+        <column name="price_to"  type="DOUBLE" required="false"/>
         <column name="use_price_range" type="CHAR" sqlType="enum('0','1')" required="true" defaultValue="1"/>
         <column name="created_at" type="TIMESTAMP" required="true"/>
         <column name="status" type="CHAR" sqlType="enum('active','disabled')" required="true" defaultValue="active"/>
         <column name="discount_type" type="CHAR" sqlType="enum('none','percent','amount')" required="true" defaultValue="none"/>
-        <column name="discount_amount"  type="FLOAT" required="false"/>
+        <column name="discount_amount"  type="DOUBLE" required="false"/>
         <vendor type="mysql">
             <parameter name="Engine" value="InnoDB"/>
             <parameter name="Charset" value="utf8"/>
