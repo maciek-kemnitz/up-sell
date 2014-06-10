@@ -47,7 +47,7 @@ $(function () {
 
 
                 $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
-//                    window.location.href = "http://" + window.location.hostname + "/koszyk";
+                    window.location.href = "http://" + window.location.hostname + "/koszyk";
                 });
 
             });
