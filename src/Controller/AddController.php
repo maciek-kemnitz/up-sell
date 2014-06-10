@@ -40,7 +40,18 @@ class AddController implements ControllerProviderInterface
 				$products = $products['products'];
 
 
-				$productIds = array_keys($products);
+				$productIds = [];
+				foreach ($products as $product)
+				{
+					if (isset($product['variants'][0]))
+					{
+						$productIds[$product['variants'][0]['product_id']] = $product['id'];
+					}
+					else
+					{
+						continue;
+					}
+				}
 
 				/** @var \PropelObjectCollection $ownedIds */
 				$ownedProducts = ProductQuery::create()
@@ -50,13 +61,13 @@ class AddController implements ControllerProviderInterface
 
 				$ownedIds = $ownedProducts->toKeyValue('shoploProductId', 'shoploProductId');
 
-
-				$missingProductIds = array_diff($productIds, $ownedIds);
+				$missingProductIds = array_diff(array_keys($productIds), $ownedIds);
 
 
 				foreach($missingProductIds as $productId)
 				{
-					$product = Product::getProductFromArray($products[$productId], $shopDomain);
+
+					$product = Product::getProductFromArray($products[$productIds[$productId]], $shopDomain);
 				}
 			}
 

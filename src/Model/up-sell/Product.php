@@ -37,7 +37,7 @@ class Product extends BaseProduct
 
 		$variants = $data['variants'];
 		$firstVariant = reset($variants);
-		$product->setShoploProductId($firstVariant['id']);
+		$product->setShoploProductId($firstVariant['product_id']);
 		$product->setOriginalPrice($firstVariant['price']/100);
 
 		$variantsData = [];
@@ -83,7 +83,6 @@ class Product extends BaseProduct
 			$variantsData = null;
 		}
 		$product->setVariants($variantsData);
-
 
 		$product->setUrl($data['url']);
 		$product->setSku($firstVariant['sku']);
