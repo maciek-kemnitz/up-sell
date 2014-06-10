@@ -22,7 +22,6 @@ class Product extends BaseProduct
 	{
 		$product = new Product();
 		$product->setShopDomain($shopDomain);
-		$product->setShoploProductId($data['id']);
 		$product->setName($data['name']);
 
 		$images = $data['images'];
@@ -38,6 +37,7 @@ class Product extends BaseProduct
 
 		$variants = $data['variants'];
 		$firstVariant = reset($variants);
+		$product->setShoploProductId($firstVariant['id']);
 		$product->setOriginalPrice($firstVariant['price']/100);
 
 		$variantsData = [];
