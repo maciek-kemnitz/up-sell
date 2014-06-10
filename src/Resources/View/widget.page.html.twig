@@ -310,6 +310,16 @@
         margin: 10px auto;
     }
 
+    .up-sell-img img {
+        max-width: 240px;
+        max-height: 280px;
+    }
+
+    .multi-item img {
+        max-width: 180px;
+        max-height: 210px;
+    }
+
 
 </style>
 <div id="up-sell-modal" class="modal hide fade in">
@@ -326,7 +336,7 @@
                 {% for product in products %}
                     <li class="multi-item">
                         <div >
-                            <img max-width="180px" max-height="210px" src="{{ product.getImgUrl() }}"/>
+                            <img  src="{{ product.getImgUrl() }}"/>
                         </div>
                         <div class="up-sell-description-container">
                                 <span class="product-name">
@@ -357,7 +367,7 @@
                 {% for product in products %}
                 <div class="up-sell-content-inner">
                     <div class="up-sell-img">
-                        <img max-width="240px" max-height="280px" src="{{ product.getImgUrl() }}"/>
+                        <img src="{{ product.getImgUrl() }}"/>
                     </div>
                     <div class="up-sell-description-container">
                         <h2 class=" product-name">
