@@ -47,7 +47,7 @@ class Product extends BaseProduct
 			{
 				$propertyArray = null;
 
-				if (false == intval($variant['availability']) || $variant['id'] == $data['id'])
+				if (false == intval($variant['availability']))
 				{
 					continue;
 				}
