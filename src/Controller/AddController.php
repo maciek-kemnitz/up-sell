@@ -39,13 +39,12 @@ class AddController implements ControllerProviderInterface
 				$products = $shoploApi->product->retrieve(0,0,0,["page"=>$i, "limit"=>100 ]);
 				$products = $products['products'];
 
-
 				$productIds = [];
 				foreach ($products as $product)
 				{
 					if (isset($product['variants'][0]))
 					{
-						$productIds[$product['variants'][0]['id']] = $product['product_id'];
+						$productIds[$product['variants'][0]['id']] = $product['id'];
 					}
 					else
 					{
@@ -66,9 +65,10 @@ class AddController implements ControllerProviderInterface
 
 				foreach($missingProductIds as $productId)
 				{
-
 					$product = Product::getProductFromArray($products[$productIds[$productId]], $shopDomain);
 				}
+
+				exit;
 			}
 
 
