@@ -67,8 +67,6 @@ class AddController implements ControllerProviderInterface
 				{
 					$product = Product::getProductFromArray($products[$productIds[$productId]], $shopDomain);
 				}
-
-				exit;
 			}
 
 
