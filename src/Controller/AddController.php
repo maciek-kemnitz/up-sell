@@ -45,7 +45,7 @@ class AddController implements ControllerProviderInterface
 				{
 					if (isset($product['variants'][0]))
 					{
-						$productIds[$product['variants'][0]['product_id']] = $product['id'];
+						$productIds[$product['variants'][0]['id']] = $product['product_id'];
 					}
 					else
 					{
@@ -56,7 +56,7 @@ class AddController implements ControllerProviderInterface
 				/** @var \PropelObjectCollection $ownedIds */
 				$ownedProducts = ProductQuery::create()
 					->filterByShopDomain($shopDomain)
-					->filterByShoploProductId($productIds)
+					->filterByShoploProductId(array_keys($productIds))
 					->find();
 
 				$ownedIds = $ownedProducts->toKeyValue('shoploProductId', 'shoploProductId');
