@@ -18,7 +18,7 @@ $(function () {
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
 
             $('body').delegate('input[name="addToCard"]','click', function () {
-                console.log('addtocard click');
+
                 $('#up-sell-modal').addClass('modalMargin');
                 $('#up-sell-modal').css('display', 'block');
                 $('#up-sell-modal').addClass('in');
@@ -58,6 +58,10 @@ $(function () {
                 $('#up-sell-modal').css('display', 'none');
                 if ($(this).hasClass("to-basket")) {
                     window.location.href = "http://" + window.location.hostname + "/koszyk";
+                }
+                else
+                {
+                    location.reload();
                 }
             });
             $('#up-sell-container').html(ajaxResult['html']);
