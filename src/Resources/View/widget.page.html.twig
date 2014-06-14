@@ -1,5 +1,4 @@
 <style>
-
     .muted {
         color: #8b9ba1;
     }
@@ -82,6 +81,10 @@
     /*.modal-body div {*/
         /*overflow: hidden;*/
     /*}*/
+
+    .up-sell-content {
+        position: relative;
+    }
 
     .up-sell-content-inner {
         margin-top: 63px;
@@ -320,6 +323,19 @@
         max-height: 210px;
     }
 
+    .right-arrow {
+        position: absolute;
+        top: 50%;
+        right: 0px;
+        cursor: pointer;
+    }
+
+    .left-arrow {
+        position: absolute;
+        top: 50%;
+        cursor: pointer;
+    }
+
 
 </style>
 <div id="up-sell-modal" class="modal hide fade in">
@@ -331,10 +347,19 @@
     </div>
     <div class="modal-body">
         <div class="up-sell-content clearfix">
+            {% if products.count() > 3 %}
+                <div class="right-arrow">
+                    <img width="30px" height="80px" src="{{ app.request.basepath }}/img/rightArrow.png">
+                </div>
+                <div class="left-arrow" style="display: none;">
+                    <img width="30px" height="80px" src="{{ app.request.basepath }}/img/leftArrow.png">
+                </div>
+            {% endif %}
             {% if products.count() > 1 %}
                 <ul class="up-sell-multi">
                 {% for product in products %}
-                    <li class="multi-item">
+
+                    <li class="multi-item"{% if loop.index > 3 %} style="display: none;"{% endif %}>
                         <div >
                             <img  src="{{ product.getImgUrl() }}"/>
                         </div>
@@ -426,7 +451,51 @@
         var modalLeftMargin = (screenWidth - modalWidth)/2 - paddingLeft;
 
         $('#up-sell-modal').css('margin-left', modalLeftMargin + 'px');
+
+        $('body').delegate('.right-arrow', 'click', function(){
+            listSwitcher($('.multi-item'), this, '.left-arrow');
+        });
+
+        $('body').delegate('.left-arrow', 'click', function(){
+            listSwitcher($('.multi-item').get().reverse(), this, '.right-arrow');
+        });
     });
+
+    function listSwitcher(items, currentPointer, oppositePointer)
+    {
+        var counter = 1;
+        var doSwitch = false;
+
+        $(items).each(function(){
+
+            if ($(this).is(":visible"))
+            {
+                $(this).css('display','none');
+                doSwitch = true;
+            }
+            else
+            {
+                if (doSwitch && counter <= 3)
+                {
+                    $(this).show();
+                    counter++;
+                }
+                else if (doSwitch)
+                {
+                    counter++;
+                }
+            }
+        });
+
+        if (counter <= 4)
+        {
+            $(currentPointer).css('display','none');
+
+        }
+
+        $(oppositePointer).show();
+    }
+
 
 
 

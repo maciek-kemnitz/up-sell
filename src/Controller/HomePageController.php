@@ -41,7 +41,7 @@ class HomePageController implements ControllerProviderInterface
 //			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
 //			$product = $shoploApi->product->retrieve(68);
 //			var_dump($product['products']);
-			$upSell = UpSellQuery::create()->findPk(37);
+			$upSell = UpSellQuery::create()->findPk(39);
 
 			/** @var Product[] $upSellProducts */
 			$upSellProducts = $upSell->getProducts();
@@ -52,7 +52,7 @@ class HomePageController implements ControllerProviderInterface
 				$variants[$product->getId()] = json_decode($product->getVariants(), true);
 			}
 
-			return $app['twig']->render('widget.page.html.twig', ['upSell' => $upSell, 'products' => $upSell->getProducts(), 'variants' => $variants]);
+			return $app['twig']->render('modal.html.twig', ['upSell' => $upSell, 'products' => $upSell->getProducts(), 'variants' => $variants]);
 
 		});
 
