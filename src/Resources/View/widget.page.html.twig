@@ -349,10 +349,10 @@
         <div class="up-sell-content clearfix">
             {% if products.count() > 3 %}
                 <div class="right-arrow">
-                    <img width="30px" height="80px" src="{{ app.request.basepath }}/img/rightArrow.png">
+                    <img width="30px" height="80px" src="http://{{ app.request.host }}/img/rightArrow.png">
                 </div>
                 <div class="left-arrow" style="display: none;">
-                    <img width="30px" height="80px" src="{{ app.request.basepath }}/img/leftArrow.png">
+                    <img width="30px" height="80px" src="http://{{ app.request.host }}/img/leftArrow.png">
                 </div>
             {% endif %}
             {% if products.count() > 1 %}
