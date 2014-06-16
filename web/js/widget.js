@@ -1,7 +1,7 @@
 $(function () {
 
     var uppSellContainer = '<div id="up-sell-container"></div>';
-    debugger;
+
     $.post("http://up-sell.pl/ajax/up-sell/product", userData, function (ajaxResult) {
         if (ajaxResult['status'] == 'ok') {
             $('body').append(uppSellContainer);
