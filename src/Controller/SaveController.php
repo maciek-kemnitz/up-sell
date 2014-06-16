@@ -119,7 +119,6 @@ class SaveController implements ControllerProviderInterface
 			$newRelatedProducts = [];
 			$newProductsInCart = [];
 
-
 			if (count($upSellProducts) > 0)
 			{
 				foreach($upSellProducts as $productId)
@@ -128,9 +127,8 @@ class SaveController implements ControllerProviderInterface
 
 					$product = ProductQuery::create()
 										->filterByShopDomain($shopDomain)
-										->filterByShoploProductId($shoploProduct['id'])
+										->filterByShoploProductId($productId)
 										->findOne();
-
 
 					if (null == $product)
 					{
