@@ -369,7 +369,7 @@
                             </span>
 
                             <div class="up-price">
-                                <h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
+                                <h2 id="{{ product.getId() }}-price">{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
                             </div>
 
                             {% if product.getId() in variants|keys and variants[product.getId()] is not null %}
