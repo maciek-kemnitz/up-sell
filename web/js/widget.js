@@ -16,7 +16,10 @@ $(function () {
 
             var modalLeftMargin = (screenWidth - modalWidth) / 2 - paddingLeft;
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
-            $('input[name="addToCard"]').unbind();
+
+            $('input[name="addToCard"]').parent('form').removeAttr('action');
+
+
             $('body').delegate('input[name="addToCard"]','click', function () {
 
                 $('#up-sell-modal').addClass('modalMargin');
