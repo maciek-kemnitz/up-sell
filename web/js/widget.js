@@ -37,7 +37,7 @@ $(function () {
 
             $('body').delegate('#variant-select', 'change', function (){
                 var newPrice = $(this).find(":selected").data('price');
-                var id = '#'+$(this).find(":selected").val()+'-price';
+                var id = '#'+$(this).data('product-id') + "-price";
                 console.log(id);
                 $(id).html(newPrice);
             });

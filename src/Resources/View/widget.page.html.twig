@@ -373,7 +373,7 @@
                             </div>
 
                             {% if product.getId() in variants|keys and variants[product.getId()] is not null %}
-                                <select name="variant-id" id="variant-select">
+                                <select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
                                     {% for key, variant in variants[product.getId()] %}
                                         {% if loop.first %}
                                             <option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
@@ -409,7 +409,7 @@
 
                         <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
                         {% if product.getId() in variants|keys and variants[product.getId()] is not null %}
-                            <select name="variant-id" id="variant-select">
+                            <select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
                                 {% for key, variant in variants[product.getId()] %}
                                     {% if loop.first %}
                                         <option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
