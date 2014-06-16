@@ -39,7 +39,7 @@ $(function () {
                 var newPrice = $(this).find(":selected").data('price');
                 var id = '#'+$(this).data('product-id') + "-price";
                 console.log(id);
-                $(id).html(newPrice);
+                $(id).html(newPrice + ' zł');
             });
 
             $('body').delegate('button.up-sell-add-to-cart', 'click', function () {
