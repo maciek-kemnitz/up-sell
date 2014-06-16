@@ -376,9 +376,9 @@
                                 <select name="variant-id" id="variant-select">
                                     {% for key, variant in variants[product.getId()] %}
                                         {% if loop.first %}
-                                            <option value="{{ key }}" selected>{{ variant }}</option>
+                                            <option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
                                         {% else %}
-                                            <option value="{{ key }}">{{ variant }}</option>
+                                            <option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
                                         {% endif %}
                                     {% endfor %}
                                 </select>
@@ -412,9 +412,9 @@
                             <select name="variant-id" id="variant-select">
                                 {% for key, variant in variants[product.getId()] %}
                                     {% if loop.first %}
-                                        <option value="{{ key }}" selected>{{ variant }}</option>
+                                        <option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
                                     {% else %}
-                                        <option value="{{ key }}">{{ variant }}</option>
+                                        <option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
                                     {% endif %}
                                 {% endfor %}
                             </select>

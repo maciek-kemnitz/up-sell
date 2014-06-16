@@ -35,6 +35,12 @@ $(function () {
                 return false;
             });
 
+            $('body').delegate('#variant-select', 'change', function (){
+                console.log('yes');
+                var newPrice = $(this).find(":selected").data('price');
+                $('.up-price h2').html(newPrice);
+            });
+
             $('body').delegate('button.up-sell-add-to-cart', 'click', function () {
 
                 var productId = $(this).data('product-id');

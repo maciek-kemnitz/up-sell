@@ -69,7 +69,8 @@ class Product extends BaseProduct
 
 				if (count($propertyArray) > 0)
 				{
-					$variantsData[$variant['id']] = implode('-', $propertyArray);
+					$variantsData[$variant['id']]['var_type'] = implode('-', $propertyArray);
+					$variantsData[$variant['id']]['price'] = $variant['price']/100;
 				}
 			}
 		}
