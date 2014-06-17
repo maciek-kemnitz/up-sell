@@ -48,6 +48,7 @@ $(function () {
                 {
                     productId = $(select).find(":selected").val()
                 }
+                console.log(productId);
 
                 var productData = {
                     'id': productId
