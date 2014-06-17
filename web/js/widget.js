@@ -16,13 +16,13 @@ $(function () {
 
             var modalLeftMargin = (screenWidth - modalWidth) / 2 - paddingLeft;
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
+//
+//            $('input[name="addToCard"]').parent('form').removeAttr('action');
+//            $('input[name="addToCard"]').removeClass('btn');
+//            console.log($('input[name="addToCard"]'));
 
-            $('input[name="addToCard"]').parent('form').removeAttr('action');
-            $('input[name="addToCard"]').removeClass('btn');
-            console.log($('input[name="addToCard"]'));
 
-
-            $('body').delegate('input[name="addToCard"]','click', function () {
+            $('body').delegate('#addToCard','click', function () {
 
                 $('#up-sell-modal').addClass('modalMargin');
                 $('#up-sell-modal').css('display', 'block');
