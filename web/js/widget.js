@@ -18,7 +18,8 @@ $(function () {
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
 
             $('input[name="addToCard"]').parent('form').removeAttr('action');
-            $('input[name="addToCard"]').removeAttr('type');
+            $('input[name="addToCard"]').removeClass('btn');
+
 
             $('body').on('click','input[name="addToCard"]', function () {
 
