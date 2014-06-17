@@ -20,7 +20,7 @@ $(function () {
             $('input[name="addToCard"]').parent('form').removeAttr('action');
 
 
-            $('input[name="addToCard"]').click(function () {
+            $('input[name="addToCard"]').live('click', function () {
 
                 $('#up-sell-modal').addClass('modalMargin');
                 $('#up-sell-modal').css('display', 'block');
