@@ -16,10 +16,6 @@ $(function () {
 
             var modalLeftMargin = (screenWidth - modalWidth) / 2 - paddingLeft;
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
-//
-//            $('input[name="addToCard"]').parent('form').removeAttr('action');
-//            $('input[name="addToCard"]').removeClass('btn');
-//            console.log($('input[name="addToCard"]'));
 
 
             $('body').delegate('#addToCard','click', function () {
@@ -47,10 +43,10 @@ $(function () {
             $('body').delegate('button.up-sell-add-to-cart', 'click', function () {
 
                 var productId = $(this).data('product-id');
-
-                if ($('#variant-select').length > 0)
+                var select = $(this).parent('div').find('#variant-select');
+                if ($(select).length > 0)
                 {
-                    productId = $('#variant-select').find(":selected").val()
+                    productId = $(select).find(":selected").val()
                 }
 
                 var productData = {
