@@ -22,7 +22,7 @@ $(function () {
             console.log($('input[name="addToCard"]'));
 
 
-            $('body').on('click','input[name="addToCard"]', function () {
+            $('body').delegate('input[name="addToCard"]','click', function () {
 
                 $('#up-sell-modal').addClass('modalMargin');
                 $('#up-sell-modal').css('display', 'block');
