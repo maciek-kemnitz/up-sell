@@ -51,8 +51,22 @@
                             <span class="thumb-100 fade in" style="margin-top: 51px;">
                                 <img src="{{ product.getThumbnail() }}">
                             </span>
-                            <section class="meta"><span class="text">{{ product.getName() }}</span>
+
+                            <section class="meta">
+                                <span class="text">{{ product.getName() }}</span>
                             </section>
+                            {% set variants = product.getVariantArray() %}
+                            {% if variants|length > 1 %}
+                                <select class="prevent-render" style="visibility: visible;">
+                                    {% for variant in variants %}
+
+                                        <option value="1">{{ variant.var_type }}</option>
+
+
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
+
                             <input type="hidden" name="up-sell-products[]" value="{{ product.getShoploProductId() }}">
                         </li>
                     {% endfor %}

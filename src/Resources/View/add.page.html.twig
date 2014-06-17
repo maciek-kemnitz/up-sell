@@ -219,10 +219,19 @@
             var imgSrc = $(this).data('thumbnail');
             var name = $(this).data('name');
             var productId = $(this).data('id');
-
+            var html = '<li class="with-handle with-meta preloaded" data-id="8">' +
+                            '<a class="delete" data-icon="!"></a>' +
+                            '<span class="thumb-100 fade in" style="margin-top: 51px;">' +
+                                '<img src="'+imgSrc+'">' +
+                            '</span>' +
+                            '<section class="meta">' +
+                                '<span class="text">'+ $.trim(name)+'</span>' +
+                            '</section>' +
+                            '<input type="hidden" name="up-sell-products[]" value="'+productId+'">' +
+                        '</li>';
             $('#up-sell-ac').css('border-color','');
             $('#up-sell-ac-result-container').addClass('hide');
-            $('#up-sell').find('ul.photos.products').append('<li class="with-handle with-meta preloaded" data-id="8"><a class="delete" data-icon="!"></a><span class="thumb-100 fade in" style="margin-top: 51px;"><img src="'+imgSrc+'"></span><section class="meta"><span class="text">'+ $.trim(name)+'</span></section><input type="hidden" name="up-sell-products[]" value="'+productId+'"></li>');
+            $('#up-sell').find('ul.photos.products').append(html);
             $('#up-sell-ac').val('');
         });
 

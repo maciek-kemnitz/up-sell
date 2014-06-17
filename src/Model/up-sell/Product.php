@@ -91,4 +91,12 @@ class Product extends BaseProduct
 
 		return $product;
 	}
+
+	/**
+	 * @return array
+	 */
+	public function getVariantArray()
+	{
+		return json_decode($this->getVariants(), true);
+	}
 }
