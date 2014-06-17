@@ -233,6 +233,12 @@
         $('#up-sell-ac-result-container').on('click', 'li.item', function(){
             var imgSrc = $(this).data('thumbnail');
             var name = $(this).data('name');
+            var variantData = $(this).data('variants');
+            if (variantData.length > 0)
+            {
+                variantData = variantData.split(";");
+            }
+
             var productId = $(this).data('id');
             var html = '<li class="with-handle with-meta preloaded" data-id="8">' +
                             '<a class="delete" data-icon="!"></a>' +
@@ -241,9 +247,22 @@
                             '</span>' +
                             '<section class="meta">' +
                                 '<span class="text">'+ $.trim(name)+'</span>' +
-                            '</section>' +
-                            '<input type="hidden" name="up-sell-products[]" value="'+productId+'">' +
-                        '</li>';
+                            '</section>';
+
+            if (variantData.length > 0)
+            {
+                html += '<select id="variant_selected" name="variant_selected-'+productId+'" class="prevent-render" style="visibility: visible;">' +
+                        '<option value="null">Wszystkie</option>';
+                for (i = 0; i < variantData.length; i +=2)
+                {
+                    html += '<option value="'+ variantData[i] +'">'+ variantData[i+1] +'</option>';
+                }
+
+                html +=  '</select>';
+            }
+
+            html += '<input type="hidden" name="up-sell-products[]" value="'+productId+'">' +
+                    '</li>';
             $('#up-sell-ac').css('border-color','');
             $('#up-sell-ac-result-container').addClass('hide');
             $('#up-sell').find('ul.photos.products').append(html);

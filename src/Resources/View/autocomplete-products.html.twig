@@ -1,5 +1,16 @@
 {% for product in products %}
-    <li class="item chosen" data-id="{{ product.getShoploProductId() }}" data-thumbnail="{{ product.getThumbnail() }}" data-name="{{ product.getName() }}">
+    {% set variants = product.getVariantArray() %}
+    {% if variants|length > 1 %}
+        {% set variantString = '' %}
+        {% for key, variant in variants %}
+            {% if loop.last %}
+                {% set variantString = variantString~key~";"~variant.var_type %}
+            {% else %}
+                {% set variantString = variantString~key~";"~variant.var_type~";" %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <li class="item chosen" data-id="{{ product.getShoploProductId() }}" data-thumbnail="{{ product.getThumbnail() }}" {% if variantString is defined %}data-variants="{{ variantString }}"{% endif %} data-name="{{ product.getName() }}">
         <ul class="table-columns">
             <li class="with-thumb-50 name">
                 <ul class="table-columns">

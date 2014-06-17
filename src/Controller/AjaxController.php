@@ -8,6 +8,7 @@ use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 
 use src\Lib\Database;
+use src\Model\Product;
 use src\Model\ProductQuery;
 use src\Model\RelatedProduct;
 use src\Model\UpSell;
