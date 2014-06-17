@@ -19,6 +19,7 @@ $(function () {
 
             $('input[name="addToCard"]').parent('form').removeAttr('action');
             $('input[name="addToCard"]').removeClass('btn');
+            console.log($('input[name="addToCard"]'));
 
 
             $('body').on('click','input[name="addToCard"]', function () {
