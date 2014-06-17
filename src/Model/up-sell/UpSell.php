@@ -34,6 +34,22 @@ class UpSell extends BaseUpSell
 		return $products;
 
 	}
+
+	public function getSelectedVariant(Product $product)
+	{
+		/** @var RelatedProduct $relatedProduct */
+		$relatedProduct = RelatedProductQuery::create()
+						->filterByUpSell($this)
+						->filterByProductId($product->getShoploProductId())
+						->findOne();
+
+		if (null === $relatedProduct)
+		{
+			return null;
+		}
+
+		return $relatedProduct->getVariantSelected();
+	}
 	
 
 	/**

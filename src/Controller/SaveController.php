@@ -38,7 +38,6 @@ class SaveController implements ControllerProviderInterface
 			$discountType = $request->request->get('discount-type');
 			$discountAmount = $request->request->get('discount-amount');
 
-
 			/** @var ShoploApi $shoploApi */
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
 			$shopDomain = $shoploApi->shop->retrieve()['permanent_domain'];
@@ -123,7 +122,15 @@ class SaveController implements ControllerProviderInterface
 			{
 				foreach($upSellProducts as $productId)
 				{
+					$variantSet = null;
+
+					if ($request->request->has('variant_selected-'.$productId))
+					{
+						$variantSet = $request->request->get('variant_selected-'.$productId);
+					}
+
 					$shoploProduct = $shoploApi->product->retrieve($productId)['products'];
+
 
 					$product = ProductQuery::create()
 										->filterByShopDomain($shopDomain)
@@ -149,14 +156,18 @@ class SaveController implements ControllerProviderInterface
 					{
 						$relatedProduct = new RelatedProduct();
 						$relatedProduct->setUpSellId($upSell->getId());
-						$relatedProduct->setProductId($product->getShoploProductId());
+						$relatedProduct->setProductId($productId);
+						$relatedProduct->setVariantSelected($variantSet);
 						$relatedProduct->save();
 
 						$newRelatedProducts[] = $relatedProduct;
 					}
 					else
 					{
-						$newRelatedProducts[] = $relatedProducts[$productId];
+						$relatedProduct = $relatedProducts[$productId];
+						$relatedProduct->setVariantSelected($variantSet);
+						$relatedProduct->save();
+						$newRelatedProducts[] = $relatedProduct;
 
 					}
 

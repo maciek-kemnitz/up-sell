@@ -58,8 +58,9 @@
                             {% set variants = product.getVariantArray() %}
                             {% if variants|length > 1 %}
                                 <select id="variant_selected" name="variant_selected-{{ product.getShoploProductId() }}" class="prevent-render" style="visibility: visible;">
+                                    <option value="null">Wszystkie</option>
                                     {% for key, variant in variants %}
-                                        <option value="{{ key }}">{{ variant.var_type }}</option>
+                                        <option value="{{ key }}" {% if key == upSell.getSelectedVariant(product) %}selected="selected"{% endif %}>{{ variant.var_type }}</option>
                                     {% endfor %}
                                 </select>
                             {% endif %}
