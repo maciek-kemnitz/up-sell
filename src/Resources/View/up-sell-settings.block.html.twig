@@ -43,7 +43,7 @@
             </section>
         </section>
         <section class="control-group box">
-            <ul class="grid horizontal photos products  prevent-ajax">
+            <ul id="related-items-list" class="grid horizontal photos products  prevent-ajax">
                 {% if upSell != null %}
                     {% for product in upSell.getProducts() %}
                         <li class="with-handle with-meta preloaded" data-id="8">
@@ -57,12 +57,9 @@
                             </section>
                             {% set variants = product.getVariantArray() %}
                             {% if variants|length > 1 %}
-                                <select class="prevent-render" style="visibility: visible;">
-                                    {% for variant in variants %}
-
-                                        <option value="1">{{ variant.var_type }}</option>
-
-
+                                <select id="variant_selected" name="variant_selected-{{ product.getShoploProductId() }}" class="prevent-render" style="visibility: visible;">
+                                    {% for key, variant in variants %}
+                                        <option value="{{ key }}">{{ variant.var_type }}</option>
                                     {% endfor %}
                                 </select>
                             {% endif %}
