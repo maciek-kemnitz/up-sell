@@ -55,6 +55,7 @@ CREATE TABLE `related_product`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `up_sell_id` INTEGER NOT NULL,
     `product_id` INTEGER NOT NULL,
+    `variant_selected` INTEGER,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `up_sell_id` (`up_sell_id`, `product_id`),
     CONSTRAINT `related_product_ibfk_1`

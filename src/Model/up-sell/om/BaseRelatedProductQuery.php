@@ -25,10 +25,12 @@ use src\Model\UpSell;
  * @method RelatedProductQuery orderById($order = Criteria::ASC) Order by the id column
  * @method RelatedProductQuery orderByUpSellId($order = Criteria::ASC) Order by the up_sell_id column
  * @method RelatedProductQuery orderByProductId($order = Criteria::ASC) Order by the product_id column
+ * @method RelatedProductQuery orderByVariantSelected($order = Criteria::ASC) Order by the variant_selected column
  *
  * @method RelatedProductQuery groupById() Group by the id column
  * @method RelatedProductQuery groupByUpSellId() Group by the up_sell_id column
  * @method RelatedProductQuery groupByProductId() Group by the product_id column
+ * @method RelatedProductQuery groupByVariantSelected() Group by the variant_selected column
  *
  * @method RelatedProductQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method RelatedProductQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -43,10 +45,12 @@ use src\Model\UpSell;
  *
  * @method RelatedProduct findOneByUpSellId(int $up_sell_id) Return the first RelatedProduct filtered by the up_sell_id column
  * @method RelatedProduct findOneByProductId(int $product_id) Return the first RelatedProduct filtered by the product_id column
+ * @method RelatedProduct findOneByVariantSelected(int $variant_selected) Return the first RelatedProduct filtered by the variant_selected column
  *
  * @method array findById(int $id) Return RelatedProduct objects filtered by the id column
  * @method array findByUpSellId(int $up_sell_id) Return RelatedProduct objects filtered by the up_sell_id column
  * @method array findByProductId(int $product_id) Return RelatedProduct objects filtered by the product_id column
+ * @method array findByVariantSelected(int $variant_selected) Return RelatedProduct objects filtered by the variant_selected column
  *
  * @package    propel.generator.up-sell.om
  */
@@ -154,7 +158,7 @@ abstract class BaseRelatedProductQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `up_sell_id`, `product_id` FROM `related_product` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `up_sell_id`, `product_id`, `variant_selected` FROM `related_product` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -369,6 +373,48 @@ abstract class BaseRelatedProductQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RelatedProductPeer::PRODUCT_ID, $productId, $comparison);
+    }
+
+    /**
+     * Filter the query on the variant_selected column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByVariantSelected(1234); // WHERE variant_selected = 1234
+     * $query->filterByVariantSelected(array(12, 34)); // WHERE variant_selected IN (12, 34)
+     * $query->filterByVariantSelected(array('min' => 12)); // WHERE variant_selected >= 12
+     * $query->filterByVariantSelected(array('max' => 12)); // WHERE variant_selected <= 12
+     * </code>
+     *
+     * @param     mixed $variantSelected The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RelatedProductQuery The current query, for fluid interface
+     */
+    public function filterByVariantSelected($variantSelected = null, $comparison = null)
+    {
+        if (is_array($variantSelected)) {
+            $useMinMax = false;
+            if (isset($variantSelected['min'])) {
+                $this->addUsingAlias(RelatedProductPeer::VARIANT_SELECTED, $variantSelected['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($variantSelected['max'])) {
+                $this->addUsingAlias(RelatedProductPeer::VARIANT_SELECTED, $variantSelected['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RelatedProductPeer::VARIANT_SELECTED, $variantSelected, $comparison);
     }
 
     /**

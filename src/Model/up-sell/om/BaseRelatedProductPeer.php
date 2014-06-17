@@ -37,13 +37,13 @@ abstract class BaseRelatedProductPeer
     const TM_CLASS = 'src\\Model\\map\\RelatedProductTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /** the column name for the id field */
     const ID = 'related_product.id';
@@ -53,6 +53,9 @@ abstract class BaseRelatedProductPeer
 
     /** the column name for the product_id field */
     const PRODUCT_ID = 'related_product.product_id';
+
+    /** the column name for the variant_selected field */
+    const VARIANT_SELECTED = 'related_product.variant_selected';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -73,12 +76,12 @@ abstract class BaseRelatedProductPeer
      * e.g. RelatedProductPeer::$fieldNames[RelatedProductPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'UpSellId', 'ProductId', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'upSellId', 'productId', ),
-        BasePeer::TYPE_COLNAME => array (RelatedProductPeer::ID, RelatedProductPeer::UP_SELL_ID, RelatedProductPeer::PRODUCT_ID, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'UP_SELL_ID', 'PRODUCT_ID', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'up_sell_id', 'product_id', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'UpSellId', 'ProductId', 'VariantSelected', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'upSellId', 'productId', 'variantSelected', ),
+        BasePeer::TYPE_COLNAME => array (RelatedProductPeer::ID, RelatedProductPeer::UP_SELL_ID, RelatedProductPeer::PRODUCT_ID, RelatedProductPeer::VARIANT_SELECTED, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'UP_SELL_ID', 'PRODUCT_ID', 'VARIANT_SELECTED', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'up_sell_id', 'product_id', 'variant_selected', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
     /**
@@ -88,12 +91,12 @@ abstract class BaseRelatedProductPeer
      * e.g. RelatedProductPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UpSellId' => 1, 'ProductId' => 2, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'upSellId' => 1, 'productId' => 2, ),
-        BasePeer::TYPE_COLNAME => array (RelatedProductPeer::ID => 0, RelatedProductPeer::UP_SELL_ID => 1, RelatedProductPeer::PRODUCT_ID => 2, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'UP_SELL_ID' => 1, 'PRODUCT_ID' => 2, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'up_sell_id' => 1, 'product_id' => 2, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UpSellId' => 1, 'ProductId' => 2, 'VariantSelected' => 3, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'upSellId' => 1, 'productId' => 2, 'variantSelected' => 3, ),
+        BasePeer::TYPE_COLNAME => array (RelatedProductPeer::ID => 0, RelatedProductPeer::UP_SELL_ID => 1, RelatedProductPeer::PRODUCT_ID => 2, RelatedProductPeer::VARIANT_SELECTED => 3, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'UP_SELL_ID' => 1, 'PRODUCT_ID' => 2, 'VARIANT_SELECTED' => 3, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'up_sell_id' => 1, 'product_id' => 2, 'variant_selected' => 3, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
     /**
@@ -170,10 +173,12 @@ abstract class BaseRelatedProductPeer
             $criteria->addSelectColumn(RelatedProductPeer::ID);
             $criteria->addSelectColumn(RelatedProductPeer::UP_SELL_ID);
             $criteria->addSelectColumn(RelatedProductPeer::PRODUCT_ID);
+            $criteria->addSelectColumn(RelatedProductPeer::VARIANT_SELECTED);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.up_sell_id');
             $criteria->addSelectColumn($alias . '.product_id');
+            $criteria->addSelectColumn($alias . '.variant_selected');
         }
     }
 
