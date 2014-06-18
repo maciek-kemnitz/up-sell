@@ -9,6 +9,8 @@ use Silex\ControllerProviderInterface;
 
 use src\Lib\Database;
 use src\Model\Product;
+use src\Model\ProductInCart;
+use src\Model\ProductInCartQuery;
 use src\Model\ProductQuery;
 use src\Model\RelatedProduct;
 use src\Model\UpSell;
@@ -71,13 +73,31 @@ class AjaxController implements ControllerProviderInterface
 			$variants = [];
 			foreach ($upSellProducts as $product)
 			{
-
 				$variants[$product->getId()] = json_decode($product->getVariants(), true);
 			}
 
+			$params = [
+				'upSell' => $upSellByRelation,
+				'products' => $upSellByRelation->getProducts(),
+				'variants' => $variants
+			];
+
+			/** @var ProductInCart $productInCart */
+			$productInCart = ProductInCartQuery::create()
+										->filterByProductId($productId)
+										->filterByUpSell($upSellByRelation)
+										->findOne();
+
+			if ($productInCart && $productInCart->getVariantSelected())
+			{
+				$params['variantSelected'] = $productInCart->getVariantSelected();
+			}
+
+
+
 			$data = [
 				"status" => "ok",
-				"html"	=> $app['twig']->render('widget.page.html.twig', ['upSell' => $upSellByRelation, 'products' => $upSellByRelation->getProducts(), 'variants' => $variants]),
+				"html"	=> $app['twig']->render('widget.page.html.twig', $params),
 
 			];
 

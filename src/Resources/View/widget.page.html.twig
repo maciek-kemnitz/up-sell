@@ -460,6 +460,10 @@
 {#<div class="modal-backdrop fade in hide"></div>#}
 
 <script type="text/javascript">
+
+    {% if variantSelected is defined %}
+        var variantSelected = {{ variandSelected }};
+    {% endif %}
     $(function(){
 
         var screenWidth = $(window).width();
@@ -482,6 +486,8 @@
         $('body').delegate('.left-arrow', 'click', function(){
             listSwitcher($('.multi-item').get().reverse(), this, '.right-arrow');
         });
+
+
     });
 
     function listSwitcher(items, currentPointer, oppositePointer)

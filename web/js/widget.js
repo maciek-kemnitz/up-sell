@@ -17,17 +17,23 @@ $(function () {
             var modalLeftMargin = (screenWidth - modalWidth) / 2 - paddingLeft;
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
 
-
             $('body').delegate('#addToCard','click', function () {
+
+                var productId = $(this).parents('form').find('input[name="id"]').val();
+                var productData = {
+                    'id': productId
+                };
+
+                if (typeof variantSelected != 'undefined' && variantSelected != productId)
+                {
+                    return true;
+                }
+
 
                 $('#up-sell-modal').addClass('modalMargin');
                 $('#up-sell-modal').css('display', 'block');
                 $('#up-sell-modal').addClass('in');
 
-                var productId = $(this).parents('form').find('input[name="id"]').val();
-                var productData = {
-                  'id': productId
-                };
                 $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData);
 
                 return false;
