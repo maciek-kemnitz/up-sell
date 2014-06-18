@@ -176,6 +176,7 @@ class SaveController implements ControllerProviderInterface
 
 			$product = null;
 
+
 			if (count($productTrigger) > 0)
 			{
 				foreach($productTrigger as $productId)
@@ -192,17 +193,18 @@ class SaveController implements ControllerProviderInterface
 						$productInCart = new ProductInCart();
 						$productInCart->setUpSellId($upSell->getId());
 						$productInCart->setProductId($productId);
-						$productsInCart->setVariantSelected($variantSet);
+						$productInCart->setVariantSelected($variantSet);
 						$productInCart->save();
 
 						$newProductsInCart[] = $productInCart;
 					}
 					else
 					{
-						$productsInCart = $productsInCart[$productId];
-						$productsInCart->setVariantSelected($variantSet);
-						$productsInCart->save();
-						$newProductsInCart[] = $productsInCart;
+						$productInCart = $productsInCart[$productId];
+						$productInCart->setVariantSelected($variantSet);
+						$productInCart->save();
+
+						$newProductsInCart[] = $productInCart;
 					}
 				}
 			}
