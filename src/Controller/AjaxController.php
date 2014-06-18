@@ -87,11 +87,11 @@ class AjaxController implements ControllerProviderInterface
 									->filterByProductId($productId)
 									->filterByUpSell($upSellByRelation)
 									->findOne();
-//
-//			if ($productInCart && $productInCart->getVariantSelected())
-//			{
+
+			if (null !== $productInCart && $productInCart->getVariantSelected())
+			{
 //				$params['variantSelected'] = $productInCart->getVariantSelected();
-//			}
+			}
 
 
 
