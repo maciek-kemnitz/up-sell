@@ -365,7 +365,7 @@
                         </div>
                         <div class="up-sell-description-container">
                                 <span class="product-name">
-                                    {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...' : product.getName()  }}
+                                    {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...'|striptags : product.getName()|striptags  }}
                                 </span>
 
                             {% if upSell.getSelectedVariant(product) %}
@@ -410,11 +410,11 @@
                         {% set selectedVariant = upSell.getSelectedVariant(product) %}
                         {% set variant = variants[product.getId()][upSell.getSelectedVariant(product)] %}
                         <h2 class=" product-name">
-                            {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...' : product.getName()  }} {% if selectedVariant %}{{ variant.var_type }}{% endif %}
+                            {{ product.getName()|length > 70 ? product.getName()|slice(0, 70) ~ '...'|striptags : product.getName()|striptags  }} {% if selectedVariant %}{{ variant.var_type }}{% endif %}
                         </h2>
                         <small class="muted">
                             {% if product.getDescription() != null %}
-                                {{ product.getDescription()|length > 200 ? product.getDescription()|slice(0, 200) ~ '...' : product.getDescription()  }}
+                                {{ product.getDescription()|length > 200 ? product.getDescription()|slice(0, 200) ~ '...'|striptags : product.getDescription()|striptags  }}
                             {% endif %}
                         </small>
                         <div class="up-price">
