@@ -82,11 +82,11 @@ class AjaxController implements ControllerProviderInterface
 				'variants' => $variants
 			];
 
-//			/** @var ProductInCart $productInCart */
-//			$productInCart = ProductInCartQuery::create()
-//										->filterByProductId($productId)
-//										->filterByUpSell($upSellByRelation)
-//										->findOne();
+			/** @var ProductInCart $productInCart */
+			$productInCart = ProductInCartQuery::create()
+									->filterByProductId($productId)
+									->filterByUpSell($upSellByRelation)
+									->findOne();
 //
 //			if ($productInCart && $productInCart->getVariantSelected())
 //			{
