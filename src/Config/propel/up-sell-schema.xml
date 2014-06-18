@@ -27,6 +27,7 @@
         <column name="id"  type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
         <column name="up_sell_id"  type="INTEGER" required="true"/>
         <column name="product_id"  type="INTEGER" required="true"/>
+        <column name="variant_selected" type="INTEGER" required="false"/>
         <foreign-key foreignTable="up_sell" name="product_in_cart_ibfk_1" onDelete="RESTRICT" onUpdate="RESTRICT">
             <reference local="up_sell_id" foreign="id"/>
         </foreign-key>

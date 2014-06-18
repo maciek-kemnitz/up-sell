@@ -180,18 +180,29 @@ class SaveController implements ControllerProviderInterface
 			{
 				foreach($productTrigger as $productId)
 				{
+					$variantSet = null;
+
+					if ($request->request->has('variant_selectedPCR-'.$productId))
+					{
+						$variantSet = $request->request->get('variant_selectedPCR-'.$productId);
+					}
+
 					if (!array_key_exists($productId, $productsInCart))
 					{
 						$productInCart = new ProductInCart();
 						$productInCart->setUpSellId($upSell->getId());
 						$productInCart->setProductId($productId);
+						$productsInCart->setVariantSelected($variantSet);
 						$productInCart->save();
 
 						$newProductsInCart[] = $productInCart;
 					}
 					else
 					{
-						$newProductsInCart[] = $productsInCart[$productId];
+						$productsInCart = $productsInCart[$productId];
+						$productsInCart->setVariantSelected($variantSet);
+						$productsInCart->save();
+						$newProductsInCart[] = $productsInCart;
 					}
 				}
 			}

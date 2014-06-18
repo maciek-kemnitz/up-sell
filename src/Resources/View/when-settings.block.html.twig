@@ -47,7 +47,7 @@
             </section>
         </section>
         <section class="control-group box">
-            <ul class="grid horizontal photos products  prevent-ajax">
+            <ul id="in-cart-items-list" class="grid horizontal photos products  prevent-ajax">
                 {% if upSell != null %}
                     {% for productInCart in upSell.getProductInCarts() %}
                         {% set product = productInCart.getProduct() %}
@@ -58,6 +58,15 @@
                             </span>
                             <section class="meta"><span class="text">{{ product.getName() }}</span>
                             </section>
+                            {% set variants = product.getVariantArray() %}
+                            {% if variants|length > 1 %}
+                                <select id="variant_selectedPCR" name="variant_selectedPCR-{{ product.getShoploProductId() }}" class="prevent-render" style="visibility: visible;">
+                                    <option value="null">Wszystkie</option>
+                                    {% for key, variant in variants %}
+                                        <option value="{{ key }}" {% if key == upSell.getSelectedVariantPIC(product) %}selected="selected"{% endif %}>{{ variant.var_type }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
                             <input type="hidden" name="selected-product-trigger[]" value="{{ product.getShoploProductId() }}">
                         </li>
                     {% endfor %}

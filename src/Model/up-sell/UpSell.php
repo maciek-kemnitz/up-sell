@@ -50,6 +50,22 @@ class UpSell extends BaseUpSell
 
 		return $relatedProduct->getVariantSelected();
 	}
+
+	public function getSelectedVariantPIC(Product $product)
+	{
+		/** @var ProductInCart $productInCart */
+		$productInCart = ProductInCartQuery::create()
+			->filterByUpSell($this)
+			->filterByProductId($product->getShoploProductId())
+			->findOne();
+
+		if (null === $productInCart)
+		{
+			return null;
+		}
+
+		return $productInCart->getVariantSelected();
+	}
 	
 
 	/**

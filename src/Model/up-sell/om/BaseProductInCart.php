@@ -64,6 +64,12 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
     protected $product_id;
 
     /**
+     * The value for the variant_selected field.
+     * @var        int
+     */
+    protected $variant_selected;
+
+    /**
      * @var        UpSell
      */
     protected $aUpSell;
@@ -119,6 +125,17 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
     {
 
         return $this->product_id;
+    }
+
+    /**
+     * Get the [variant_selected] column value.
+     *
+     * @return int
+     */
+    public function getVariantSelected()
+    {
+
+        return $this->variant_selected;
     }
 
     /**
@@ -189,6 +206,27 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
     } // setProductId()
 
     /**
+     * Set the value of [variant_selected] column.
+     *
+     * @param  int $v new value
+     * @return ProductInCart The current object (for fluent API support)
+     */
+    public function setVariantSelected($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->variant_selected !== $v) {
+            $this->variant_selected = $v;
+            $this->modifiedColumns[] = ProductInCartPeer::VARIANT_SELECTED;
+        }
+
+
+        return $this;
+    } // setVariantSelected()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -223,6 +261,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->up_sell_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->product_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->variant_selected = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -232,7 +271,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 3; // 3 = ProductInCartPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = ProductInCartPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating ProductInCart object", $e);
@@ -466,6 +505,9 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductInCartPeer::PRODUCT_ID)) {
             $modifiedColumns[':p' . $index++]  = '`product_id`';
         }
+        if ($this->isColumnModified(ProductInCartPeer::VARIANT_SELECTED)) {
+            $modifiedColumns[':p' . $index++]  = '`variant_selected`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `product_in_cart` (%s) VALUES (%s)',
@@ -485,6 +527,9 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
                         break;
                     case '`product_id`':
                         $stmt->bindValue($identifier, $this->product_id, PDO::PARAM_INT);
+                        break;
+                    case '`variant_selected`':
+                        $stmt->bindValue($identifier, $this->variant_selected, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -643,6 +688,9 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
             case 2:
                 return $this->getProductId();
                 break;
+            case 3:
+                return $this->getVariantSelected();
+                break;
             default:
                 return null;
                 break;
@@ -675,6 +723,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
             $keys[0] => $this->getId(),
             $keys[1] => $this->getUpSellId(),
             $keys[2] => $this->getProductId(),
+            $keys[3] => $this->getVariantSelected(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -728,6 +777,9 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
             case 2:
                 $this->setProductId($value);
                 break;
+            case 3:
+                $this->setVariantSelected($value);
+                break;
         } // switch()
     }
 
@@ -755,6 +807,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setUpSellId($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setProductId($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setVariantSelected($arr[$keys[3]]);
     }
 
     /**
@@ -769,6 +822,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductInCartPeer::ID)) $criteria->add(ProductInCartPeer::ID, $this->id);
         if ($this->isColumnModified(ProductInCartPeer::UP_SELL_ID)) $criteria->add(ProductInCartPeer::UP_SELL_ID, $this->up_sell_id);
         if ($this->isColumnModified(ProductInCartPeer::PRODUCT_ID)) $criteria->add(ProductInCartPeer::PRODUCT_ID, $this->product_id);
+        if ($this->isColumnModified(ProductInCartPeer::VARIANT_SELECTED)) $criteria->add(ProductInCartPeer::VARIANT_SELECTED, $this->variant_selected);
 
         return $criteria;
     }
@@ -834,6 +888,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
     {
         $copyObj->setUpSellId($this->getUpSellId());
         $copyObj->setProductId($this->getProductId());
+        $copyObj->setVariantSelected($this->getVariantSelected());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -952,6 +1007,7 @@ abstract class BaseProductInCart extends BaseObject implements Persistent
         $this->id = null;
         $this->up_sell_id = null;
         $this->product_id = null;
+        $this->variant_selected = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

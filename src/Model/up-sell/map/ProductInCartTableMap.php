@@ -45,6 +45,7 @@ class ProductInCartTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addForeignKey('up_sell_id', 'UpSellId', 'INTEGER', 'up_sell', 'id', true, null, null);
         $this->addColumn('product_id', 'ProductId', 'INTEGER', true, null, null);
+        $this->addColumn('variant_selected', 'VariantSelected', 'INTEGER', false, null, null);
         // validators
     } // initialize()
 
