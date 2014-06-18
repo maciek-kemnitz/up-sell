@@ -234,7 +234,7 @@
             var imgSrc = $(this).data('thumbnail');
             var name = $(this).data('name');
             var variantData = $(this).data('variants');
-            if (variantData.length > 0)
+            if ($(this).data('variants'))
             {
                 variantData = variantData.split(";");
             }
@@ -249,7 +249,7 @@
                                 '<span class="text">'+ $.trim(name)+'</span>' +
                             '</section>';
 
-            if (variantData.length > 0)
+            if ($(this).data('variants'))
             {
                 html += '<select id="variant_selected" name="variant_selected-'+productId+'" class="prevent-render" style="visibility: visible;">' +
                         '<option value="null">Wszystkie</option>';
