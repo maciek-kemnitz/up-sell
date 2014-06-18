@@ -90,7 +90,7 @@ class AjaxController implements ControllerProviderInterface
 
 			if (null !== $productInCart && $productInCart->getVariantSelected())
 			{
-//				$params['variantSelected'] = $productInCart->getVariantSelected();
+				$params['variantSelected'] = $productInCart->getVariantSelected();
 			}
 
 
