@@ -3,30 +3,30 @@
 </td>
 
 <td class="bottom-frame  valign-top">
-    <section class="control-group bottom box bottom-frame clearfix">
-        <ul class="table-columns">
-            <li>
-                <label class="control-label bottom pull-left" for="pageTitle">
-                    Wybierz zniżkę
-                </label>
-            </li>
-            <li>
-                <select name="discount-type" class="pull-right to-right" id="select-discount">
-                    <option value="none" {% if upSell != null and upSell.getDiscountType() == 'none' %} selected=selected{% endif %}>Nie chcę zniżki</option>
-                    <option value="percent" {% if upSell != null and upSell.getDiscountType() == 'percent' %} selected=selected{% endif %}>Zniżka procentowa</option>
-                    <option value="amount" {% if upSell != null and upSell.getDiscountType() == 'amount' %} selected=selected{% endif %}>Zniżka cenowa</option>
-                </select>
-                <div class="discount-container input-prepend pull-right space-right space-top" style="height: 30px">
-                    {% if upSell != null and upSell.getDiscountType() == 'percent' %}
-                        <div><span class="add-on">%</span><input name="discount-amount" type="text" style="height: 30px;" value="{{ upSell.getDiscountAmount() }}"></div>
-                    {% elseif upSell != null and upSell.getDiscountType() == 'amount' %}
-                        <div><span class="add-on">$</span><input name="discount-amount" type="text" style="height: 30px;" value="{{ upSell.getDiscountAmount() }}"></div>
-                    {% endif %}
-                </div>
+    {#<section class="control-group bottom box bottom-frame clearfix">#}
+        {#<ul class="table-columns">#}
+            {#<li>#}
+                {#<label class="control-label bottom pull-left" for="pageTitle">#}
+                    {#Wybierz zniżkę#}
+                {#</label>#}
+            {#</li>#}
+            {#<li>#}
+                {#<select name="discount-type" class="pull-right to-right" id="select-discount">#}
+                    {#<option value="none" {% if upSell != null and upSell.getDiscountType() == 'none' %} selected=selected{% endif %}>Nie chcę zniżki</option>#}
+                    {#<option value="percent" {% if upSell != null and upSell.getDiscountType() == 'percent' %} selected=selected{% endif %}>Zniżka procentowa</option>#}
+                    {#<option value="amount" {% if upSell != null and upSell.getDiscountType() == 'amount' %} selected=selected{% endif %}>Zniżka cenowa</option>#}
+                {#</select>#}
+                {#<div class="discount-container input-prepend pull-right space-right space-top" style="height: 30px">#}
+                    {#{% if upSell != null and upSell.getDiscountType() == 'percent' %}#}
+                        {#<div><span class="add-on">%</span><input name="discount-amount" type="text" style="height: 30px;" value="{{ upSell.getDiscountAmount() }}"></div>#}
+                    {#{% elseif upSell != null and upSell.getDiscountType() == 'amount' %}#}
+                        {#<div><span class="add-on">$</span><input name="discount-amount" type="text" style="height: 30px;" value="{{ upSell.getDiscountAmount() }}"></div>#}
+                    {#{% endif %}#}
+                {#</div>#}
 
-            </li>
-        </ul>
-    </section>
+            {#</li>#}
+        {#</ul>#}
+    {#</section>#}
 
 
     <section id="up-sell" class="control-group bottom box clearfix">

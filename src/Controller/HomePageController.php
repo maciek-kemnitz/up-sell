@@ -35,19 +35,28 @@ class HomePageController implements ControllerProviderInterface
 
 		});
 
+		$controllers->get('/logout', function (Request $request) use ($app)
+		{
+			session_unset();
+
+			return new RedirectResponse('/');
+
+		});
+
 		$controllers->get('/modal', function (Request $request) use ($app)
 		{
-			/** @var ShoploApi $shoploApi */
-//			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
-//			$product = $shoploApi->product->retrieve(68);
-//			var_dump($product['products']);
-			$upSell = UpSellQuery::create()->findPk(39);
+			$upSell = UpSellQuery::create()->findPk(53);
 
 			/** @var Product[] $upSellProducts */
 			$upSellProducts = $upSell->getProducts();
 			$variants = [];
+
+
 			foreach ($upSellProducts as $product)
 			{
+				$variantsTmp = json_decode($product->getVariants(), true);
+
+				$varaintProducts = ProductQuery::create()->findPks($variantsTmp)->getArrayCopy();
 
 				$variants[$product->getId()] = json_decode($product->getVariants(), true);
 			}
