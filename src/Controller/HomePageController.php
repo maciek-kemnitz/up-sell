@@ -8,11 +8,16 @@ use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 
 use src\Model\Product;
+use src\Model\ProductInCart;
 use src\Model\ProductQuery;
+use src\Model\RelatedProduct;
+use src\Model\UpSell;
+use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
 use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class HomePageController implements ControllerProviderInterface
 {
@@ -40,6 +45,58 @@ class HomePageController implements ControllerProviderInterface
 			session_unset();
 
 			return new RedirectResponse('/');
+
+		});
+
+		$controllers->get('/copy', function (Request $request) use ($app)
+		{
+			/** @var ShoploApi $shoploApi */
+			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
+			$shop = $shoploApi->shop->retrieve();
+
+			$newShopDomain = $shop['permanent_domain'];
+			$oldShopDomain = $request->query->get('from');
+
+			echo "<h2>Copy form: ".$oldShopDomain." To: ".$newShopDomain."</h2><hr>";
+
+
+			/** @var UpSell[] $upSells */
+			$upSells = UpSellQuery::create()
+						->findByShopDomain($oldShopDomain);
+
+			foreach ($upSells as $upSell)
+			{
+				$newUpSell = new UpSell();
+				$upSell->copyInto($newUpSell);
+				$newUpSell->setShopDomain($newShopDomain);
+				$newUpSell->save();
+
+				$relatedProducts = $upSell->getRelatedProducts();
+
+				foreach ($relatedProducts as $relatedProduct)
+				{
+					$newRelated = new RelatedProduct();
+					$relatedProduct->copyInto($newRelated);
+					$newRelated->setUpSellId($newUpSell->getId());
+					$newRelated->save();
+				}
+
+				$productInCarts = $upSell->getProductInCarts();
+
+				foreach ($productInCarts as $productInCart)
+				{
+					$newProductInCart = new ProductInCart();
+					$productInCart->copyInto($newProductInCart);
+					$newProductInCart->setUpSellId($newUpSell->getId());
+					$newProductInCart->save();
+				}
+
+				echo $upSell->getName() ."<br>";
+			}
+
+
+
+			return new Response("<h1>done</h1>");
 
 		});
 
