@@ -36,7 +36,7 @@ class HomePageController implements ControllerProviderInterface
 								->orderByOrder()
 								->find();
 
-			return $app['twig']->render('home.page.html.twig', ['product'=>$shoploApi->product->retrieve(), 'uppSells' => $upSells]);
+			return $app['twig']->render('home.page.html.twig', ['product'=>$shoploApi->product->retrieve(), 'uppSells' => $upSells, 'shop'=>$shop]);
 
 		});
 
