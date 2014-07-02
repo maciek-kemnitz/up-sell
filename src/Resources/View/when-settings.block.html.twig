@@ -51,7 +51,7 @@
                 {% if upSell != null %}
                     {% for productInCart in upSell.getProductInCarts() %}
                         {% set product = productInCart.getProduct() %}
-                        <li class="with-handle with-meta preloaded" data-id="8">
+                        <li class="with-handle with-meta preloaded selected-item-container" data-id="8">
                             <a class="delete" data-icon="!"></a>
                             <span class="thumb-100 fade in" style="margin-top: 51px;">
                                 <img src="{{ product.getThumbnail() }}">
@@ -60,7 +60,7 @@
                             </section>
                             {% set variants = product.getVariantArray() %}
                             {% if variants|length > 1 %}
-                                <select id="variant_selectedPCR" name="variant_selectedPCR-{{ product.getShoploProductId() }}" class="prevent-render" style="visibility: visible;">
+                                <select id="variant_selectedPCR" name="variant_selectedPCR-{{ product.getShoploProductId() }}" class="prevent-render variant-selector" style="visibility: visible;">
                                     <option value="null">Wszystkie</option>
                                     {% for key, variant in variants %}
                                         <option value="{{ key }}" {% if key == upSell.getSelectedVariantPIC(product) %}selected="selected"{% endif %}>{{ variant.var_type }}</option>
