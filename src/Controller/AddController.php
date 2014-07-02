@@ -28,7 +28,8 @@ class AddController implements ControllerProviderInterface
 
 			/** @var ShoploApi $shoploApi */
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
-			$shopDomain = $shoploApi->shop->retrieve()['permanent_domain'];
+			$shop = $shoploApi->shop->retrieve();
+			$shopDomain = $shop['permanent_domain'];
 			$productCount = $shoploApi->product->count();
 
 			$pageCount = $productCount['count']/100;
@@ -72,7 +73,7 @@ class AddController implements ControllerProviderInterface
 
 			$upSell = null;
 
-			return $app['twig']->render('add.page.html.twig', ['products'=>$shoploApi->product->retrieve()]);
+			return $app['twig']->render('add.page.html.twig', ['products'=>$shoploApi->product->retrieve(), 'shop'=> $shop]);
 		});
 
 
