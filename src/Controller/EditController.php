@@ -25,6 +25,8 @@ class EditController implements ControllerProviderInterface
 
 			/** @var ShoploApi $shoploApi */
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
+			$shop = $shoploApi->shop->retrieve();
+			$shopDomain = $shop['permanent_domain'];
 			$upSell = UpSellQuery::create()->findPk($upSellId);
 
 			if (null === $upSell)
@@ -42,7 +44,7 @@ class EditController implements ControllerProviderInterface
 
 
 
-			return $app['twig']->render('add.page.html.twig', ['products'=>$shoploApi->product->retrieve(), 'upSell' => $upSell]);
+			return $app['twig']->render('add.page.html.twig', ['products'=>$shoploApi->product->retrieve(), 'upSell' => $upSell, 'shop'=> $shop]);
 		});
 
 
