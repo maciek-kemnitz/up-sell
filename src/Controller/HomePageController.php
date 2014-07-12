@@ -7,6 +7,7 @@ use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 
+use src\Lib\ShoploObject;
 use src\Model\Product;
 use src\Model\ProductInCart;
 use src\Model\ProductQuery;
@@ -27,16 +28,16 @@ class HomePageController implements ControllerProviderInterface
 
 		$controllers->get('/', function (Request $request) use ($app)
 		{
-			/** @var ShoploApi $shoploApi */
-			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
-			$shop = $shoploApi->shop->retrieve();
+			/** @var ShoploObject $shoploApi */
+			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
+			$shop 		= $shoploApi->getShop();
 
 			$upSells = UpSellQuery::create()
 								->filterByShopDomain($shop['permanent_domain'])
 								->orderByOrder()
 								->find();
 
-			return $app['twig']->render('home.page.html.twig', ['product'=>$shoploApi->product->retrieve(), 'uppSells' => $upSells, 'shop'=>$shop]);
+			return $app['twig']->render('home.page.html.twig', ['product'=>$shoploApi->getProducts(), 'uppSells' => $upSells, 'shop'=>$shop]);
 
 		});
 
