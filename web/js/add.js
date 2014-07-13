@@ -111,7 +111,7 @@ $(function(){
 
             if ($(this).data('variants'))
             {
-                html += '<select id="variant_selectedPCR" name="variant_selectedPCR-'+productId+'[]" class="prevent-render variant-selector" style="visibility: visible;">' +
+                html += '<select id="variant_selectedPCR" name="selected-product-trigger['+productId+'][variant][]" class="prevent-render variant-selector" style="visibility: visible;">' +
                     '<option value="null">Wszystkie</option>';
                 for (i = 0; i < variantData.length; i +=2)
                 {
@@ -121,7 +121,7 @@ $(function(){
                 html +=  '</select>';
             }
 
-        html += '<input type="hidden" name="selected-product-trigger[]" value="'+productId+'">' +
+        html += '<input type="hidden" name="selected-product-trigger['+productId+'][productId]" value="'+productId+'">' +
             '</li>';
 
 
@@ -153,7 +153,7 @@ $(function(){
 
             if ($(this).data('variants'))
                 {
-                    html += '<select id="variant_selected" name="variant_selected-'+productId+'" class="prevent-render variant-selector" style="visibility: visible;">' +
+                    html += '<select id="variant_selected" name="up-sell-products['+productId+'][variant][]" class="prevent-render variant-selector" style="visibility: visible;">' +
                         '<option value="null">Wszystkie</option>';
                     for (i = 0; i < variantData.length; i +=2)
                     {
@@ -163,7 +163,7 @@ $(function(){
             html +=  '</select>';
         }
 
-        html += '<input type="hidden" name="up-sell-products[]" value="'+productId+'">' +
+        html += '<input type="hidden" name="up-sell-products['+productId+'][productId]" value="'+productId+'">' +
             '</li>';
         $('#up-sell-ac').css('border-color','');
         $('#up-sell-ac-result-container').addClass('hide');

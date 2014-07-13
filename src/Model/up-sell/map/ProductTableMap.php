@@ -48,7 +48,7 @@ class ProductTableMap extends TableMap
         $this->addColumn('name', 'Name', 'LONGVARCHAR', true, null, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
         $this->addColumn('img_url', 'ImgUrl', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('original_price', 'OriginalPrice', 'FLOAT', true, null, null);
+        $this->addColumn('original_price', 'OriginalPrice', 'DOUBLE', true, null, null);
         $this->addColumn('url', 'Url', 'LONGVARCHAR', true, null, null);
         $this->addColumn('thumbnail', 'Thumbnail', 'LONGVARCHAR', false, null, null);
         $this->addColumn('sku', 'Sku', 'FLOAT', false, null, null);

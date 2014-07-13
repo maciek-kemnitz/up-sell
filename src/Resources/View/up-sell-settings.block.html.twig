@@ -45,7 +45,8 @@
         <section class="control-group box">
             <ul id="related-items-list" class="grid horizontal photos products  prevent-ajax">
                 {% if upSell != null %}
-                    {% for product in upSell.getProducts() %}
+                    {% for relatedProduct in upSell.getRelatedProducts() %}
+	                    {% set product = relatedProduct.getProduct() %}
                         <li class="with-handle with-meta preloaded" data-id="8">
                             <a class="delete" data-icon="!"></a>
                             <span class="thumb-100 fade in" style="margin-top: 51px;">
@@ -57,15 +58,15 @@
                             </section>
                             {% set variants = product.getVariantArray() %}
                             {% if variants|length > 1 %}
-                                <select id="variant_selected" name="variant_selected-{{ product.getShoploProductId() }}" class="prevent-render variant-selector" style="visibility: visible;">
+                                <select id="variant_selected" name="up-sell-products[{{ product.getShoploProductId() }}][variant][]" class="prevent-render variant-selector" style="visibility: visible;">
                                     <option value="null">Wszystkie</option>
                                     {% for key, variant in variants %}
-                                        <option value="{{ key }}" {% if key == upSell.getSelectedVariant(product) %}selected="selected"{% endif %}>{{ variant.var_type }}</option>
+                                        <option value="{{ key }}" {% if key ==  relatedProduct.getVariantSelected() %}selected="selected"{% endif %}>{{ variant.var_type }}</option>
                                     {% endfor %}
                                 </select>
                             {% endif %}
 
-                            <input type="hidden" name="up-sell-products[]" value="{{ product.getShoploProductId() }}">
+                            <input type="hidden" name="up-sell-products[{{ product.getShoploProductId() }}][productId]" value="{{ product.getShoploProductId() }}">
                         </li>
                     {% endfor %}
                 {% endif %}

@@ -34,6 +34,7 @@
         <unique name="up_sell_id">
             <unique-column name="up_sell_id"/>
             <unique-column name="product_id"/>
+            <unique-column name="variant_selected"/>
         </unique>
         <vendor type="mysql">
             <parameter name="Engine" value="InnoDB"/>
@@ -50,6 +51,7 @@
         <unique name="up_sell_id">
             <unique-column name="up_sell_id"/>
             <unique-column name="product_id"/>
+            <unique-column name="variant_selected"/>
         </unique>
         <vendor type="mysql">
             <parameter name="Engine" value="InnoDB"/>

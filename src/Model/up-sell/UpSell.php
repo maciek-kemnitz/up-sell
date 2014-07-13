@@ -24,7 +24,7 @@ class UpSell extends BaseUpSell
 	 */
 	public function getProducts()
 	{
-		$relatedProductIds = $this->getRelatedProducts()->toKeyValue('productId', 'productId');
+		$relatedProductIds = $this->getRelatedProducts()->toKeyValue('id', 'productId');
 
 		$products = ProductQuery::create()
 						->filterByShopDomain($this->getShopDomain())

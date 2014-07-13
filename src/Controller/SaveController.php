@@ -7,6 +7,7 @@ use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 
+use src\Lib\ShoploObject;
 use src\Model\Product;
 use src\Model\ProductInCart;
 use src\Model\ProductQuery;
@@ -17,6 +18,8 @@ use src\Model\UpSellQuery;
 use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SaveController implements ControllerProviderInterface
 {
@@ -38,9 +41,9 @@ class SaveController implements ControllerProviderInterface
 			$discountType = $request->request->get('discount-type');
 			$discountAmount = $request->request->get('discount-amount');
 
-			/** @var ShoploApi $shoploApi */
-			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
-			$shopDomain = $shoploApi->shop->retrieve()['permanent_domain'];
+			/** @var ShoploObject $shoploApi */
+			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
+			$shopDomain = $shoploApi->getPermanentDomain();
 
 
 			if ($upSellId)
@@ -52,10 +55,7 @@ class SaveController implements ControllerProviderInterface
 					throw new NotFoundHttpException();
 				}
 
-
-				$shop = $shoploApi->shop->retrieve();
-
-				if ($shop['permanent_domain'] != $shopDomain)
+				if ($upSell->getShopDomain() != $shopDomain)
 				{
 					throw new AccessDeniedHttpException();
 				}
@@ -70,6 +70,7 @@ class SaveController implements ControllerProviderInterface
 			$upSell->setName($name);
 			$upSell->setHeadline($headline);
 			$upSell->setDescription($description);
+
 			if ($discountType)
 			{
 				$upSell->setDiscountType($discountType);
@@ -88,7 +89,6 @@ class SaveController implements ControllerProviderInterface
 			if (null != $priceFrom)
 			{
 				$upSell->setPriceFrom($priceFrom);
-
 			}
 
 			if (null != $priceTo)
@@ -113,29 +113,19 @@ class SaveController implements ControllerProviderInterface
 			$upSell->setOrder($currentUpSellCount);
 			$upSell->setCreatedAt(date('Y-m-d H:i:s'));
 			$upSell->save();
-			$relatedProducts = $upSell->getRelatedProducts()->getArrayCopy('productId');
-			$productsInCart = $upSell->getProductInCarts()->getArrayCopy('productId');
+
 			$newRelatedProducts = [];
-			$newProductsInCart = [];
 
 			if (count($upSellProducts) > 0)
 			{
-				foreach($upSellProducts as $productId)
+				foreach($upSellProducts as $productId => $data)
 				{
-					$variantSet = null;
-
-					if ($request->request->has('variant_selected-'.$productId))
-					{
-						$variantSet = $request->request->get('variant_selected-'.$productId);
-					}
-
-					$shoploProduct = $shoploApi->product->retrieve($productId)['products'];
-
+					$shoploProduct = $shoploApi->getProduct($productId);
 
 					$product = ProductQuery::create()
-										->filterByShopDomain($shopDomain)
-										->filterByShoploProductId($productId)
-										->findOne();
+						->filterByShopDomain($shopDomain)
+						->filterByShoploProductId($productId)
+						->findOne();
 
 					if (null == $product)
 					{
@@ -152,65 +142,40 @@ class SaveController implements ControllerProviderInterface
 						$product->save();
 					}
 
-					if (!array_key_exists($productId, $relatedProducts))
+					foreach ($data['variant'] as $variantId)
 					{
 						$relatedProduct = new RelatedProduct();
 						$relatedProduct->setUpSellId($upSell->getId());
 						$relatedProduct->setProductId($productId);
-						$relatedProduct->setVariantSelected($variantSet);
-						$relatedProduct->save();
+						$relatedProduct->setVariantSelected($variantId);
 
 						$newRelatedProducts[] = $relatedProduct;
 					}
-					else
-					{
-						$relatedProduct = $relatedProducts[$productId];
-						$relatedProduct->setVariantSelected($variantSet);
-						$relatedProduct->save();
-						$newRelatedProducts[] = $relatedProduct;
-
-					}
-
 				}
 			}
 
-			$product = null;
 
+			$productInCartArray = [];
 
 			if (count($productTrigger) > 0)
 			{
-				foreach($productTrigger as $productId)
+
+				foreach ($productTrigger as $productId => $data)
 				{
-					$variantSet = null;
-
-					if ($request->request->has('variant_selectedPCR-'.$productId))
-					{
-						$variantSet = $request->request->get('variant_selectedPCR-'.$productId);
-					}
-
-					if (!array_key_exists($productId, $productsInCart))
+					foreach ($data['variant'] as $variantId)
 					{
 						$productInCart = new ProductInCart();
 						$productInCart->setUpSellId($upSell->getId());
 						$productInCart->setProductId($productId);
-						$productInCart->setVariantSelected($variantSet);
-						$productInCart->save();
+						$productInCart->setVariantSelected($variantId);
 
-						$newProductsInCart[] = $productInCart;
-					}
-					else
-					{
-						$productInCart = $productsInCart[$productId];
-						$productInCart->setVariantSelected($variantSet);
-						$productInCart->save();
-
-						$newProductsInCart[] = $productInCart;
+						$productInCartArray[] = $productInCart;
 					}
 				}
 			}
 
+			$upSell->setProductInCarts(new \PropelCollection($productInCartArray));
 			$upSell->setRelatedProducts(new \PropelObjectCollection($newRelatedProducts));
-			$upSell->setProductInCarts(new \PropelObjectCollection($newProductsInCart));
 			$upSell->save();
 
 

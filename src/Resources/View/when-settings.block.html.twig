@@ -15,20 +15,29 @@
             <li>
                 <div class="input-prepend pull-right">
                     <span class="add-on">$</span>
-                    <input name="price_to" class="span2" id="prependedInput"  type="text" style="height: 30px;" {% if upSell is not defined or (upSell != null and not upSell.usePriceRange()) %} disabled=disabled{% endif %}
-                            {% if upSell != null and upSell.usePriceRange() %} value="{{ upSell.getPriceTo() }}"{% endif %}>
+                    <input name="price_to"
+                           class="span2"
+                           id="prependedInput"
+                           type="text" style="height: 30px;"
+		                   {% if upSell is not defined or (upSell != null and not upSell.usePriceRange()) %} disabled=disabled{% endif %}
+                           {% if upSell != null and upSell.usePriceRange() %} value="{{ upSell.getPriceTo() }}"{% endif %}>
                 </div>
                 <span class="pull-right" style="padding: 5px 10px;">do</span>
                 <div class="input-prepend pull-right">
                     <span class="add-on">$</span>
-                    <input name="price_from" class="span2" id="prependedInput" type="text" style="height: 30px;" {% if upSell is not defined or (upSell != null and not upSell.usePriceRange()) %} disabled=disabled{% endif %}
-                            {% if upSell != null and upSell.usePriceRange() %} value="{{ upSell.getPriceFrom() }}"{% endif %}>
+                    <input name="price_from"
+                           class="span2"
+                           id="prependedInput"
+                           type="text"
+                           style="height: 30px;"
+		                   {% if upSell is not defined or (upSell != null and not upSell.usePriceRange()) %} disabled=disabled{% endif %}
+                           {% if upSell != null and upSell.usePriceRange() %} value="{{ upSell.getPriceFrom() }}"{% endif %}>
                 </div>
             </li>
         </ul>
     </section>
-    <section id="related" class="control-group bottom box  clearfix">
 
+    <section id="related" class="control-group bottom box  clearfix">
         <label class="control-label" for="pageTitle">
             <div class="prettycheckbox">
                 <input type="checkbox" name="cos" checked="checked"/>
@@ -60,14 +69,14 @@
                             </section>
                             {% set variants = product.getVariantArray() %}
                             {% if variants|length > 1 %}
-                                <select id="variant_selectedPCR" name="variant_selectedPCR-{{ product.getShoploProductId() }}" class="prevent-render variant-selector" style="visibility: visible;">
+                                <select id="variant_selectedPCR" name="selected-product-trigger[{{ product.getShoploProductId() }}][variant][]" class="prevent-render variant-selector" style="visibility: visible;">
                                     <option value="null">Wszystkie</option>
                                     {% for key, variant in variants %}
-                                        <option value="{{ key }}" {% if key == upSell.getSelectedVariantPIC(product) %}selected="selected"{% endif %}>{{ variant.var_type }}</option>
+                                        <option value="{{ key }}" {% if key == productInCart.getVariantSelected() %}selected="selected"{% endif %}>{{ variant.var_type }}</option>
                                     {% endfor %}
                                 </select>
                             {% endif %}
-                            <input type="hidden" name="selected-product-trigger[]" value="{{ product.getShoploProductId() }}">
+                            <input type="hidden" name="selected-product-trigger[{{ product.getShoploProductId() }}][productId]" value="{{ product.getShoploProductId() }}">
                         </li>
                     {% endfor %}
                 {% endif %}

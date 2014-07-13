@@ -48,8 +48,8 @@ class UpSellTableMap extends TableMap
         $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
         $this->addColumn('headline', 'Headline', 'LONGVARCHAR', true, null, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('price_from', 'PriceFrom', 'FLOAT', false, null, null);
-        $this->addColumn('price_to', 'PriceTo', 'FLOAT', false, null, null);
+        $this->addColumn('price_from', 'PriceFrom', 'DOUBLE', false, null, null);
+        $this->addColumn('price_to', 'PriceTo', 'DOUBLE', false, null, null);
         $this->addColumn('use_price_range', 'UsePriceRange', 'CHAR', true, null, '1');
         $this->getColumn('use_price_range', false)->setValueSet(array (
   0 => '0',
@@ -67,7 +67,7 @@ class UpSellTableMap extends TableMap
   1 => 'percent',
   2 => 'amount',
 ));
-        $this->addColumn('discount_amount', 'DiscountAmount', 'FLOAT', false, null, null);
+        $this->addColumn('discount_amount', 'DiscountAmount', 'DOUBLE', false, null, null);
         // validators
     } // initialize()
 
