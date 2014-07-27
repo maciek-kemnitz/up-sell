@@ -20,9 +20,6 @@ $app->mount('/delete', new \src\Controller\DeleteController());
 $app->mount('/status', new \src\Controller\UpSellStatusController());
 
 
-
-
-
 $app->run();
 
 
@@ -41,30 +38,41 @@ function getAppConfigured()
 
 	$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
-//	$app['swiftmailer.options'] = array(
-//		'host' => 'ssl://smtp.gmail.com',
-//		'port' => '465',
-//		'username' => SWIFT_MAILER_USERNAME,
-//		'password' => SWIFT_MAILER_PASSWORD,
-//		'encryption' => null,
-//		'auth_mode' => null
-//	);
+	$app->register(new Silex\Provider\SwiftmailerServiceProvider());
 
-//	$app->register(new Silex\Provider\SwiftmailerServiceProvider());
+	$app['swiftmailer.options'] = array(
+		'host' => 'smtp.gmail.com',
+		'port' => '465',
+		'username' => SWIFT_MAILER_USERNAME,
+		'password' => SWIFT_MAILER_PASSWORD,
+		'encryption' => 'ssl',
+		'auth_mode' => 'login'
+	);
 
 	$app->register(new \FF\ServiceProvider\LessServiceProvider(), array(
 		'less.sources'     => array( __DIR__.'/../src/Resources/less/styles.less'),
 		'less.target'      => __DIR__.'/../web/css/styles.css',
 		'less.target_mode' => 0775,));
 
-
-//	$app->register(new Propel\Silex\PropelServiceProvider(), array(
-//		'propel.config_file' => __DIR__.'/../src/Config/propel-conf.php',
-//		'propel.model_path' => __DIR__.'/../src/Model',
-//	));
-
 	$serviceRegistry = new \src\Service\ServiceRegistry($app);
 	$serviceRegistry->init();
+
+	$app->error(function (\Exception $e, $code) use ($app)
+	{
+		$body = $e->getMessage() . "\n";
+		$body .= $e->getTraceAsString();
+		$message = \Swift_Message::newInstance()
+			->setSubject('[up-sell.com] Error')
+			->setFrom(array('noreply@yoursite.com'))
+			->setTo(array('maciek.kemnitz@gmail.com'))
+			->setBody($body);
+
+		$app['mailer']->send($message);
+
+		$app['swiftmailer.spooltransport']
+			->getSpool()
+			->flushQueue($app['swiftmailer.transport']);
+	});
 
 	return $app;
 }
