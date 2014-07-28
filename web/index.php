@@ -64,12 +64,12 @@ function getAppConfigured()
 		foreach ($_SERVER as $key => $item)
 		{
 			$server .= "-- " .$key. "--/n/n";
-			$server .= "/n";
+			$server .= "\n";
 			$server .= $item;
-			$server .= "/n/n";
+			$server .= "\n\n";
 
 		}
-		$body .= "Request: \n" . $server. "/n/n";
+		$body .= "Request: \n" . $server. "\n\n";
 		$body .= $e->getMessage() . "\n";
 		$body .= $e->getTraceAsString();
 		$message = \Swift_Message::newInstance()
