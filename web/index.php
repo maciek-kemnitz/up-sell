@@ -63,10 +63,10 @@ function getAppConfigured()
 		$body = '';
 		foreach ($_SERVER as $key => $item)
 		{
-			$server .= $key;
+			$server .= "-- " .$key. "--/n/n";
 			$server .= "/n";
 			$server .= $item;
-			$server .= "/n";
+			$server .= "/n/n";
 
 		}
 		$body .= "Request: \n" . $server. "/n/n";
