@@ -72,6 +72,8 @@ function getAppConfigured()
 		$app['swiftmailer.spooltransport']
 			->getSpool()
 			->flushQueue($app['swiftmailer.transport']);
+
+		return new \Symfony\Component\HttpFoundation\Response('Ups, something went very wrong.');
 	});
 
 	return $app;
