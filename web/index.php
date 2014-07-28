@@ -59,6 +59,17 @@ function getAppConfigured()
 
 	$app->error(function (\Exception $e, $code) use ($app)
 	{
+		$server = '';
+		$body = '';
+		foreach ($_SERVER as $key => $item)
+		{
+			$server .= $key;
+			$server .= "/n";
+			$server .= $item;
+			$server .= "/n";
+
+		}
+		$body .= "Request: \n" . $server. "/n/n";
 		$body = $e->getMessage() . "\n";
 		$body .= $e->getTraceAsString();
 		$message = \Swift_Message::newInstance()
