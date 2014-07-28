@@ -13,7 +13,7 @@ define('CALLBACK_URL', '');
 
 define('SWIFT_MAILER_USERNAME', '');
 define('SWIFT_MAILER_PASSWORD', '');
-
+define('DEBUG', '');
 //define('DATABASE_HOST', '');
 //define('DATABASE_USER', '');
 //define('DATABASE_PASSWORD', '');
