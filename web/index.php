@@ -74,7 +74,7 @@ function getAppConfigured()
 		$body .= $e->getTraceAsString() . "\n\n";
 		$body .= "Request: \n" . $server. "\n\n";
 		$message = \Swift_Message::newInstance()
-			->setSubject('[up-sell.com] Error')
+			->setSubject('[up-sell.com] Error: '.$e->getMessage())
 			->setFrom(array('noreply@yoursite.com'))
 			->setTo(array('maciek.kemnitz@gmail.com'))
 			->setBody($body);
