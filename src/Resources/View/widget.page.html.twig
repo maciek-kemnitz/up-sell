@@ -408,7 +408,9 @@
                     </div>
                     <div class="up-sell-description-container">
                         {% set selectedVariant = upSell.getSelectedVariant(product) %}
-                        {% set variant = variants[product.getId()][upSell.getSelectedVariant(product)] %}
+	                    {% if selectedVariant %}
+                            {% set variant = variants[product.getId()][upSell.getSelectedVariant(product)] %}
+	                    {% endif %}
                         <h2 class=" product-name">
                             {{ product.getName()|length > 70 ? product.getName()|striptags|slice(0, 70) ~ '...' : product.getName()|striptags  }} {% if selectedVariant %}{{ variant.var_type }}{% endif %}
                         </h2>
