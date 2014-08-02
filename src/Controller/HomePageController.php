@@ -123,7 +123,7 @@ class HomePageController implements ControllerProviderInterface
 
 		});
 
-		$controllers->get('/robot.txt', function (Request $request) use ($app)
+		$controllers->get('/robots.txt', function (Request $request) use ($app)
 		{
 			$response = new Response(
 			"User-agent: *
