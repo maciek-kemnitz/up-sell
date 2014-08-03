@@ -17,7 +17,8 @@ $(function () {
             var modalLeftMargin = (screenWidth - modalWidth) / 2 - paddingLeft;
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
 
-	        $('form[method="post"]').attr('id', 'addToCart');
+	        var form = $('form[method="post"]').first();
+	        $(form).find('input[type="submit"]').attr('id', 'addToCart');
 
             $('body').delegate('#addToCart','click', function () {
 
