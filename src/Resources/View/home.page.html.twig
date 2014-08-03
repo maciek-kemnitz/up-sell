@@ -23,6 +23,7 @@
                         <section class="filters">
                             <a class="btn-dark pull-right" data-icon="/" href="/logout">Wyloguj</a>
                             <a class="btn-dark pull-right" data-icon="m" href="/add">Dodaj</a>
+                            <input id="search" type="search" placeholder="wyszukaj" class="pull-right">
                         </section>
                     </section>
                     <section class="scroll-content">
@@ -35,7 +36,7 @@
                             <section style="position: relative;">
                                 <ul id="sortable">
                                     {% for upSell in uppSells %}
-                                        <li>
+                                        <li class="list-item">
                                             <ul class="table-columns three-in-row top-frame bottom-frame" data-up-sell-id="{{ upSell.getId() }}">
                                                 <li id="up-sell-name" class="box ">
                                                     {{ upSell.getName() }}
@@ -98,6 +99,26 @@
 </script>
 <script type="text/javascript">
     $(function(){
+
+	    $('#search').keyup(function(){
+
+		    var query = $(this).val().toLowerCase();
+
+			$('#sortable').find('.list-item').each(function(){
+
+				var name = $(this).find('#up-sell-name').text().toLowerCase().trim();
+
+				if (name.indexOf(query) == -1)
+				{
+					$(this).hide();
+				}
+				else
+				{
+					$(this).show();
+				}
+			});
+	    });
+
         $( "#sortable" ).sortable({
 
             placeholder: "sortable-placeholder",
