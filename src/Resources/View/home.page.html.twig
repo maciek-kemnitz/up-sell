@@ -119,55 +119,55 @@
 			});
 	    });
 
-        $( "#sortable" ).sortable({
-
-            placeholder: "sortable-placeholder",
-            cursor: 'pointer',
-
-            start: function( event, ui ) {
-              $(ui.item).addClass('left-frame');
-              $(ui.item).addClass('right-frame');
-              $(ui.item).addClass('sorted-item');
-            },
-
-            stop: function( event, ui ) {
-                $(ui.item).removeClass('left-frame');
-                $(ui.item).removeClass('right-frame');
-                $(ui.item).removeClass('sorted-item');
-            },
-            update: function( event, ui ) {
-                var index = 1;
-                var data = [];
-
-                $('#sortable').fadeTo( "slow" , 0.2);
-                $('.loader').toggle('slow');
-
-
-                $("#sortable").find('ul').each(function(){
-
-                    data.push($(this).data('up-sell-id'));
-
-                }).delay( 10000 );
-
-                var userData = {
-                    'data': data
-                };
-
-
-
-                $.post('/ajax/sort', userData, function (ajaxResult) {
-                        if(ajaxResult.status == 'ok'){
-                            setTimeout(function(){
-                                $('#sortable').fadeTo("slow", 1);
-                                $('.loader').toggle();
-                            }, 2000);
-
-                        }
-
-                }
-                , 'json');
-            }
-        });
+//        $( "#sortable" ).sortable({
+//
+//            placeholder: "sortable-placeholder",
+//            cursor: 'pointer',
+//
+//            start: function( event, ui ) {
+//              $(ui.item).addClass('left-frame');
+//              $(ui.item).addClass('right-frame');
+//              $(ui.item).addClass('sorted-item');
+//            },
+//
+//            stop: function( event, ui ) {
+//                $(ui.item).removeClass('left-frame');
+//                $(ui.item).removeClass('right-frame');
+//                $(ui.item).removeClass('sorted-item');
+//            },
+//            update: function( event, ui ) {
+//                var index = 1;
+//                var data = [];
+//				alert('wi?');
+//                $('#sortable').fadeTo( "slow" , 0.2);
+//                $('.loader').toggle('slow');
+//
+//
+//                $("#sortable").find('ul').each(function(){
+//
+//                    data.push($(this).data('up-sell-id'));
+//
+//                }).delay( 10000 );
+//
+//                var userData = {
+//                    'data': data
+//                };
+//
+//
+//
+//                $.post('/ajax/sort', userData, function (ajaxResult) {
+//                        if(ajaxResult.status == 'ok'){
+//                            setTimeout(function(){
+//                                $('#sortable').fadeTo("slow", 1);
+//                                $('.loader').toggle();
+//                            }, 2000);
+//
+//                        }
+//
+//                }
+//                , 'json');
+//            }
+//        });
     });
 </script>
 </body>
