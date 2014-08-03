@@ -37,31 +37,45 @@ $(function(){
         }
     });
 
+	$('#related-ac').blur(function() {
+		$('#related-ac-result-container').find('.autocompleter-list').empty();
+		$(this).css('border-color','');
+		$('#related-ac-result-container').addClass('hide');
+	});
+
     $('#related-ac').keyup(function(){
 
         if ($(this).val())
         {
-        $('#related-ac-result-container').removeClass('hide');
-        $(this).css('border-color','#1c1f27');
-        var query = $(this).val();
+	        $('#related-ac-result-container').removeClass('hide');
+	        $(this).css('border-color','#1c1f27');
+	        var query = $(this).val();
 
-        var userData = {
-        'query': query
-        };
+	        var userData = {
+	        'query': query
+	        };
 
-    $.post('/ajax/autocomplete', userData, function (ajaxResult) {
-        if(ajaxResult.status == 'ok'){
-        $('#related-ac-result-container').find('.autocompleter-list').html(ajaxResult.html);
+	        $.post('/ajax/autocomplete', userData, function (ajaxResult) {
+		        if(ajaxResult.status == 'ok')
+		        {
+			        console.log(ajaxResult.html);
+		            $('#related-ac-result-container').find('.autocompleter-list').html(ajaxResult.html);
+		        }
+	        }
+	        , 'json');
+	    }
+	    else
+        {
+            $(this).css('border-color','');
+            $('#related-ac-result-container').addClass('hide');
         }
-    }
-    , 'json');
-    }
-    else
-                {
-                    $(this).css('border-color','');
-                    $('#related-ac-result-container').addClass('hide');
-                    }
     });
+
+	$('#up-sell-ac').blur(function() {
+		$('#up-sell-ac-result-container').find('.autocompleter-list').empty();
+		$(this).css('border-color','');
+		$('#up-sell-ac-result-container').addClass('hide');
+	});
 
     $('#up-sell-ac').keyup(function(){
 

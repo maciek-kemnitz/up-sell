@@ -37,11 +37,11 @@
                                     {% for upSell in uppSells %}
                                         <li>
                                             <ul class="table-columns three-in-row top-frame bottom-frame" data-up-sell-id="{{ upSell.getId() }}">
-                                                <li class="box ">
+                                                <li id="up-sell-name" class="box ">
                                                     {{ upSell.getName() }}
                                                 </li>
                                                 <li class="box ">
-                                                    Zniżka {{ upSell.getCreatedAt() }}
+                                                     {{ upSell.getCreatedAt() }}
                                                 </li>
                                                 <li class="box ">
                                                     <a href="/edit/{{ upSell.getId() }}">Edytuj</a>
