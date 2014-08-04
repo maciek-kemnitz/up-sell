@@ -37,7 +37,7 @@ $(function(){
         }
     });
 
-	$('#related-ac').blur(function() {
+	$('#related-ac-container').blur(function() {
 		$('#related-ac-result-container').find('.autocompleter-list').empty();
 		$(this).css('border-color','');
 		$('#related-ac-result-container').addClass('hide');
@@ -58,7 +58,6 @@ $(function(){
 	        $.post('/ajax/autocomplete', userData, function (ajaxResult) {
 		        if(ajaxResult.status == 'ok')
 		        {
-			        console.log(ajaxResult.html);
 		            $('#related-ac-result-container').find('.autocompleter-list').html(ajaxResult.html);
 		        }
 	        }
@@ -71,7 +70,7 @@ $(function(){
         }
     });
 
-	$('#up-sell-ac').blur(function() {
+	$('#up-sell-ac-container').blur(function() {
 		$('#up-sell-ac-result-container').find('.autocompleter-list').empty();
 		$(this).css('border-color','');
 		$('#up-sell-ac-result-container').addClass('hide');
