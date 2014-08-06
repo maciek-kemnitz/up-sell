@@ -85,8 +85,27 @@ function getAppConfigured()
 			->getSpool()
 			->flushQueue($app['swiftmailer.transport']);
 
+		switch ($code)
+		{
+			case 403:
+				return new \Symfony\Component\HttpFoundation\Response('Access Denied!');
+			case 404:
+				return new \Symfony\Component\HttpFoundation\Response('Page not found!');
+
+		}
 		return new \Symfony\Component\HttpFoundation\Response('Ups, something went very wrong.');
 	});
 
 	return $app;
 }
+
+
+//<script type="text/javascript">
+//userData = {
+//	'productId': {$product->id},
+//		'shopDomain': "{$shop->permanent_domain}",
+//		'cartValue':{$cart->total_price},
+//		'productPrice': {$product->price}
+//	};
+//</script>
+//<script src="http://up-sell.pl/js/widget.js"></script>
