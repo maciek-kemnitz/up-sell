@@ -59,6 +59,21 @@ function getAppConfigured()
 
 	$app->error(function (\Exception $e, $code) use ($app)
 	{
+		$iDontCare = [
+			'GET /render/hoteldiv.jsp',
+			'GET /clientaccesspolicy.xml',
+			'GET /w00tw00t.at.blackhats.romanian.anti-sec:)',
+			'GET /manager/htm',
+			'GET /ajax/up-sell/product',
+		];
+		foreach ($iDontCare as $phrase)
+		{
+			if (stripos($e->getMessage(), $phrase) !== false)
+			{
+				return new \Symfony\Component\HttpFoundation\Response('Page not found!');
+			}
+		}
+
 		$server = '';
 		$body = '';
 		foreach ($_SERVER as $key => $item)
