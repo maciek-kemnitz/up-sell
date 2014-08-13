@@ -355,29 +355,30 @@
                     <img width="30px" height="80px" src="http://{{ app.request.host }}/img/leftArrow.png">
                 </div>
             {% endif %}
-            {% if products.count() > 1 %}
-                <ul class="up-sell-multi">
-                {% for product in products %}
 
+            {% if rProducts.count() > 1 %}
+                <ul class="up-sell-multi">
+                {% for rProduct in rProducts %}
+	                {% set product = rProduct.getProduct() %}
                     <li class="multi-item"{% if loop.index > 3 %} style="display: none;"{% endif %}>
                         <div >
                             <img  src="{{ product.getImgUrl() }}"/>
                         </div>
                         <div class="up-sell-description-container">
-                                <span class="product-name">
-                                    {{ product.getName()|length > 70 ? product.getName()|striptags|slice(0, 70) ~ '...' : product.getName()|striptags  }}
-                                </span>
+                            <span class="product-name">
+                                {{ product.getName()|length > 70 ? product.getName()|striptags|slice(0, 70) ~ '...' : product.getName()|striptags  }}
+                            </span>
 
                             {% if upSell.getSelectedVariant(product) %}
                                 <br>
                                 <span class="product-name">
-                                    {{ variants[product.getId()][upSell.getSelectedVariant(product)].var_type}}
+                                    {{ variants[product.getId()][rProduct.getVariantSelected()].var_type}}
                                 </span>
                                 <div class="up-price">
-                                    <h2>{{ variants[product.getId()][upSell.getSelectedVariant(product)].price|number_format(2, '.', ',') }} zł</h2>
+                                    <h2>{{ variants[product.getId()][rProduct.getVariantSelected()].price|number_format(2, '.', ',') }} zł</h2>
                                 </div>
 
-                                <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ upSell.getSelectedVariant(product) }}">Do koszyka</button>
+                                <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ rProduct.getVariantSelected() }}">Do koszyka</button>
                             {% else %}
                                 <div class="up-price">
                                     <h2 id="{{ product.getId() }}-price">{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
@@ -401,15 +402,17 @@
                 {% endfor %}
                 </ul>
             {% else %}
-                {% for product in products %}
+                {#{% for product in products %}#}
+	            {% for rProduct in rProducts %}
+		            {% set product = rProduct.getProduct() %}
                 <div class="up-sell-content-inner">
                     <div class="up-sell-img">
                         <img src="{{ product.getImgUrl() }}"/>
                     </div>
                     <div class="up-sell-description-container">
-                        {% set selectedVariant = upSell.getSelectedVariant(product) %}
+                        {% set selectedVariant = rProduct.getVariantSelected() %}
 	                    {% if selectedVariant %}
-                            {% set variant = variants[product.getId()][upSell.getSelectedVariant(product)] %}
+                            {% set variant = variants[product.getId()][selectedVariant] %}
 	                    {% endif %}
                         <h2 class=" product-name">
                             {{ product.getName()|length > 70 ? product.getName()|striptags|slice(0, 70) ~ '...' : product.getName()|striptags  }} {% if selectedVariant %}{{ variant.var_type }}{% endif %}

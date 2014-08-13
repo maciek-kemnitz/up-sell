@@ -38,35 +38,36 @@ class AjaxController implements ControllerProviderInterface
 
 
 			$uppSells = UpSellQuery::create()
-								->filterByShopDomain($shopDomain)
-								->filterByStatus(UpSellPeer::STATUS_ACTIVE)
-								->useProductInCartQuery()
-									->filterByProductId($productId)
-								->endUse()
-								->orderBy(UpSellPeer::ORDER)
-								->distinct()
-								->find();
+				->filterByShopDomain($shopDomain)
+				->filterByStatus(UpSellPeer::STATUS_ACTIVE)
+				->useProductInCartQuery()
+					->filterByProductId($productId)
+				->endUse()
+				->orderBy(UpSellPeer::ORDER)
+				->distinct()
+				->find();
 
 			if (!$uppSells->count())
 			{
 				$uppSells = UpSellQuery::create()
-									->priceInRange($futureCartValue)
-									->filterByUsePriceRange(UpSellPeer::USE_PRICE_RANGE_1)
-									->filterByStatus(UpSellPeer::STATUS_ACTIVE)
-									->filterByShopDomain($shopDomain)
-									->orderBy(UpSellPeer::ORDER)
-									->find();
+					->priceInRange($futureCartValue)
+					->filterByUsePriceRange(UpSellPeer::USE_PRICE_RANGE_1)
+					->filterByStatus(UpSellPeer::STATUS_ACTIVE)
+					->filterByShopDomain($shopDomain)
+					->orderBy(UpSellPeer::ORDER, \Criteria::ASC)
+					->find();
 
 
 				if (!$uppSells->count())
 				{
-					return new JsonResponse(['status' => 'no up-sell', "count" => ($uppSells->count()), 'fcv'=>$futureCartValue]);
+					return new JsonResponse(['status' => 'no up-sell']);
 				}
 			}
 
 
 			/** @var UpSell $upSellByRelation */
 			$upSellByRelation = $uppSells->getFirst();
+			$rProducts = $upSellByRelation->getRelatedProducts();
 
 			/** @var Product[] $upSellProducts */
 			$upSellProducts = $upSellByRelation->getProducts();
@@ -79,14 +80,15 @@ class AjaxController implements ControllerProviderInterface
 			$params = [
 				'upSell' => $upSellByRelation,
 				'products' => $upSellByRelation->getProducts(),
-				'variants' => $variants
+				'variants' => $variants,
+				'rProducts' => $rProducts
 			];
 
 			/** @var ProductInCart $productInCart */
 			$productInCart = ProductInCartQuery::create()
-									->filterByProductId($productId)
-									->filterByUpSell($upSellByRelation)
-									->findOne();
+				->filterByProductId($productId)
+				->filterByUpSell($upSellByRelation)
+				->findOne();
 
 			if (null !== $productInCart && $productInCart->getVariantSelected())
 			{

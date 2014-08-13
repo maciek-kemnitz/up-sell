@@ -39,9 +39,9 @@ class UpSell extends BaseUpSell
 	{
 		/** @var RelatedProduct $relatedProduct */
 		$relatedProduct = RelatedProductQuery::create()
-						->filterByUpSell($this)
-						->filterByProductId($product->getShoploProductId())
-						->findOne();
+			->filterByUpSell($this)
+			->filterByProductId($product->getShoploProductId())
+			->findOne();
 
 		if (null === $relatedProduct)
 		{
