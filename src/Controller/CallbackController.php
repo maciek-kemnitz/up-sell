@@ -23,13 +23,20 @@ class CallbackController implements ControllerProviderInterface
 				'secret_key'   =>  SECRET_KEY,
 				'callback_url' =>  CALLBACK_URL,
 			);
-			$shoploApi = new ShoploApi($config);
+
+			try
+			{
+				$shoploApi = new ShoploApi($config);
+			}
+			catch (\Exception $e)
+			{
+
+			}
 
 			if ($shoploApi->authorized)
 			{
 				return new RedirectResponse('/');
 			}
-//			return $app['twig']->render('login.page.html.twig', ['product'=>$shoploApi->product->retrieve()]);
 		});
 
 		return $controllers;
