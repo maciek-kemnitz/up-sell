@@ -105,7 +105,9 @@ function getAppConfigured()
 			case 403:
 				return new \Symfony\Component\HttpFoundation\Response('Access Denied!');
 			case 404:
-				return new \Symfony\Component\HttpFoundation\Response('Page not found!');
+				$shoploApi 	= $app[\src\Service\ServiceRegistry::SERVICE_SHOPLO_OBJECT];
+				$shop 		= $shoploApi->getShop();
+				return new \Symfony\Component\HttpFoundation\Response($app['twig']->render('404.page.html.twig',['shop'=> $shop]));
 
 		}
 		return new \Symfony\Component\HttpFoundation\Response('Ups, something went very wrong.');
@@ -113,14 +115,3 @@ function getAppConfigured()
 
 	return $app;
 }
-
-
-//<script type="text/javascript">
-//userData = {
-//	'productId': {$product->id},
-//		'shopDomain': "{$shop->permanent_domain}",
-//		'cartValue':{$cart->total_price},
-//		'productPrice': {$product->price}
-//	};
-//</script>
-//<script src="http://up-sell.pl/js/widget.js"></script>
