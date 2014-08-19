@@ -43,6 +43,7 @@
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
+      <parameter name="Charset" value="utf8"/>
     </vendor>
   </table>
   <table name="product_in_cart" phpName="ProductInCart" idMethod="native">
@@ -75,6 +76,9 @@
     <index name="product_id">
       <index-column name="product_id"/>
     </index>
+    <foreign-key foreignTable="up_sell" name="related_product_ibfk_1" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="up_sell_id" foreign="id"/>
+    </foreign-key>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>

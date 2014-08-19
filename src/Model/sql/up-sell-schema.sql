@@ -58,7 +58,7 @@ CREATE TABLE `product`
     `variants` TEXT,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `shoplo_product_id` (`shoplo_product_id`, `shop_domain`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB CHARACTER SET='utf8';
 
 -- ---------------------------------------------------------------------
 -- product_in_cart
@@ -93,7 +93,10 @@ CREATE TABLE `related_product`
     `variant_selected` INTEGER,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `up_sell_id` (`up_sell_id`, `product_id`, `variant_selected`),
-    INDEX `product_id` (`product_id`)
+    INDEX `product_id` (`product_id`),
+    CONSTRAINT `related_product_ibfk_1`
+        FOREIGN KEY (`up_sell_id`)
+        REFERENCES `up_sell` (`id`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------

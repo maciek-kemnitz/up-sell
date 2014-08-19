@@ -77,6 +77,7 @@ class UpSellTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('ProductInCart', 'src\\Model\\ProductInCart', RelationMap::ONE_TO_MANY, array('id' => 'up_sell_id', ), null, null, 'ProductInCarts');
+        $this->addRelation('RelatedProduct', 'src\\Model\\RelatedProduct', RelationMap::ONE_TO_MANY, array('id' => 'up_sell_id', ), null, null, 'RelatedProducts');
     } // buildRelations()
 
 } // UpSellTableMap

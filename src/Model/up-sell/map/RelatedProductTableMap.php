@@ -43,7 +43,7 @@ class RelatedProductTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('up_sell_id', 'UpSellId', 'INTEGER', true, null, null);
+        $this->addForeignKey('up_sell_id', 'UpSellId', 'INTEGER', 'up_sell', 'id', true, null, null);
         $this->addColumn('product_id', 'ProductId', 'INTEGER', true, null, null);
         $this->addColumn('variant_selected', 'VariantSelected', 'INTEGER', false, null, null);
         // validators
@@ -54,6 +54,7 @@ class RelatedProductTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('UpSell', 'src\\Model\\UpSell', RelationMap::MANY_TO_ONE, array('up_sell_id' => 'id', ), null, null);
     } // buildRelations()
 
 } // RelatedProductTableMap
