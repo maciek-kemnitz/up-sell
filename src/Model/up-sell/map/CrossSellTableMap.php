@@ -7,7 +7,7 @@ use \TableMap;
 
 
 /**
- * This class defines the structure of the 'product' table.
+ * This class defines the structure of the 'cross_sell' table.
  *
  *
  *
@@ -18,13 +18,13 @@ use \TableMap;
  *
  * @package    propel.generator.up-sell.map
  */
-class ProductTableMap extends TableMap
+class CrossSellTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'up-sell.map.ProductTableMap';
+    const CLASS_NAME = 'up-sell.map.CrossSellTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -36,23 +36,24 @@ class ProductTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('product');
-        $this->setPhpName('Product');
-        $this->setClassname('src\\Model\\Product');
+        $this->setName('cross_sell');
+        $this->setPhpName('CrossSell');
+        $this->setClassname('src\\Model\\CrossSell');
         $this->setPackage('up-sell');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('shoplo_product_id', 'ShoploProductId', 'INTEGER', true, null, null);
-        $this->addColumn('shop_domain', 'ShopDomain', 'VARCHAR', true, 255, null);
-        $this->addColumn('name', 'Name', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('img_url', 'ImgUrl', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('original_price', 'OriginalPrice', 'DOUBLE', true, null, null);
-        $this->addColumn('url', 'Url', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('thumbnail', 'Thumbnail', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('sku', 'Sku', 'FLOAT', true, null, null);
+        $this->addColumn('shop_domain', 'ShopDomain', 'VARCHAR', false, 255, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
+        $this->addColumn('headline', 'Headline', 'VARCHAR', true, 255, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('variants', 'Variants', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('order', 'Order', 'INTEGER', true, null, null);
+        $this->addColumn('status', 'Status', 'CHAR', true, null, 'active');
+        $this->getColumn('status', false)->setValueSet(array (
+  0 => 'active',
+  1 => 'disabled',
+));
+        $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', true, null, null);
         // validators
     } // initialize()
 
@@ -63,4 +64,4 @@ class ProductTableMap extends TableMap
     {
     } // buildRelations()
 
-} // ProductTableMap
+} // CrossSellTableMap

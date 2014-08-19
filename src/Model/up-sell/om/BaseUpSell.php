@@ -17,8 +17,6 @@ use \PropelObjectCollection;
 use \PropelPDO;
 use src\Model\ProductInCart;
 use src\Model\ProductInCartQuery;
-use src\Model\RelatedProduct;
-use src\Model\RelatedProductQuery;
 use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
@@ -64,12 +62,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     protected $shop_domain;
 
     /**
-     * The value for the order field.
-     * @var        int
-     */
-    protected $order;
-
-    /**
      * The value for the name field.
      * @var        string
      */
@@ -98,6 +90,12 @@ abstract class BaseUpSell extends BaseObject implements Persistent
      * @var        double
      */
     protected $price_to;
+
+    /**
+     * The value for the order field.
+     * @var        int
+     */
+    protected $order;
 
     /**
      * The value for the use_price_range field.
@@ -139,12 +137,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     protected $collProductInCartsPartial;
 
     /**
-     * @var        PropelObjectCollection|RelatedProduct[] Collection to store aggregation of RelatedProduct objects.
-     */
-    protected $collRelatedProducts;
-    protected $collRelatedProductsPartial;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -169,12 +161,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $productInCartsScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var		PropelObjectCollection
-     */
-    protected $relatedProductsScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -219,17 +205,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     {
 
         return $this->shop_domain;
-    }
-
-    /**
-     * Get the [order] column value.
-     *
-     * @return int
-     */
-    public function getOrder()
-    {
-
-        return $this->order;
     }
 
     /**
@@ -285,6 +260,17 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     {
 
         return $this->price_to;
+    }
+
+    /**
+     * Get the [order] column value.
+     *
+     * @return int
+     */
+    public function getOrder()
+    {
+
+        return $this->order;
     }
 
     /**
@@ -414,27 +400,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     } // setShopDomain()
 
     /**
-     * Set the value of [order] column.
-     *
-     * @param  int $v new value
-     * @return UpSell The current object (for fluent API support)
-     */
-    public function setOrder($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->order !== $v) {
-            $this->order = $v;
-            $this->modifiedColumns[] = UpSellPeer::ORDER;
-        }
-
-
-        return $this;
-    } // setOrder()
-
-    /**
      * Set the value of [name] column.
      *
      * @param  string $v new value
@@ -538,6 +503,27 @@ abstract class BaseUpSell extends BaseObject implements Persistent
 
         return $this;
     } // setPriceTo()
+
+    /**
+     * Set the value of [order] column.
+     *
+     * @param  int $v new value
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function setOrder($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->order !== $v) {
+            $this->order = $v;
+            $this->modifiedColumns[] = UpSellPeer::ORDER;
+        }
+
+
+        return $this;
+    } // setOrder()
 
     /**
      * Set the value of [use_price_range] column.
@@ -692,12 +678,12 @@ abstract class BaseUpSell extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->shop_domain = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->order = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->headline = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->description = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->price_from = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
-            $this->price_to = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
+            $this->name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->headline = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->description = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->price_from = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
+            $this->price_to = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
+            $this->order = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
             $this->use_price_range = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->created_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->status = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
@@ -775,8 +761,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->collProductInCarts = null;
-
-            $this->collRelatedProducts = null;
 
         } // if (deep)
     }
@@ -919,23 +903,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                 }
             }
 
-            if ($this->relatedProductsScheduledForDeletion !== null) {
-                if (!$this->relatedProductsScheduledForDeletion->isEmpty()) {
-                    RelatedProductQuery::create()
-                        ->filterByPrimaryKeys($this->relatedProductsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->relatedProductsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collRelatedProducts !== null) {
-                foreach ($this->collRelatedProducts as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
             $this->alreadyInSave = false;
 
         }
@@ -968,9 +935,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         if ($this->isColumnModified(UpSellPeer::SHOP_DOMAIN)) {
             $modifiedColumns[':p' . $index++]  = '`shop_domain`';
         }
-        if ($this->isColumnModified(UpSellPeer::ORDER)) {
-            $modifiedColumns[':p' . $index++]  = '`order`';
-        }
         if ($this->isColumnModified(UpSellPeer::NAME)) {
             $modifiedColumns[':p' . $index++]  = '`name`';
         }
@@ -985,6 +949,9 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         }
         if ($this->isColumnModified(UpSellPeer::PRICE_TO)) {
             $modifiedColumns[':p' . $index++]  = '`price_to`';
+        }
+        if ($this->isColumnModified(UpSellPeer::ORDER)) {
+            $modifiedColumns[':p' . $index++]  = '`order`';
         }
         if ($this->isColumnModified(UpSellPeer::USE_PRICE_RANGE)) {
             $modifiedColumns[':p' . $index++]  = '`use_price_range`';
@@ -1018,9 +985,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                     case '`shop_domain`':
                         $stmt->bindValue($identifier, $this->shop_domain, PDO::PARAM_STR);
                         break;
-                    case '`order`':
-                        $stmt->bindValue($identifier, $this->order, PDO::PARAM_INT);
-                        break;
                     case '`name`':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
@@ -1035,6 +999,9 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                         break;
                     case '`price_to`':
                         $stmt->bindValue($identifier, $this->price_to, PDO::PARAM_STR);
+                        break;
+                    case '`order`':
+                        $stmt->bindValue($identifier, $this->order, PDO::PARAM_INT);
                         break;
                     case '`use_price_range`':
                         $stmt->bindValue($identifier, $this->use_price_range, PDO::PARAM_STR);
@@ -1158,14 +1125,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                     }
                 }
 
-                if ($this->collRelatedProducts !== null) {
-                    foreach ($this->collRelatedProducts as $referrerFK) {
-                        if (!$referrerFK->validate($columns)) {
-                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-                        }
-                    }
-                }
-
 
             $this->alreadyInValidation = false;
         }
@@ -1208,22 +1167,22 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                 return $this->getShopDomain();
                 break;
             case 2:
-                return $this->getOrder();
-                break;
-            case 3:
                 return $this->getName();
                 break;
-            case 4:
+            case 3:
                 return $this->getHeadline();
                 break;
-            case 5:
+            case 4:
                 return $this->getDescription();
                 break;
-            case 6:
+            case 5:
                 return $this->getPriceFrom();
                 break;
-            case 7:
+            case 6:
                 return $this->getPriceTo();
+                break;
+            case 7:
+                return $this->getOrder();
                 break;
             case 8:
                 return $this->getUsePriceRange();
@@ -1271,12 +1230,12 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getShopDomain(),
-            $keys[2] => $this->getOrder(),
-            $keys[3] => $this->getName(),
-            $keys[4] => $this->getHeadline(),
-            $keys[5] => $this->getDescription(),
-            $keys[6] => $this->getPriceFrom(),
-            $keys[7] => $this->getPriceTo(),
+            $keys[2] => $this->getName(),
+            $keys[3] => $this->getHeadline(),
+            $keys[4] => $this->getDescription(),
+            $keys[5] => $this->getPriceFrom(),
+            $keys[6] => $this->getPriceTo(),
+            $keys[7] => $this->getOrder(),
             $keys[8] => $this->getUsePriceRange(),
             $keys[9] => $this->getCreatedAt(),
             $keys[10] => $this->getStatus(),
@@ -1291,9 +1250,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         if ($includeForeignObjects) {
             if (null !== $this->collProductInCarts) {
                 $result['ProductInCarts'] = $this->collProductInCarts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collRelatedProducts) {
-                $result['RelatedProducts'] = $this->collRelatedProducts->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1336,22 +1292,22 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                 $this->setShopDomain($value);
                 break;
             case 2:
-                $this->setOrder($value);
-                break;
-            case 3:
                 $this->setName($value);
                 break;
-            case 4:
+            case 3:
                 $this->setHeadline($value);
                 break;
-            case 5:
+            case 4:
                 $this->setDescription($value);
                 break;
-            case 6:
+            case 5:
                 $this->setPriceFrom($value);
                 break;
-            case 7:
+            case 6:
                 $this->setPriceTo($value);
+                break;
+            case 7:
+                $this->setOrder($value);
                 break;
             case 8:
                 $this->setUsePriceRange($value);
@@ -1394,12 +1350,12 @@ abstract class BaseUpSell extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setShopDomain($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setOrder($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setName($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setHeadline($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setDescription($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setPriceFrom($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setPriceTo($arr[$keys[7]]);
+        if (array_key_exists($keys[2], $arr)) $this->setName($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setHeadline($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setDescription($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setPriceFrom($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setPriceTo($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setOrder($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setUsePriceRange($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setCreatedAt($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setStatus($arr[$keys[10]]);
@@ -1418,12 +1374,12 @@ abstract class BaseUpSell extends BaseObject implements Persistent
 
         if ($this->isColumnModified(UpSellPeer::ID)) $criteria->add(UpSellPeer::ID, $this->id);
         if ($this->isColumnModified(UpSellPeer::SHOP_DOMAIN)) $criteria->add(UpSellPeer::SHOP_DOMAIN, $this->shop_domain);
-        if ($this->isColumnModified(UpSellPeer::ORDER)) $criteria->add(UpSellPeer::ORDER, $this->order);
         if ($this->isColumnModified(UpSellPeer::NAME)) $criteria->add(UpSellPeer::NAME, $this->name);
         if ($this->isColumnModified(UpSellPeer::HEADLINE)) $criteria->add(UpSellPeer::HEADLINE, $this->headline);
         if ($this->isColumnModified(UpSellPeer::DESCRIPTION)) $criteria->add(UpSellPeer::DESCRIPTION, $this->description);
         if ($this->isColumnModified(UpSellPeer::PRICE_FROM)) $criteria->add(UpSellPeer::PRICE_FROM, $this->price_from);
         if ($this->isColumnModified(UpSellPeer::PRICE_TO)) $criteria->add(UpSellPeer::PRICE_TO, $this->price_to);
+        if ($this->isColumnModified(UpSellPeer::ORDER)) $criteria->add(UpSellPeer::ORDER, $this->order);
         if ($this->isColumnModified(UpSellPeer::USE_PRICE_RANGE)) $criteria->add(UpSellPeer::USE_PRICE_RANGE, $this->use_price_range);
         if ($this->isColumnModified(UpSellPeer::CREATED_AT)) $criteria->add(UpSellPeer::CREATED_AT, $this->created_at);
         if ($this->isColumnModified(UpSellPeer::STATUS)) $criteria->add(UpSellPeer::STATUS, $this->status);
@@ -1493,12 +1449,12 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setShopDomain($this->getShopDomain());
-        $copyObj->setOrder($this->getOrder());
         $copyObj->setName($this->getName());
         $copyObj->setHeadline($this->getHeadline());
         $copyObj->setDescription($this->getDescription());
         $copyObj->setPriceFrom($this->getPriceFrom());
         $copyObj->setPriceTo($this->getPriceTo());
+        $copyObj->setOrder($this->getOrder());
         $copyObj->setUsePriceRange($this->getUsePriceRange());
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setStatus($this->getStatus());
@@ -1515,12 +1471,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             foreach ($this->getProductInCarts() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addProductInCart($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getRelatedProducts() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addRelatedProduct($relObj->copy($deepCopy));
                 }
             }
 
@@ -1587,9 +1537,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     {
         if ('ProductInCart' == $relationName) {
             $this->initProductInCarts();
-        }
-        if ('RelatedProduct' == $relationName) {
-            $this->initRelatedProducts();
         }
     }
 
@@ -1819,243 +1766,18 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     }
 
     /**
-     * Clears out the collRelatedProducts collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return UpSell The current object (for fluent API support)
-     * @see        addRelatedProducts()
-     */
-    public function clearRelatedProducts()
-    {
-        $this->collRelatedProducts = null; // important to set this to null since that means it is uninitialized
-        $this->collRelatedProductsPartial = null;
-
-        return $this;
-    }
-
-    /**
-     * reset is the collRelatedProducts collection loaded partially
-     *
-     * @return void
-     */
-    public function resetPartialRelatedProducts($v = true)
-    {
-        $this->collRelatedProductsPartial = $v;
-    }
-
-    /**
-     * Initializes the collRelatedProducts collection.
-     *
-     * By default this just sets the collRelatedProducts collection to an empty array (like clearcollRelatedProducts());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initRelatedProducts($overrideExisting = true)
-    {
-        if (null !== $this->collRelatedProducts && !$overrideExisting) {
-            return;
-        }
-        $this->collRelatedProducts = new PropelObjectCollection();
-        $this->collRelatedProducts->setModel('RelatedProduct');
-    }
-
-    /**
-     * Gets an array of RelatedProduct objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this UpSell is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|RelatedProduct[] List of RelatedProduct objects
-     * @throws PropelException
-     */
-    public function getRelatedProducts($criteria = null, PropelPDO $con = null)
-    {
-        $partial = $this->collRelatedProductsPartial && !$this->isNew();
-        if (null === $this->collRelatedProducts || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collRelatedProducts) {
-                // return empty collection
-                $this->initRelatedProducts();
-            } else {
-                $collRelatedProducts = RelatedProductQuery::create(null, $criteria)
-                    ->filterByUpSell($this)
-                    ->find($con);
-                if (null !== $criteria) {
-                    if (false !== $this->collRelatedProductsPartial && count($collRelatedProducts)) {
-                      $this->initRelatedProducts(false);
-
-                      foreach ($collRelatedProducts as $obj) {
-                        if (false == $this->collRelatedProducts->contains($obj)) {
-                          $this->collRelatedProducts->append($obj);
-                        }
-                      }
-
-                      $this->collRelatedProductsPartial = true;
-                    }
-
-                    $collRelatedProducts->getInternalIterator()->rewind();
-
-                    return $collRelatedProducts;
-                }
-
-                if ($partial && $this->collRelatedProducts) {
-                    foreach ($this->collRelatedProducts as $obj) {
-                        if ($obj->isNew()) {
-                            $collRelatedProducts[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collRelatedProducts = $collRelatedProducts;
-                $this->collRelatedProductsPartial = false;
-            }
-        }
-
-        return $this->collRelatedProducts;
-    }
-
-    /**
-     * Sets a collection of RelatedProduct objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param PropelCollection $relatedProducts A Propel collection.
-     * @param PropelPDO $con Optional connection object
-     * @return UpSell The current object (for fluent API support)
-     */
-    public function setRelatedProducts(PropelCollection $relatedProducts, PropelPDO $con = null)
-    {
-        $relatedProductsToDelete = $this->getRelatedProducts(new Criteria(), $con)->diff($relatedProducts);
-
-
-        $this->relatedProductsScheduledForDeletion = $relatedProductsToDelete;
-
-        foreach ($relatedProductsToDelete as $relatedProductRemoved) {
-            $relatedProductRemoved->setUpSell(null);
-        }
-
-        $this->collRelatedProducts = null;
-        foreach ($relatedProducts as $relatedProduct) {
-            $this->addRelatedProduct($relatedProduct);
-        }
-
-        $this->collRelatedProducts = $relatedProducts;
-        $this->collRelatedProductsPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related RelatedProduct objects.
-     *
-     * @param Criteria $criteria
-     * @param boolean $distinct
-     * @param PropelPDO $con
-     * @return int             Count of related RelatedProduct objects.
-     * @throws PropelException
-     */
-    public function countRelatedProducts(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-    {
-        $partial = $this->collRelatedProductsPartial && !$this->isNew();
-        if (null === $this->collRelatedProducts || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collRelatedProducts) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getRelatedProducts());
-            }
-            $query = RelatedProductQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByUpSell($this)
-                ->count($con);
-        }
-
-        return count($this->collRelatedProducts);
-    }
-
-    /**
-     * Method called to associate a RelatedProduct object to this object
-     * through the RelatedProduct foreign key attribute.
-     *
-     * @param    RelatedProduct $l RelatedProduct
-     * @return UpSell The current object (for fluent API support)
-     */
-    public function addRelatedProduct(RelatedProduct $l)
-    {
-        if ($this->collRelatedProducts === null) {
-            $this->initRelatedProducts();
-            $this->collRelatedProductsPartial = true;
-        }
-
-        if (!in_array($l, $this->collRelatedProducts->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddRelatedProduct($l);
-
-            if ($this->relatedProductsScheduledForDeletion and $this->relatedProductsScheduledForDeletion->contains($l)) {
-                $this->relatedProductsScheduledForDeletion->remove($this->relatedProductsScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param	RelatedProduct $relatedProduct The relatedProduct object to add.
-     */
-    protected function doAddRelatedProduct($relatedProduct)
-    {
-        $this->collRelatedProducts[]= $relatedProduct;
-        $relatedProduct->setUpSell($this);
-    }
-
-    /**
-     * @param	RelatedProduct $relatedProduct The relatedProduct object to remove.
-     * @return UpSell The current object (for fluent API support)
-     */
-    public function removeRelatedProduct($relatedProduct)
-    {
-        if ($this->getRelatedProducts()->contains($relatedProduct)) {
-            $this->collRelatedProducts->remove($this->collRelatedProducts->search($relatedProduct));
-            if (null === $this->relatedProductsScheduledForDeletion) {
-                $this->relatedProductsScheduledForDeletion = clone $this->collRelatedProducts;
-                $this->relatedProductsScheduledForDeletion->clear();
-            }
-            $this->relatedProductsScheduledForDeletion[]= clone $relatedProduct;
-            $relatedProduct->setUpSell(null);
-        }
-
-        return $this;
-    }
-
-    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->id = null;
         $this->shop_domain = null;
-        $this->order = null;
         $this->name = null;
         $this->headline = null;
         $this->description = null;
         $this->price_from = null;
         $this->price_to = null;
+        $this->order = null;
         $this->use_price_range = null;
         $this->created_at = null;
         $this->status = null;
@@ -2089,11 +1811,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collRelatedProducts) {
-                foreach ($this->collRelatedProducts as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
@@ -2102,10 +1819,6 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             $this->collProductInCarts->clearIterator();
         }
         $this->collProductInCarts = null;
-        if ($this->collRelatedProducts instanceof PropelCollection) {
-            $this->collRelatedProducts->clearIterator();
-        }
-        $this->collRelatedProducts = null;
     }
 
     /**

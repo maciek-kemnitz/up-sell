@@ -13,7 +13,6 @@ use \PropelException;
 use \PropelObjectCollection;
 use \PropelPDO;
 use src\Model\ProductInCart;
-use src\Model\RelatedProduct;
 use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
@@ -25,12 +24,12 @@ use src\Model\UpSellQuery;
  *
  * @method UpSellQuery orderById($order = Criteria::ASC) Order by the id column
  * @method UpSellQuery orderByShopDomain($order = Criteria::ASC) Order by the shop_domain column
- * @method UpSellQuery orderByOrder($order = Criteria::ASC) Order by the order column
  * @method UpSellQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method UpSellQuery orderByHeadline($order = Criteria::ASC) Order by the headline column
  * @method UpSellQuery orderByDescription($order = Criteria::ASC) Order by the description column
  * @method UpSellQuery orderByPriceFrom($order = Criteria::ASC) Order by the price_from column
  * @method UpSellQuery orderByPriceTo($order = Criteria::ASC) Order by the price_to column
+ * @method UpSellQuery orderByOrder($order = Criteria::ASC) Order by the order column
  * @method UpSellQuery orderByUsePriceRange($order = Criteria::ASC) Order by the use_price_range column
  * @method UpSellQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method UpSellQuery orderByStatus($order = Criteria::ASC) Order by the status column
@@ -39,12 +38,12 @@ use src\Model\UpSellQuery;
  *
  * @method UpSellQuery groupById() Group by the id column
  * @method UpSellQuery groupByShopDomain() Group by the shop_domain column
- * @method UpSellQuery groupByOrder() Group by the order column
  * @method UpSellQuery groupByName() Group by the name column
  * @method UpSellQuery groupByHeadline() Group by the headline column
  * @method UpSellQuery groupByDescription() Group by the description column
  * @method UpSellQuery groupByPriceFrom() Group by the price_from column
  * @method UpSellQuery groupByPriceTo() Group by the price_to column
+ * @method UpSellQuery groupByOrder() Group by the order column
  * @method UpSellQuery groupByUsePriceRange() Group by the use_price_range column
  * @method UpSellQuery groupByCreatedAt() Group by the created_at column
  * @method UpSellQuery groupByStatus() Group by the status column
@@ -59,20 +58,16 @@ use src\Model\UpSellQuery;
  * @method UpSellQuery rightJoinProductInCart($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ProductInCart relation
  * @method UpSellQuery innerJoinProductInCart($relationAlias = null) Adds a INNER JOIN clause to the query using the ProductInCart relation
  *
- * @method UpSellQuery leftJoinRelatedProduct($relationAlias = null) Adds a LEFT JOIN clause to the query using the RelatedProduct relation
- * @method UpSellQuery rightJoinRelatedProduct($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RelatedProduct relation
- * @method UpSellQuery innerJoinRelatedProduct($relationAlias = null) Adds a INNER JOIN clause to the query using the RelatedProduct relation
- *
  * @method UpSell findOne(PropelPDO $con = null) Return the first UpSell matching the query
  * @method UpSell findOneOrCreate(PropelPDO $con = null) Return the first UpSell matching the query, or a new UpSell object populated from the query conditions when no match is found
  *
  * @method UpSell findOneByShopDomain(string $shop_domain) Return the first UpSell filtered by the shop_domain column
- * @method UpSell findOneByOrder(int $order) Return the first UpSell filtered by the order column
  * @method UpSell findOneByName(string $name) Return the first UpSell filtered by the name column
  * @method UpSell findOneByHeadline(string $headline) Return the first UpSell filtered by the headline column
  * @method UpSell findOneByDescription(string $description) Return the first UpSell filtered by the description column
  * @method UpSell findOneByPriceFrom(double $price_from) Return the first UpSell filtered by the price_from column
  * @method UpSell findOneByPriceTo(double $price_to) Return the first UpSell filtered by the price_to column
+ * @method UpSell findOneByOrder(int $order) Return the first UpSell filtered by the order column
  * @method UpSell findOneByUsePriceRange(string $use_price_range) Return the first UpSell filtered by the use_price_range column
  * @method UpSell findOneByCreatedAt(string $created_at) Return the first UpSell filtered by the created_at column
  * @method UpSell findOneByStatus(string $status) Return the first UpSell filtered by the status column
@@ -81,12 +76,12 @@ use src\Model\UpSellQuery;
  *
  * @method array findById(int $id) Return UpSell objects filtered by the id column
  * @method array findByShopDomain(string $shop_domain) Return UpSell objects filtered by the shop_domain column
- * @method array findByOrder(int $order) Return UpSell objects filtered by the order column
  * @method array findByName(string $name) Return UpSell objects filtered by the name column
  * @method array findByHeadline(string $headline) Return UpSell objects filtered by the headline column
  * @method array findByDescription(string $description) Return UpSell objects filtered by the description column
  * @method array findByPriceFrom(double $price_from) Return UpSell objects filtered by the price_from column
  * @method array findByPriceTo(double $price_to) Return UpSell objects filtered by the price_to column
+ * @method array findByOrder(int $order) Return UpSell objects filtered by the order column
  * @method array findByUsePriceRange(string $use_price_range) Return UpSell objects filtered by the use_price_range column
  * @method array findByCreatedAt(string $created_at) Return UpSell objects filtered by the created_at column
  * @method array findByStatus(string $status) Return UpSell objects filtered by the status column
@@ -199,7 +194,7 @@ abstract class BaseUpSellQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `shop_domain`, `order`, `name`, `headline`, `description`, `price_from`, `price_to`, `use_price_range`, `created_at`, `status`, `discount_type`, `discount_amount` FROM `up_sell` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `shop_domain`, `name`, `headline`, `description`, `price_from`, `price_to`, `order`, `use_price_range`, `created_at`, `status`, `discount_type`, `discount_amount` FROM `up_sell` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -357,48 +352,6 @@ abstract class BaseUpSellQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UpSellPeer::SHOP_DOMAIN, $shopDomain, $comparison);
-    }
-
-    /**
-     * Filter the query on the order column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByOrder(1234); // WHERE order = 1234
-     * $query->filterByOrder(array(12, 34)); // WHERE order IN (12, 34)
-     * $query->filterByOrder(array('min' => 12)); // WHERE order >= 12
-     * $query->filterByOrder(array('max' => 12)); // WHERE order <= 12
-     * </code>
-     *
-     * @param     mixed $order The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return UpSellQuery The current query, for fluid interface
-     */
-    public function filterByOrder($order = null, $comparison = null)
-    {
-        if (is_array($order)) {
-            $useMinMax = false;
-            if (isset($order['min'])) {
-                $this->addUsingAlias(UpSellPeer::ORDER, $order['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($order['max'])) {
-                $this->addUsingAlias(UpSellPeer::ORDER, $order['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(UpSellPeer::ORDER, $order, $comparison);
     }
 
     /**
@@ -570,6 +523,48 @@ abstract class BaseUpSellQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UpSellPeer::PRICE_TO, $priceTo, $comparison);
+    }
+
+    /**
+     * Filter the query on the order column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrder(1234); // WHERE order = 1234
+     * $query->filterByOrder(array(12, 34)); // WHERE order IN (12, 34)
+     * $query->filterByOrder(array('min' => 12)); // WHERE order >= 12
+     * $query->filterByOrder(array('max' => 12)); // WHERE order <= 12
+     * </code>
+     *
+     * @param     mixed $order The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return UpSellQuery The current query, for fluid interface
+     */
+    public function filterByOrder($order = null, $comparison = null)
+    {
+        if (is_array($order)) {
+            $useMinMax = false;
+            if (isset($order['min'])) {
+                $this->addUsingAlias(UpSellPeer::ORDER, $order['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($order['max'])) {
+                $this->addUsingAlias(UpSellPeer::ORDER, $order['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(UpSellPeer::ORDER, $order, $comparison);
     }
 
     /**
@@ -816,80 +811,6 @@ abstract class BaseUpSellQuery extends ModelCriteria
         return $this
             ->joinProductInCart($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'ProductInCart', '\src\Model\ProductInCartQuery');
-    }
-
-    /**
-     * Filter the query by a related RelatedProduct object
-     *
-     * @param   RelatedProduct|PropelObjectCollection $relatedProduct  the related object to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 UpSellQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByRelatedProduct($relatedProduct, $comparison = null)
-    {
-        if ($relatedProduct instanceof RelatedProduct) {
-            return $this
-                ->addUsingAlias(UpSellPeer::ID, $relatedProduct->getUpSellId(), $comparison);
-        } elseif ($relatedProduct instanceof PropelObjectCollection) {
-            return $this
-                ->useRelatedProductQuery()
-                ->filterByPrimaryKeys($relatedProduct->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByRelatedProduct() only accepts arguments of type RelatedProduct or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the RelatedProduct relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return UpSellQuery The current query, for fluid interface
-     */
-    public function joinRelatedProduct($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('RelatedProduct');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'RelatedProduct');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the RelatedProduct relation RelatedProduct object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   \src\Model\RelatedProductQuery A secondary query class using the current class as primary query
-     */
-    public function useRelatedProductQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinRelatedProduct($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'RelatedProduct', '\src\Model\RelatedProductQuery');
     }
 
     /**

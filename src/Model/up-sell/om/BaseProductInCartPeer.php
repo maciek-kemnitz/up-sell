@@ -772,6 +772,10 @@ abstract class BaseProductInCartPeer
             $criteria = $values->buildCriteria(); // build Criteria from ProductInCart object
         }
 
+        if ($criteria->containsKey(ProductInCartPeer::ID) && $criteria->keyContainsValue(ProductInCartPeer::ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.ProductInCartPeer::ID.')');
+        }
+
 
         // Set the correct dbName
         $criteria->setDbName(ProductInCartPeer::DATABASE_NAME);

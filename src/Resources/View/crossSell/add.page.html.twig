@@ -1,0 +1,76 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="http://swiatmat.pl/css/fonts!admin-3376.css">
+    <link rel="stylesheet" type="text/css" href="http://www.shoplo.com/css/admin!admin-4486067.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/autosize.js/1.17.1/autosize-min.js"></script>
+    <script src="http://www.shoplo.com/js/admin!admin-3376.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.24/jquery-ui.min.js"></script>
+    <script src="{{ app.request.basepath }}/js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ app.request.basepath }}/css/styles.css">
+</head>
+<body id="add-page" class="sidebar-collapsed content-ready">
+<iframe src="http://{{ shop['permanent_domain'] }}/admin/adminnavbar" style="width:230px;height:1000px;border:0;position:fixed;top:0;left:0;"></iframe>
+
+<section class="main-container">
+
+<section class="content-container">
+    <section class="content-settings">
+        <article class="content">
+            <section class="scroll-area right-frame bottom-frame">
+                <section class="box bottom-frame scroll-heading page-heading">
+                    <h2>Dodaj ofertę</h2>
+                    <a href="/"><span><< </span>wstecz</a>
+                </section>
+                <section class="scroll-content">
+                    <form action="/save/cross-sell" method="post">
+                        {% if crossSell is defined %}<input name="crossSellId" type="hidden" value="{{ crossSell.getId() }}">{% endif %}
+                        <table class="tabular">
+                            <tbody>
+                                <tr>
+                                    {% include 'crossSell/main-settings.block.html.twig' with {'crossSell': crossSell is defined ? crossSell : null} %}
+                                </tr>
+                                {#<tr>#}
+                                    {#{% include 'when-settings.block.html.twig' with {'upSell': upSell is defined ? upSell : null} %}#}
+                                {#</tr>#}
+                                {#<tr>#}
+                                    {#{% include 'up-sell-settings.block.html.twig' with {'upSell': upSell is defined ? upSell : null} %}#}
+                                {#</tr>#}
+                            </tbody>
+                        </table>
+
+                        <section class="buttons-bar">
+                            <section class="box buttons" style="position: static">
+                                <button type="submit" class="btn-accept" data-icon="'">Zapisz zmiany</button>
+                                <button type="reset" class="btn-cancel" data-icon="!">Anuluj</button>
+                            </section>
+                        </section>
+                    </form>
+                </section>
+            </section>
+        </article>
+    </section>
+</section>
+</section>
+
+<script src="http://www.shoplo.com/js/admin!bootstrap-admin!bootstrap.select-admin!bootstrap.checkbox-admin!jquery.custom-admin!jquery.validate-admin!jquery.sortable-admin!jquery.slimscroll-admin!jquery.numberAnimate-admin!jquery.touchtoclick-admin!admin-admin!main-11240606.js"></script>
+<script src="http://www.shoplo.com/js/admin!autocompleter-0.js"></script>
+<script>
+    ADMIN.ROOT = 'local.up-sell.pl';
+    ADMIN.STATIC_ROOT = 'local.up-sell.pl';
+    ADMIN.USER = {
+        ID: '0',
+        TOKEN: '',
+        LANG: {% if js_dict is defined %}eval(js_dict){% else %}''{% endif %},
+        IC: {% if ins_com is defined and ins_com %}true{% else %}false{% endif %}
+    };
+    ADMIN.SHOP = {
+        CURRENCY: '{% if shop is defined and shop%}{{ shop.currency }}{% endif %}'
+    };
+
+    ADMIN.run();
+</script>
+<script src="{{ app.request.basepath }}/js/add.js"></script>
+
+</body>
+</html>

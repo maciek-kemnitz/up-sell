@@ -7,6 +7,8 @@ use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 
+use src\Lib\GateKeeper;
+use src\Lib\ShoploObject;
 use src\Model\Product;
 use src\Model\ProductPeer;
 use src\Model\ProductQuery;
@@ -76,6 +78,24 @@ class AddController implements ControllerProviderInterface
 			return $app['twig']->render('add.page.html.twig', ['products'=>$shoploApi->product->retrieve(), 'shop'=> $shop]);
 		});
 
+
+		$controllers->get('/cross-sell', function () use ($app)
+		{
+			/** @var GateKeeper $gateKeeper */
+			$gateKeeper = $app[ServiceRegistry::SERVICE_GATEKEEPER];
+
+			if (false === $gateKeeper->hasAccess(GateKeeper::GATE_CROSS_SELL))
+			{
+				throw new AccessDeniedHttpException();
+			}
+
+			/** @var ShoploObject $shoploApi */
+			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
+			$shop = $shoploApi->getShop();
+			$shopDomain = $shoploApi->getPermanentDomain();
+
+			return $app['twig']->render('crossSell/add.page.html.twig', ['products' => $shoploApi->getProducts(), 'shop'=> $shop]);
+		});
 
 
 		return $controllers;

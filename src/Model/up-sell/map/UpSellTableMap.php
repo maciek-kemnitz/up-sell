@@ -44,12 +44,12 @@ class UpSellTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('shop_domain', 'ShopDomain', 'VARCHAR', true, 255, null);
-        $this->addColumn('order', 'Order', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
         $this->addColumn('headline', 'Headline', 'LONGVARCHAR', true, null, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', true, null, null);
         $this->addColumn('price_from', 'PriceFrom', 'DOUBLE', false, null, null);
         $this->addColumn('price_to', 'PriceTo', 'DOUBLE', false, null, null);
+        $this->addColumn('order', 'Order', 'INTEGER', true, null, null);
         $this->addColumn('use_price_range', 'UsePriceRange', 'CHAR', true, null, '1');
         $this->getColumn('use_price_range', false)->setValueSet(array (
   0 => '0',
@@ -67,7 +67,7 @@ class UpSellTableMap extends TableMap
   1 => 'percent',
   2 => 'amount',
 ));
-        $this->addColumn('discount_amount', 'DiscountAmount', 'DOUBLE', false, null, null);
+        $this->addColumn('discount_amount', 'DiscountAmount', 'FLOAT', false, null, null);
         // validators
     } // initialize()
 
@@ -77,7 +77,6 @@ class UpSellTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('ProductInCart', 'src\\Model\\ProductInCart', RelationMap::ONE_TO_MANY, array('id' => 'up_sell_id', ), null, null, 'ProductInCarts');
-        $this->addRelation('RelatedProduct', 'src\\Model\\RelatedProduct', RelationMap::ONE_TO_MANY, array('id' => 'up_sell_id', ), null, null, 'RelatedProducts');
     } // buildRelations()
 
 } // UpSellTableMap

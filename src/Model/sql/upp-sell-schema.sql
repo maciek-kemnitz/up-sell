@@ -4,6 +4,40 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ---------------------------------------------------------------------
+-- cross_sell
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `cross_sell`;
+
+CREATE TABLE `cross_sell`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `shop_domain` VARCHAR(255),
+    `name` VARCHAR(255),
+    `headline` VARCHAR(255) NOT NULL,
+    `description` TEXT,
+    `order` INTEGER NOT NULL,
+    `status` enum('active','disabled') DEFAULT 'active' NOT NULL,
+    `created_at` DATETIME NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- gatekeeper
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `gatekeeper`;
+
+CREATE TABLE `gatekeeper`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `shop_domain` VARCHAR(255) NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    `created_at` DATETIME NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- product
 -- ---------------------------------------------------------------------
 
@@ -15,16 +49,16 @@ CREATE TABLE `product`
     `shoplo_product_id` INTEGER NOT NULL,
     `shop_domain` VARCHAR(255) NOT NULL,
     `name` TEXT NOT NULL,
-    `description` TEXT,
     `img_url` TEXT NOT NULL,
-    `original_price` FLOAT NOT NULL,
+    `original_price` DOUBLE NOT NULL,
     `url` TEXT NOT NULL,
-    `thumbnail` TEXT,
-    `sku` FLOAT,
+    `thumbnail` TEXT NOT NULL,
+    `sku` FLOAT NOT NULL,
+    `description` TEXT,
     `variants` TEXT,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `shoplo_product_id` (`shoplo_product_id`, `shop_domain`)
-) ENGINE=InnoDB CHARACTER SET='utf8';
+) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
 -- product_in_cart
@@ -37,8 +71,9 @@ CREATE TABLE `product_in_cart`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `up_sell_id` INTEGER NOT NULL,
     `product_id` INTEGER NOT NULL,
+    `variant_selected` INTEGER,
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `up_sell_id` (`up_sell_id`, `product_id`),
+    UNIQUE INDEX `up_sell_id` (`up_sell_id`, `product_id`, `variant_selected`),
     CONSTRAINT `product_in_cart_ibfk_1`
         FOREIGN KEY (`up_sell_id`)
         REFERENCES `up_sell` (`id`)
@@ -57,10 +92,8 @@ CREATE TABLE `related_product`
     `product_id` INTEGER NOT NULL,
     `variant_selected` INTEGER,
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `up_sell_id` (`up_sell_id`, `product_id`),
-    CONSTRAINT `related_product_ibfk_1`
-        FOREIGN KEY (`up_sell_id`)
-        REFERENCES `up_sell` (`id`)
+    UNIQUE INDEX `up_sell_id` (`up_sell_id`, `product_id`, `variant_selected`),
+    INDEX `product_id` (`product_id`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -73,19 +106,20 @@ CREATE TABLE `up_sell`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `shop_domain` VARCHAR(255) NOT NULL,
-    `order` INTEGER NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `headline` TEXT NOT NULL,
     `description` TEXT NOT NULL,
-    `price_from` FLOAT,
-    `price_to` FLOAT,
+    `price_from` DOUBLE,
+    `price_to` DOUBLE,
+    `order` INTEGER NOT NULL,
     `use_price_range` enum('0','1') DEFAULT '1' NOT NULL,
     `created_at` DATETIME NOT NULL,
     `status` enum('active','disabled') DEFAULT 'active' NOT NULL,
     `discount_type` enum('none','percent','amount') DEFAULT 'none' NOT NULL,
     `discount_amount` FLOAT,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB CHARACTER SET='utf8';
+    PRIMARY KEY (`id`),
+    INDEX `shop_id` (`shop_domain`)
+) ENGINE=InnoDB;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

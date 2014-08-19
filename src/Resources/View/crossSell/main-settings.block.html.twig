@@ -1,0 +1,42 @@
+<td class="box bottom-frame right-frame left-column valign-top">
+    <h3>Ustawienia główne</h3>
+</td>
+<td class="bottom-frame valign-top">
+    <section class="control-group bottom box bottom-frame clearfix">
+        <ul class="table-columns">
+            <li>
+                <label class="control-label bottom pull-left" for="pageTitle">Nazwa kampanii</label>
+            </li>
+            <li>
+                <input name="name" type="text" class="pull-right" placeholder="np. baterie" required="required" {% if crossSell != null %}value="{{ crossSell.getName() }}"{% endif %}
+            </li>
+        </ul>
+    </section>
+    <section class="control-group bottom box bottom-frame clearfix">
+        <ul class="table-columns">
+            <li>
+                <label class="control-label bottom pull-left" for="pageUrl">Nagłówek
+                    oferty</label>
+            </li>
+
+            <li>
+                <input name="headline" type="text" class="pull-right"
+                       placeholder="np. Nie zapomnij o bateriach!" required="required"
+                       {% if crossSell != null %}value="{{ crossSell.getHeadLine() }}"{% endif %}
+            </li>
+        </ul>
+    </section>
+
+    <section class="control-group bottom box clearfix">
+        <ul class="table-columns">
+            <li>
+                <label class="control-label bottom pull-left" for="pageView">Opis oferty</label>
+            </li>
+
+            <li>
+                <textarea name="description" class="pull-right"
+                          style="width: 400px; height: 100px">{% if crossSell != null %}{{ crossSell.getDescription() }}{% endif %}</textarea>
+            </li>
+        </ul>
+    </section>
+</td>

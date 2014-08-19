@@ -23,56 +23,56 @@
                         <section class="filters">
                             <a class="btn-dark pull-right" data-icon="/" href="/logout">Wyloguj</a>
                             <a class="btn-dark pull-right" data-icon="m" href="/add">Dodaj</a>
+	                        {% if app.gatekeeper.hasAccess('cross_sell') %}
+                                <a class="btn-dark pull-right" data-icon="m" href="/add/cross-sell">Dodaj cross sell</a>
+	                        {% endif %}
                             <input id="search" type="search" placeholder="wyszukaj" class="pull-right">
                         </section>
                     </section>
                     <section class="scroll-content">
-                    {#<div class="" style="position: relative; width: auto;">#}
-                        {#<section class="" style=" width: auto; ">#}
-
-                            <section class="box variants clearfix">
-                                <h2 class="pull-left">Aktywne oferty</h2>
-                            </section>
-                            <section style="position: relative;">
-                                <ul id="sortable">
-                                    {% for upSell in uppSells %}
-                                        <li class="list-item">
-                                            <ul class="table-columns three-in-row top-frame bottom-frame" data-up-sell-id="{{ upSell.getId() }}">
-                                                <li id="up-sell-name" class="box ">
-                                                    {{ upSell.getName() }}
-                                                </li>
-                                                <li class="box ">
-                                                     {{ upSell.getCreatedAt() }}
-                                                </li>
-                                                <li class="box ">
-                                                    <a href="/edit/{{ upSell.getId() }}">Edytuj</a>
-                                                    {% if upSell.isActive() %}
-                                                        <a href="/status/disable?up-sell-id={{ upSell.getId() }}" >Zatrzymaj</a>
-                                                    {% else %}
-                                                        <a href="/status/activate?up-sell-id={{ upSell.getId() }}" >Aktywuj</a>
-                                                    {% endif %}
-
-                                                    <a href="/delete?up-sell-id={{ upSell.getId() }}">Usuń</a>
-                                                </li>
-
-                                            </ul>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                                <div class="loader hide">
-                                    <img src="{{ app.request.basepath }}/img/loader.gif">
-                                </div>
-                            </section>
-
-
-                            <script>
-                                $(function() {
-                                    $( "#sortable" ).sortable();
-                                    $( "#sortable" ).disableSelection();
-                                });
-                            </script>
-
+                        <section class="box variants clearfix">
+                            <h2 class="pull-left">Aktywne oferty</h2>
                         </section>
+                        <section style="position: relative;">
+                            <ul id="sortable">
+                                {% for upSell in uppSells %}
+                                    <li class="list-item">
+                                        <ul class="table-columns three-in-row top-frame bottom-frame" data-up-sell-id="{{ upSell.getId() }}">
+                                            <li id="up-sell-name" class="box ">
+                                                {{ upSell.getName() }}
+                                            </li>
+                                            <li class="box ">
+                                                 {{ upSell.getCreatedAt() }}
+                                            </li>
+                                            <li class="box ">
+                                                <a href="/edit/{{ upSell.getId() }}">Edytuj</a>
+                                                {% if upSell.isActive() %}
+                                                    <a href="/status/disable?up-sell-id={{ upSell.getId() }}" >Zatrzymaj</a>
+                                                {% else %}
+                                                    <a href="/status/activate?up-sell-id={{ upSell.getId() }}" >Aktywuj</a>
+                                                {% endif %}
+
+                                                <a href="/delete?up-sell-id={{ upSell.getId() }}">Usuń</a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="loader hide">
+                                <img src="{{ app.request.basepath }}/img/loader.gif">
+                            </div>
+                        </section>
+
+
+                        <script>
+                            $(function() {
+                                $( "#sortable" ).sortable();
+                                $( "#sortable" ).disableSelection();
+                            });
+                        </script>
+
+                    </section>
                 </section>
             </article>
     </section>
