@@ -1,0 +1,45 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="http://www.shoplo.com/css/admin!admin-4486067.css">
+	<link rel="stylesheet" type="text/css" href="{{ app.request.basepath }}/css/styles.css">
+
+	<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+</head>
+
+
+
+<body class="content-ready sidebar-collapsed" style="">
+<iframe src="http://{{ shop['permanent_domain'] }}/admin/adminnavbar" style="width:230px;height:1000px;border:0;position:fixed;top:0;left:0;"></iframe>
+
+
+<section id="home-page" class="main-container">
+	<section class="content-container">
+		<section class="content-dashboard">
+			<article class="content">
+
+			</article>
+		</section>
+	</section>
+
+
+</section>
+<script src="http://www.shoplo.com/js/admin!bootstrap-admin!bootstrap.select-admin!bootstrap.checkbox-admin!jquery.custom-admin!jquery.validate-admin!jquery.sortable-admin!jquery.slimscroll-admin!jquery.numberAnimate-admin!jquery.touchtoclick-admin!admin-admin!main-11240606.js"></script>
+<script src="http://www.shoplo.com/js/admin!autocompleter-0.js"></script>
+<script>
+	ADMIN.ROOT = 'local.up-sell.pl';
+	ADMIN.STATIC_ROOT = 'local.up-sell.pl';
+	ADMIN.USER = {
+		ID: '0',
+		TOKEN: '',
+		LANG: {% if js_dict is defined %}eval(js_dict){% else %}''{% endif %},
+		IC: {% if ins_com is defined and ins_com %}true{% else %}false{% endif %}
+	};
+	ADMIN.SHOP = {
+		CURRENCY: '{% if shop is defined and shop%}{{ shop.currency }}{% endif %}'
+	};
+
+	ADMIN.run();
+</script>
+</body>
+</html>

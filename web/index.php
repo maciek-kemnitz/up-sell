@@ -11,6 +11,7 @@ $app = getAppConfigured();
 session_start();
 
 $app->mount('/', new \src\Controller\HomePageController());
+$app->mount('/info', new \src\Controller\InfoController());
 $app->mount('/callback', new \src\Controller\CallbackController());
 $app->mount('/add', new \src\Controller\AddController());
 $app->mount('/edit', new \src\Controller\EditController());
