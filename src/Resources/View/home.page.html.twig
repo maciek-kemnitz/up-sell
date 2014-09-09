@@ -23,9 +23,6 @@
                         <section class="filters">
                             <a class="btn-dark pull-right" data-icon="/" href="/logout">Wyloguj</a>
                             <a class="btn-dark pull-right" data-icon="m" href="/add">Dodaj</a>
-	                        {% if app.gatekeeper.hasAccess('cross_sell') %}
-                                <a class="btn-dark pull-right" data-icon="m" href="/add/cross-sell">Dodaj cross sell</a>
-	                        {% endif %}
 	                        {% if uppSells|length > 7 %}
                                 <input id="search" type="search" placeholder="wyszukaj" class="pull-right">
 	                        {% endif %}
