@@ -4,7 +4,7 @@
         "twig/twig": ">=1.8,<2.0-dev",
         "darklow/ff-silex-less-provider": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
-        "maciek-kemnitz/shoplo-php": "1.0.0",
+	    "maciek-kemnitz/shoplo-php": "1.1.0",
         "propel/propel1": "1.7.1"
     },
     "autoload": {
