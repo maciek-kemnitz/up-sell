@@ -18,7 +18,7 @@
                     <input name="price_to"
                            class="span2"
                            id="prependedInput"
-                           type="text" style="height: 30px;"
+                           type="text" style="height: 30px;width: 100px;"
 		                   {% if upSell is not defined or (upSell != null and not upSell.usePriceRange()) %} disabled=disabled{% endif %}
                            {% if upSell != null and upSell.usePriceRange() %} value="{{ upSell.getPriceTo() }}"{% endif %}>
                 </div>
@@ -29,7 +29,7 @@
                            class="span2"
                            id="prependedInput"
                            type="text"
-                           style="height: 30px;"
+                           style="height: 30px;width: 100px;"
 		                   {% if upSell is not defined or (upSell != null and not upSell.usePriceRange()) %} disabled=disabled{% endif %}
                            {% if upSell != null and upSell.usePriceRange() %} value="{{ upSell.getPriceFrom() }}"{% endif %}>
                 </div>

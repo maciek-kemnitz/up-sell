@@ -60,6 +60,11 @@ function getAppConfigured()
 
 	$app->error(function (\Exception $e, $code) use ($app)
 	{
+		if ($app['debug'])
+		{
+			return;
+		}
+
 		$iDontCare = [
 			'GET /render/hoteldiv.jsp',
 			'GET /clientaccesspolicy.xml',
