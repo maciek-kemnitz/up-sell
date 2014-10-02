@@ -28,14 +28,55 @@ class HomePageController implements ControllerProviderInterface
 
 		$controllers->get('/', function (Request $request) use ($app)
 		{
+			$snippetName = 'snippets/up-sell.tpl';
+			$productTemplate = 'templates/product.tpl';
+			$snippetContent = '
+				<script type="text/javascript">
+					userData = {
+					"productId": {$product->id},
+					"shopDomain": "{$shop->permanent_domain}",
+					"cartValue": {$cart->total_price},
+					"productPrice": {$product->price}
+					};
+				</script>
+				<script src="http://up-sell.pl/js/widget.js"></script>';
+			$snippetInclude = PHP_EOL. '{snippet file="up-sell"}';
+
 			/** @var ShoploObject $shoploApi */
 			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
 			$shop 		= $shoploApi->getShop();
 
 			$upSells = UpSellQuery::create()
-								->filterByShopDomain($shop['permanent_domain'])
-								->orderByOrder()
-								->find();
+				->filterByShopDomain($shop['permanent_domain'])
+				->orderByOrder()
+				->find();
+
+			$themes = $shoploApi->getThemes();
+
+			foreach ($themes as $theme)
+			{
+				$themeId 		= $theme['id'];
+				$snippet 		= $shoploApi->getAssetByThemeIdAndName($themeId, $snippetName);
+				$template 		= $shoploApi->getAssetByThemeIdAndName($themeId, $productTemplate);
+				$currentContent = $template['content'];
+
+				if (null === $snippet)
+				{
+					$shoploApi->createAsset($themeId, $snippetName, $snippetContent);
+				}
+
+				if (strpos($currentContent, trim($snippetInclude)) === false)
+				{
+					$currentContent .= $snippetInclude;
+					$shoploApi->createAsset(
+						$themeId,
+						$template['key'],
+						$currentContent,
+						$template['content_type'],
+						$template['public_url']
+					);
+				}
+			}
 
 			return $app['twig']->render('home.page.html.twig', ['product'=>$shoploApi->getProducts(), 'uppSells' => $upSells, 'shop'=>$shop]);
 
