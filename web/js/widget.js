@@ -18,7 +18,7 @@ $(function () {
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
 
 	        var form = $('form[method="post"]').first();
-	        $(form).find('button[type="submit"]').attr('id', 'addToCart');
+	        $(form).find('[type="submit"]').attr('id', 'addToCart');
 
             $('body').delegate('#addToCart','click', function () {
 
