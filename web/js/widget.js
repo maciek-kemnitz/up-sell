@@ -18,11 +18,12 @@ $(function () {
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
 
 	        var form = $('form[method="post"]').first();
+//	        change to data-attribute
 	        $(form).find('[type="submit"]').attr('id', 'addToCart');
 
             $('body').delegate('#addToCart','click', function () {
 
-                var productId = $(this).parents('form').find('input[name="id"]').val();
+                var productId = $(this).parents('form').find('[name="id"]').val();
                 var productData = {
                     'id': productId
                 };
