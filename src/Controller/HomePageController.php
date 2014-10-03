@@ -33,7 +33,7 @@ class HomePageController implements ControllerProviderInterface
 			$snippetContent = '
 				<script type="text/javascript">
 					userData = {
-					"productId": {$product->id},
+					"productId": {$product->variants[0]->id},
 					"shopDomain": "{$shop->permanent_domain}",
 					"cartValue": {$cart->total_price},
 					"productPrice": {$product->price}
