@@ -15,7 +15,16 @@ $(function () {
             }
 
             var modalLeftMargin = (screenWidth - modalWidth) / 2 - paddingLeft;
+
             $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;}</style>").appendTo("head");
+
+	        $('body').delegate('.right-arrow', 'click', function(){
+		        listSwitcher($('.multi-item'), this, '.left-arrow');
+	        });
+
+	        $('body').delegate('.left-arrow', 'click', function(){
+		        listSwitcher($('.multi-item').get().reverse(), this, '.right-arrow');
+	        });
 
 	        var form = $('form[method="post"]').first();
 //	        change to data-attribute
@@ -91,4 +100,39 @@ $(function () {
         }
 
     }, 'json');
+
+	function listSwitcher(items, currentPointer, oppositePointer)
+	{
+		var counter = 1;
+		var doSwitch = false;
+
+		$(items).each(function(){
+
+			if ($(this).is(":visible"))
+			{
+				$(this).css('display','none');
+				doSwitch = true;
+			}
+			else
+			{
+				if (doSwitch && counter <= 3)
+				{
+					$(this).show();
+					counter++;
+				}
+				else if (doSwitch)
+				{
+					counter++;
+				}
+			}
+		});
+
+		if (counter <= 4)
+		{
+			$(currentPointer).css('display','none');
+
+		}
+
+		$(oppositePointer).show();
+	};
 });
