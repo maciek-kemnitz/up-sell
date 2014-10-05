@@ -135,5 +135,4 @@ function listSwitcher(items, currentPointer, oppositePointer)
 	}
 
 	$(oppositePointer).show();
-	event.stopPropagation();
 }
