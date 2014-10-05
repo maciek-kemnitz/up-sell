@@ -100,39 +100,40 @@ $(function () {
         }
 
     }, 'json');
-
-	function listSwitcher(items, currentPointer, oppositePointer)
-	{
-		var counter = 1;
-		var doSwitch = false;
-
-		$(items).each(function(){
-
-			if ($(this).is(":visible"))
-			{
-				$(this).css('display','none');
-				doSwitch = true;
-			}
-			else
-			{
-				if (doSwitch && counter <= 3)
-				{
-					$(this).show();
-					counter++;
-				}
-				else if (doSwitch)
-				{
-					counter++;
-				}
-			}
-		});
-
-		if (counter <= 4)
-		{
-			$(currentPointer).css('display','none');
-
-		}
-
-		$(oppositePointer).show();
-	};
 });
+
+function listSwitcher(items, currentPointer, oppositePointer)
+{
+	var counter = 1;
+	var doSwitch = false;
+
+	$(items).each(function(){
+
+		if ($(this).is(":visible"))
+		{
+			$(this).css('display','none');
+			doSwitch = true;
+		}
+		else
+		{
+			if (doSwitch && counter <= 3)
+			{
+				$(this).show();
+				counter++;
+			}
+			else if (doSwitch)
+			{
+				counter++;
+			}
+		}
+	});
+
+	if (counter <= 4)
+	{
+		$(currentPointer).css('display','none');
+
+	}
+
+	$(oppositePointer).show();
+	event.stopPropagation();
+}
