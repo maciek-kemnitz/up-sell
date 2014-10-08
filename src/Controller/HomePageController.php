@@ -54,7 +54,7 @@ class HomePageController implements ControllerProviderInterface
 				<script src="http://up-sell.pl/js/widget-cart.js"></script>'
 			];
 
-			$snippetInclude = [PHP_EOL. '{snippet file="up-sell"}', PHP_EOL. '{snippet file="up-sell"}'];
+			$snippetInclude = [PHP_EOL. '{snippet file="up-sell"}', PHP_EOL. '{snippet file="up-sell-cart"}'];
 
 			/** @var ShoploObject $shoploApi */
 			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
