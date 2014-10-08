@@ -1,6 +1,7 @@
 $(function () {
 
     var uppSellContainer = '<div id="up-sell-container"></div>';
+	var allowSubmit = false;
 
     $.post("http://up-sell.pl/ajax/up-sell/cart", userData, function (ajaxResult) {
         if (ajaxResult['status'] == 'ok') {
@@ -31,6 +32,11 @@ $(function () {
 	        $(form).find('[type="submit"]').attr('id', 'addToCart');
 
             $('body').delegate('#addToCart','click', function () {
+
+	            if (allowSubmit)
+	            {
+		            return true;
+	            }
 
                 $('#up-sell-modal').addClass('modalMargin');
                 $('#up-sell-modal').css('display', 'block');
@@ -69,7 +75,7 @@ $(function () {
             $('body').delegate('[data-dismiss="modal"]', 'click', function () {
 
 	            var form = $('form[method="post"]').first();
-	            $(form).submit();
+	            $(form).find('[type="submit"]').click();
             });
             $('#up-sell-container').html(ajaxResult['html']);
         }
