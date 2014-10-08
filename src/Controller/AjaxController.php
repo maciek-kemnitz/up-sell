@@ -109,7 +109,7 @@ class AjaxController implements ControllerProviderInterface
 
 		$controllers->post('/up-sell/cart', function (Request $request) use ($app)
 		{
-			$productId 				= $request->request->get('variants');
+			$variants 				= $request->request->get('variants');
 			$shopDomain				= $request->request->get('shopDomain');
 			$cartValue 				= $request->request->get('cartValue');
 
@@ -118,7 +118,7 @@ class AjaxController implements ControllerProviderInterface
 				->filterByStatus(UpSellPeer::STATUS_ACTIVE)
 				->filterByPlacement(UpSellPeer::PLACEMENT_CART)
 					->useProductInCartQuery()
-						->filterByProductId($productId)
+						->filterByProductId($variants)
 					->endUse()
 				->orderBy(UpSellPeer::ORDER)
 				->distinct()
@@ -164,9 +164,9 @@ class AjaxController implements ControllerProviderInterface
 
 			/** @var ProductInCart $productInCart */
 			$productInCart = ProductInCartQuery::create()
-											   ->filterByProductId($productId)
-											   ->filterByUpSell($upSellByRelation)
-											   ->findOne();
+				->filterByProductId($variants)
+				->filterByUpSell($upSellByRelation)
+				->findOne();
 
 			if (null !== $productInCart && $productInCart->getVariantSelected())
 			{
@@ -177,7 +177,7 @@ class AjaxController implements ControllerProviderInterface
 
 			$data = [
 				"status" => "ok",
-				"html"	=> $app['twig']->render('cart.page.html.twig', $params),
+				"html"	=> $app['twig']->render('widget.page.html.twig', $params),
 
 			];
 
