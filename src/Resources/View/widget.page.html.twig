@@ -456,7 +456,9 @@
     </div>
     <div class="up-sell-bottom clearfix">
         <div class="pull-right">
-            <span class="muted to-basket" data-dismiss="modal">Przejdź od razu do koszyka »</span>
+	        {% if placement == 'product'%}
+                <span class="muted to-basket" data-dismiss="modal">Przejdź od razu do koszyka »</span>
+	        {% endif %}
             <button class="btn-up-gray" data-dismiss="modal">Nie dziękuję!</button>
         </div>
     </div>
