@@ -107,6 +107,84 @@ class AjaxController implements ControllerProviderInterface
 
 		});
 
+		$controllers->post('/up-sell/cart', function (Request $request) use ($app)
+		{
+			$productId 				= $request->request->get('variants');
+			$shopDomain				= $request->request->get('shopDomain');
+			$cartValue 				= $request->request->get('cartValue');
+
+			$uppSells = UpSellQuery::create()
+				->filterByShopDomain($shopDomain)
+				->filterByStatus(UpSellPeer::STATUS_ACTIVE)
+				->filterByPlacement(UpSellPeer::PLACEMENT_CART)
+					->useProductInCartQuery()
+						->filterByProductId($productId)
+					->endUse()
+				->orderBy(UpSellPeer::ORDER)
+				->distinct()
+				->find();
+
+			if (!$uppSells->count())
+			{
+				$uppSells = UpSellQuery::create()
+					->priceInRange($cartValue)
+					->filterByUsePriceRange(UpSellPeer::USE_PRICE_RANGE_1)
+					->filterByStatus(UpSellPeer::STATUS_ACTIVE)
+					->filterByPlacement(UpSellPeer::PLACEMENT_CART)
+					->filterByShopDomain($shopDomain)
+					->orderBy(UpSellPeer::ORDER, \Criteria::ASC)
+					->find();
+
+
+				if (!$uppSells->count())
+				{
+					return new JsonResponse(['status' => 'no up-sell']);
+				}
+			}
+
+
+			/** @var UpSell $upSellByRelation */
+			$upSellByRelation = $uppSells->getFirst();
+			$rProducts = $upSellByRelation->getRelatedProducts();
+
+			/** @var Product[] $upSellProducts */
+			$upSellProducts = $upSellByRelation->getProducts();
+			$variants = [];
+			foreach ($upSellProducts as $product)
+			{
+				$variants[$product->getId()] = json_decode($product->getVariants(), true);
+			}
+
+			$params = [
+				'upSell' => $upSellByRelation,
+				'products' => $upSellByRelation->getProducts(),
+				'variants' => $variants,
+				'rProducts' => $rProducts
+			];
+
+			/** @var ProductInCart $productInCart */
+			$productInCart = ProductInCartQuery::create()
+											   ->filterByProductId($productId)
+											   ->filterByUpSell($upSellByRelation)
+											   ->findOne();
+
+			if (null !== $productInCart && $productInCart->getVariantSelected())
+			{
+				$params['variantSelected'] = $productInCart->getVariantSelected();
+			}
+
+
+
+			$data = [
+				"status" => "ok",
+				"html"	=> $app['twig']->render('cart.page.html.twig', $params),
+
+			];
+
+			return new JsonResponse($data);
+
+		});
+
 		$controllers->post('/autocomplete', function (Request $request) use ($app)
 		{
 			$method = $request->query->get('method');

@@ -36,13 +36,13 @@ abstract class BaseUpSellPeer
     const TM_CLASS = 'src\\Model\\map\\UpSellTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 13;
+    const NUM_COLUMNS = 14;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 13;
+    const NUM_HYDRATE_COLUMNS = 14;
 
     /** the column name for the id field */
     const ID = 'up_sell.id';
@@ -83,6 +83,9 @@ abstract class BaseUpSellPeer
     /** the column name for the discount_amount field */
     const DISCOUNT_AMOUNT = 'up_sell.discount_amount';
 
+    /** the column name for the placement field */
+    const PLACEMENT = 'up_sell.placement';
+
     /** The enumerated values for the use_price_range field */
     const USE_PRICE_RANGE_0 = '0';
     const USE_PRICE_RANGE_1 = '1';
@@ -95,6 +98,10 @@ abstract class BaseUpSellPeer
     const DISCOUNT_TYPE_NONE = 'none';
     const DISCOUNT_TYPE_PERCENT = 'percent';
     const DISCOUNT_TYPE_AMOUNT = 'amount';
+
+    /** The enumerated values for the placement field */
+    const PLACEMENT_PRODUCT = 'product';
+    const PLACEMENT_CART = 'cart';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -115,12 +122,12 @@ abstract class BaseUpSellPeer
      * e.g. UpSellPeer::$fieldNames[UpSellPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'ShopDomain', 'Name', 'Headline', 'Description', 'PriceFrom', 'PriceTo', 'Order', 'UsePriceRange', 'CreatedAt', 'Status', 'DiscountType', 'DiscountAmount', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shopDomain', 'name', 'headline', 'description', 'priceFrom', 'priceTo', 'order', 'usePriceRange', 'createdAt', 'status', 'discountType', 'discountAmount', ),
-        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID, UpSellPeer::SHOP_DOMAIN, UpSellPeer::NAME, UpSellPeer::HEADLINE, UpSellPeer::DESCRIPTION, UpSellPeer::PRICE_FROM, UpSellPeer::PRICE_TO, UpSellPeer::ORDER, UpSellPeer::USE_PRICE_RANGE, UpSellPeer::CREATED_AT, UpSellPeer::STATUS, UpSellPeer::DISCOUNT_TYPE, UpSellPeer::DISCOUNT_AMOUNT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOP_DOMAIN', 'NAME', 'HEADLINE', 'DESCRIPTION', 'PRICE_FROM', 'PRICE_TO', 'ORDER', 'USE_PRICE_RANGE', 'CREATED_AT', 'STATUS', 'DISCOUNT_TYPE', 'DISCOUNT_AMOUNT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'shop_domain', 'name', 'headline', 'description', 'price_from', 'price_to', 'order', 'use_price_range', 'created_at', 'status', 'discount_type', 'discount_amount', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'ShopDomain', 'Name', 'Headline', 'Description', 'PriceFrom', 'PriceTo', 'Order', 'UsePriceRange', 'CreatedAt', 'Status', 'DiscountType', 'DiscountAmount', 'Placement', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shopDomain', 'name', 'headline', 'description', 'priceFrom', 'priceTo', 'order', 'usePriceRange', 'createdAt', 'status', 'discountType', 'discountAmount', 'placement', ),
+        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID, UpSellPeer::SHOP_DOMAIN, UpSellPeer::NAME, UpSellPeer::HEADLINE, UpSellPeer::DESCRIPTION, UpSellPeer::PRICE_FROM, UpSellPeer::PRICE_TO, UpSellPeer::ORDER, UpSellPeer::USE_PRICE_RANGE, UpSellPeer::CREATED_AT, UpSellPeer::STATUS, UpSellPeer::DISCOUNT_TYPE, UpSellPeer::DISCOUNT_AMOUNT, UpSellPeer::PLACEMENT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOP_DOMAIN', 'NAME', 'HEADLINE', 'DESCRIPTION', 'PRICE_FROM', 'PRICE_TO', 'ORDER', 'USE_PRICE_RANGE', 'CREATED_AT', 'STATUS', 'DISCOUNT_TYPE', 'DISCOUNT_AMOUNT', 'PLACEMENT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'shop_domain', 'name', 'headline', 'description', 'price_from', 'price_to', 'order', 'use_price_range', 'created_at', 'status', 'discount_type', 'discount_amount', 'placement', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -130,12 +137,12 @@ abstract class BaseUpSellPeer
      * e.g. UpSellPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShopDomain' => 1, 'Name' => 2, 'Headline' => 3, 'Description' => 4, 'PriceFrom' => 5, 'PriceTo' => 6, 'Order' => 7, 'UsePriceRange' => 8, 'CreatedAt' => 9, 'Status' => 10, 'DiscountType' => 11, 'DiscountAmount' => 12, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shopDomain' => 1, 'name' => 2, 'headline' => 3, 'description' => 4, 'priceFrom' => 5, 'priceTo' => 6, 'order' => 7, 'usePriceRange' => 8, 'createdAt' => 9, 'status' => 10, 'discountType' => 11, 'discountAmount' => 12, ),
-        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID => 0, UpSellPeer::SHOP_DOMAIN => 1, UpSellPeer::NAME => 2, UpSellPeer::HEADLINE => 3, UpSellPeer::DESCRIPTION => 4, UpSellPeer::PRICE_FROM => 5, UpSellPeer::PRICE_TO => 6, UpSellPeer::ORDER => 7, UpSellPeer::USE_PRICE_RANGE => 8, UpSellPeer::CREATED_AT => 9, UpSellPeer::STATUS => 10, UpSellPeer::DISCOUNT_TYPE => 11, UpSellPeer::DISCOUNT_AMOUNT => 12, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOP_DOMAIN' => 1, 'NAME' => 2, 'HEADLINE' => 3, 'DESCRIPTION' => 4, 'PRICE_FROM' => 5, 'PRICE_TO' => 6, 'ORDER' => 7, 'USE_PRICE_RANGE' => 8, 'CREATED_AT' => 9, 'STATUS' => 10, 'DISCOUNT_TYPE' => 11, 'DISCOUNT_AMOUNT' => 12, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shop_domain' => 1, 'name' => 2, 'headline' => 3, 'description' => 4, 'price_from' => 5, 'price_to' => 6, 'order' => 7, 'use_price_range' => 8, 'created_at' => 9, 'status' => 10, 'discount_type' => 11, 'discount_amount' => 12, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShopDomain' => 1, 'Name' => 2, 'Headline' => 3, 'Description' => 4, 'PriceFrom' => 5, 'PriceTo' => 6, 'Order' => 7, 'UsePriceRange' => 8, 'CreatedAt' => 9, 'Status' => 10, 'DiscountType' => 11, 'DiscountAmount' => 12, 'Placement' => 13, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shopDomain' => 1, 'name' => 2, 'headline' => 3, 'description' => 4, 'priceFrom' => 5, 'priceTo' => 6, 'order' => 7, 'usePriceRange' => 8, 'createdAt' => 9, 'status' => 10, 'discountType' => 11, 'discountAmount' => 12, 'placement' => 13, ),
+        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID => 0, UpSellPeer::SHOP_DOMAIN => 1, UpSellPeer::NAME => 2, UpSellPeer::HEADLINE => 3, UpSellPeer::DESCRIPTION => 4, UpSellPeer::PRICE_FROM => 5, UpSellPeer::PRICE_TO => 6, UpSellPeer::ORDER => 7, UpSellPeer::USE_PRICE_RANGE => 8, UpSellPeer::CREATED_AT => 9, UpSellPeer::STATUS => 10, UpSellPeer::DISCOUNT_TYPE => 11, UpSellPeer::DISCOUNT_AMOUNT => 12, UpSellPeer::PLACEMENT => 13, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOP_DOMAIN' => 1, 'NAME' => 2, 'HEADLINE' => 3, 'DESCRIPTION' => 4, 'PRICE_FROM' => 5, 'PRICE_TO' => 6, 'ORDER' => 7, 'USE_PRICE_RANGE' => 8, 'CREATED_AT' => 9, 'STATUS' => 10, 'DISCOUNT_TYPE' => 11, 'DISCOUNT_AMOUNT' => 12, 'PLACEMENT' => 13, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shop_domain' => 1, 'name' => 2, 'headline' => 3, 'description' => 4, 'price_from' => 5, 'price_to' => 6, 'order' => 7, 'use_price_range' => 8, 'created_at' => 9, 'status' => 10, 'discount_type' => 11, 'discount_amount' => 12, 'placement' => 13, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /** The enumerated values for this table */
@@ -152,6 +159,10 @@ abstract class BaseUpSellPeer
             UpSellPeer::DISCOUNT_TYPE_NONE,
             UpSellPeer::DISCOUNT_TYPE_PERCENT,
             UpSellPeer::DISCOUNT_TYPE_AMOUNT,
+        ),
+        UpSellPeer::PLACEMENT => array(
+            UpSellPeer::PLACEMENT_PRODUCT,
+            UpSellPeer::PLACEMENT_CART,
         ),
     );
 
@@ -284,6 +295,7 @@ abstract class BaseUpSellPeer
             $criteria->addSelectColumn(UpSellPeer::STATUS);
             $criteria->addSelectColumn(UpSellPeer::DISCOUNT_TYPE);
             $criteria->addSelectColumn(UpSellPeer::DISCOUNT_AMOUNT);
+            $criteria->addSelectColumn(UpSellPeer::PLACEMENT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.shop_domain');
@@ -298,6 +310,7 @@ abstract class BaseUpSellPeer
             $criteria->addSelectColumn($alias . '.status');
             $criteria->addSelectColumn($alias . '.discount_type');
             $criteria->addSelectColumn($alias . '.discount_amount');
+            $criteria->addSelectColumn($alias . '.placement');
         }
     }
 

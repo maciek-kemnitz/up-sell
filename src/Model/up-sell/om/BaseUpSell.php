@@ -133,6 +133,13 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     protected $discount_amount;
 
     /**
+     * The value for the placement field.
+     * Note: this column has a database default value of: 'product'
+     * @var        string
+     */
+    protected $placement;
+
+    /**
      * @var        PropelObjectCollection|ProductInCart[] Collection to store aggregation of ProductInCart objects.
      */
     protected $collProductInCarts;
@@ -187,6 +194,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         $this->use_price_range = '1';
         $this->status = 'active';
         $this->discount_type = 'none';
+        $this->placement = 'product';
     }
 
     /**
@@ -369,6 +377,17 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     {
 
         return $this->discount_amount;
+    }
+
+    /**
+     * Get the [placement] column value.
+     *
+     * @return string
+     */
+    public function getPlacement()
+    {
+
+        return $this->placement;
     }
 
     /**
@@ -647,6 +666,27 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     } // setDiscountAmount()
 
     /**
+     * Set the value of [placement] column.
+     *
+     * @param  string $v new value
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function setPlacement($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->placement !== $v) {
+            $this->placement = $v;
+            $this->modifiedColumns[] = UpSellPeer::PLACEMENT;
+        }
+
+
+        return $this;
+    } // setPlacement()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -665,6 +705,10 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             }
 
             if ($this->discount_type !== 'none') {
+                return false;
+            }
+
+            if ($this->placement !== 'product') {
                 return false;
             }
 
@@ -703,6 +747,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             $this->status = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->discount_type = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->discount_amount = ($row[$startcol + 12] !== null) ? (double) $row[$startcol + 12] : null;
+            $this->placement = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -712,7 +757,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 13; // 13 = UpSellPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = UpSellPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating UpSell object", $e);
@@ -1001,6 +1046,9 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         if ($this->isColumnModified(UpSellPeer::DISCOUNT_AMOUNT)) {
             $modifiedColumns[':p' . $index++]  = '`discount_amount`';
         }
+        if ($this->isColumnModified(UpSellPeer::PLACEMENT)) {
+            $modifiedColumns[':p' . $index++]  = '`placement`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `up_sell` (%s) VALUES (%s)',
@@ -1050,6 +1098,9 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                         break;
                     case '`discount_amount`':
                         $stmt->bindValue($identifier, $this->discount_amount, PDO::PARAM_STR);
+                        break;
+                    case '`placement`':
+                        $stmt->bindValue($identifier, $this->placement, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1240,6 +1291,9 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             case 12:
                 return $this->getDiscountAmount();
                 break;
+            case 13:
+                return $this->getPlacement();
+                break;
             default:
                 return null;
                 break;
@@ -1282,6 +1336,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             $keys[10] => $this->getStatus(),
             $keys[11] => $this->getDiscountType(),
             $keys[12] => $this->getDiscountAmount(),
+            $keys[13] => $this->getPlacement(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1368,6 +1423,9 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             case 12:
                 $this->setDiscountAmount($value);
                 break;
+            case 13:
+                $this->setPlacement($value);
+                break;
         } // switch()
     }
 
@@ -1405,6 +1463,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         if (array_key_exists($keys[10], $arr)) $this->setStatus($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setDiscountType($arr[$keys[11]]);
         if (array_key_exists($keys[12], $arr)) $this->setDiscountAmount($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setPlacement($arr[$keys[13]]);
     }
 
     /**
@@ -1429,6 +1488,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         if ($this->isColumnModified(UpSellPeer::STATUS)) $criteria->add(UpSellPeer::STATUS, $this->status);
         if ($this->isColumnModified(UpSellPeer::DISCOUNT_TYPE)) $criteria->add(UpSellPeer::DISCOUNT_TYPE, $this->discount_type);
         if ($this->isColumnModified(UpSellPeer::DISCOUNT_AMOUNT)) $criteria->add(UpSellPeer::DISCOUNT_AMOUNT, $this->discount_amount);
+        if ($this->isColumnModified(UpSellPeer::PLACEMENT)) $criteria->add(UpSellPeer::PLACEMENT, $this->placement);
 
         return $criteria;
     }
@@ -1504,6 +1564,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         $copyObj->setStatus($this->getStatus());
         $copyObj->setDiscountType($this->getDiscountType());
         $copyObj->setDiscountAmount($this->getDiscountAmount());
+        $copyObj->setPlacement($this->getPlacement());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2061,6 +2122,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         $this->status = null;
         $this->discount_type = null;
         $this->discount_amount = null;
+        $this->placement = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

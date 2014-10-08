@@ -97,6 +97,7 @@
     <column name="status" phpName="Status" type="CHAR" sqlType="enum('active','disabled')" required="true" defaultValue="active"/>
     <column name="discount_type" phpName="DiscountType" type="CHAR" sqlType="enum('none','percent','amount')" required="true" defaultValue="none"/>
     <column name="discount_amount" phpName="DiscountAmount" type="FLOAT" required="false"/>
+    <column name="placement" phpName="Placement" type="CHAR" sqlType="enum('product','cart')" required="true" defaultValue="product"/>
     <index name="shop_id">
       <index-column name="shop_domain"/>
     </index>

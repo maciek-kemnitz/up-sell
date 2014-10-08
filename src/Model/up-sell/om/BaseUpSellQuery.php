@@ -36,6 +36,7 @@ use src\Model\UpSellQuery;
  * @method UpSellQuery orderByStatus($order = Criteria::ASC) Order by the status column
  * @method UpSellQuery orderByDiscountType($order = Criteria::ASC) Order by the discount_type column
  * @method UpSellQuery orderByDiscountAmount($order = Criteria::ASC) Order by the discount_amount column
+ * @method UpSellQuery orderByPlacement($order = Criteria::ASC) Order by the placement column
  *
  * @method UpSellQuery groupById() Group by the id column
  * @method UpSellQuery groupByShopDomain() Group by the shop_domain column
@@ -50,6 +51,7 @@ use src\Model\UpSellQuery;
  * @method UpSellQuery groupByStatus() Group by the status column
  * @method UpSellQuery groupByDiscountType() Group by the discount_type column
  * @method UpSellQuery groupByDiscountAmount() Group by the discount_amount column
+ * @method UpSellQuery groupByPlacement() Group by the placement column
  *
  * @method UpSellQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method UpSellQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -78,6 +80,7 @@ use src\Model\UpSellQuery;
  * @method UpSell findOneByStatus(string $status) Return the first UpSell filtered by the status column
  * @method UpSell findOneByDiscountType(string $discount_type) Return the first UpSell filtered by the discount_type column
  * @method UpSell findOneByDiscountAmount(double $discount_amount) Return the first UpSell filtered by the discount_amount column
+ * @method UpSell findOneByPlacement(string $placement) Return the first UpSell filtered by the placement column
  *
  * @method array findById(int $id) Return UpSell objects filtered by the id column
  * @method array findByShopDomain(string $shop_domain) Return UpSell objects filtered by the shop_domain column
@@ -92,6 +95,7 @@ use src\Model\UpSellQuery;
  * @method array findByStatus(string $status) Return UpSell objects filtered by the status column
  * @method array findByDiscountType(string $discount_type) Return UpSell objects filtered by the discount_type column
  * @method array findByDiscountAmount(double $discount_amount) Return UpSell objects filtered by the discount_amount column
+ * @method array findByPlacement(string $placement) Return UpSell objects filtered by the placement column
  *
  * @package    propel.generator.up-sell.om
  */
@@ -199,7 +203,7 @@ abstract class BaseUpSellQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `shop_domain`, `name`, `headline`, `description`, `price_from`, `price_to`, `order`, `use_price_range`, `created_at`, `status`, `discount_type`, `discount_amount` FROM `up_sell` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `shop_domain`, `name`, `headline`, `description`, `price_from`, `price_to`, `order`, `use_price_range`, `created_at`, `status`, `discount_type`, `discount_amount`, `placement` FROM `up_sell` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -742,6 +746,35 @@ abstract class BaseUpSellQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UpSellPeer::DISCOUNT_AMOUNT, $discountAmount, $comparison);
+    }
+
+    /**
+     * Filter the query on the placement column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPlacement('fooValue');   // WHERE placement = 'fooValue'
+     * $query->filterByPlacement('%fooValue%'); // WHERE placement LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $placement The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return UpSellQuery The current query, for fluid interface
+     */
+    public function filterByPlacement($placement = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($placement)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $placement)) {
+                $placement = str_replace('*', '%', $placement);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(UpSellPeer::PLACEMENT, $placement, $comparison);
     }
 
     /**

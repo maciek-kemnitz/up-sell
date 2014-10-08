@@ -68,6 +68,11 @@ class UpSellTableMap extends TableMap
   2 => 'amount',
 ));
         $this->addColumn('discount_amount', 'DiscountAmount', 'FLOAT', false, null, null);
+        $this->addColumn('placement', 'Placement', 'CHAR', true, null, 'product');
+        $this->getColumn('placement', false)->setValueSet(array (
+  0 => 'product',
+  1 => 'cart',
+));
         // validators
     } // initialize()
 

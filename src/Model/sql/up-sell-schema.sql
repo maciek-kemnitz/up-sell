@@ -120,6 +120,7 @@ CREATE TABLE `up_sell`
     `status` enum('active','disabled') DEFAULT 'active' NOT NULL,
     `discount_type` enum('none','percent','amount') DEFAULT 'none' NOT NULL,
     `discount_amount` FLOAT,
+    `placement` enum('product','cart') DEFAULT 'product' NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `shop_id` (`shop_domain`)
 ) ENGINE=InnoDB;
