@@ -81,7 +81,8 @@ class AjaxController implements ControllerProviderInterface
 				'upSell' => $upSellByRelation,
 				'products' => $upSellByRelation->getProducts(),
 				'variants' => $variants,
-				'rProducts' => $rProducts
+				'rProducts' => $rProducts,
+				'placement' => "product"
 			];
 
 			/** @var ProductInCart $productInCart */
@@ -94,8 +95,6 @@ class AjaxController implements ControllerProviderInterface
 			{
 				$params['variantSelected'] = $productInCart->getVariantSelected();
 			}
-
-
 
 			$data = [
 				"status" => "ok",
@@ -159,7 +158,8 @@ class AjaxController implements ControllerProviderInterface
 				'upSell' => $upSellByRelation,
 				'products' => $upSellByRelation->getProducts(),
 				'variants' => $variants,
-				'rProducts' => $rProducts
+				'rProducts' => $rProducts,
+				'placement' => "cart"
 			];
 
 			/** @var ProductInCart $productInCart */
@@ -172,6 +172,7 @@ class AjaxController implements ControllerProviderInterface
 			{
 				$params['variantSelected'] = $productInCart->getVariantSelected();
 			}
+
 
 			$data = [
 				"status" => "ok",
