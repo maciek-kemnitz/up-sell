@@ -42,7 +42,6 @@ $(function () {
             $('body').delegate('#variant-select', 'change', function (){
                 var newPrice = $(this).find(":selected").data('price');
                 var id = '#'+$(this).data('product-id') + "-price";
-                console.log(id);
                 $(id).html(newPrice + ' zł');
             });
 
@@ -69,15 +68,8 @@ $(function () {
 
             $('body').delegate('[data-dismiss="modal"]', 'click', function () {
 
-                $('#up-sell-modal').removeClass('in');
-                $('#up-sell-modal').css('display', 'none');
-                if ($(this).hasClass("to-basket")) {
-                    window.location.href = "http://" + window.location.hostname + "/koszyk";
-                }
-                else
-                {
-                    location.reload();
-                }
+	            var form = $('form[method="post"]').first();
+	            $(form).submit();
             });
             $('#up-sell-container').html(ajaxResult['html']);
         }
