@@ -28,10 +28,10 @@ class HomePageController implements ControllerProviderInterface
 
 		$controllers->get('/', function (Request $request) use ($app)
 		{
-			$snippetName = 'snippets/up-sell.tpl';
-			$productTemplate = 'templates/product.tpl';
-			$snippetContent = '
-				<script type="text/javascript">
+			$snippetName = ['snippets/up-sell.tpl', 'snippets/up-sell-cart.tpl'];
+			$productTemplate = ['templates/product.tpl', 'templates/cart.tpl'];
+			$snippetContent = [
+				'<script type="text/javascript">
 					userData = {
 					"productId": {$product->variants[0]->id},
 					"shopDomain": "{$shop->permanent_domain}",
@@ -39,8 +39,22 @@ class HomePageController implements ControllerProviderInterface
 					"productPrice": {$product->price}
 					};
 				</script>
-				<script src="http://up-sell.pl/js/widget.js"></script>';
-			$snippetInclude = PHP_EOL. '{snippet file="up-sell"}';
+				<script src="http://up-sell.pl/js/widget.js"></script>',
+				'<script type="text/javascript">
+					var userData = {
+						"shopDomain": "{$shop->permanent_domain}",
+						"cartValue": {$cart->total_price},
+						"variants": [
+							{foreach from=$cart->items name=loop item="item"}
+								"{$item->variant->id}"{if not $smarty.foreach.loop.last},{/if}
+							{/foreach}
+						]
+					};
+				</script>
+				<script src="http://up-sell.pl/js/widget-cart.js"></script>'
+			];
+
+			$snippetInclude = [PHP_EOL. '{snippet file="up-sell"}', PHP_EOL. '{snippet file="up-sell"}'];
 
 			/** @var ShoploObject $shoploApi */
 			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
@@ -56,25 +70,29 @@ class HomePageController implements ControllerProviderInterface
 			foreach ($themes as $theme)
 			{
 				$themeId 		= $theme['id'];
-				$snippet 		= $shoploApi->getAssetByThemeIdAndName($themeId, $snippetName);
-				$template 		= $shoploApi->getAssetByThemeIdAndName($themeId, $productTemplate);
-				$currentContent = $template['content'];
 
-				if (null === $snippet)
+				for ($i = 0; $i < 2; $i++)
 				{
-					$shoploApi->createAsset($themeId, $snippetName, $snippetContent);
-				}
+					$snippet 		= $shoploApi->getAssetByThemeIdAndName($themeId, $snippetName[$i]);
+					$template 		= $shoploApi->getAssetByThemeIdAndName($themeId, $productTemplate[$i]);
+					$currentContent = $template['content'];
 
-				if (strpos($currentContent, trim($snippetInclude)) === false)
-				{
-					$currentContent .= $snippetInclude;
-					$shoploApi->createAsset(
-						$themeId,
-						$template['key'],
-						$currentContent,
-						$template['content_type'],
-						$template['public_url']
-					);
+					if (null === $snippet)
+					{
+						$shoploApi->createAsset($themeId, $snippetName[$i], $snippetContent[$i]);
+					}
+
+					if (strpos($currentContent, trim($snippetInclude[$i])) === false)
+					{
+						$currentContent .= $snippetInclude[$i];
+						$shoploApi->createAsset(
+								  $themeId,
+									  $template['key'],
+									  $currentContent,
+									  $template['content_type'],
+									  $template['public_url']
+						);
+					}
 				}
 			}
 

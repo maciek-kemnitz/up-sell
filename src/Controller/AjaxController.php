@@ -173,8 +173,6 @@ class AjaxController implements ControllerProviderInterface
 				$params['variantSelected'] = $productInCart->getVariantSelected();
 			}
 
-
-
 			$data = [
 				"status" => "ok",
 				"html"	=> $app['twig']->render('widget.page.html.twig', $params),
