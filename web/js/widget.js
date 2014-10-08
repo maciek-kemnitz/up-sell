@@ -16,7 +16,7 @@ $(function () {
 
             var modalLeftMargin = (screenWidth - modalWidth) / 2 - paddingLeft;
 
-            $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;} left: 0px;</style>").appendTo("head");
+            $("<style type='text/css'> .modalMargin{ margin-left:" + modalLeftMargin + "px;left: 0px;} </style>").appendTo("head");
 
 	        $('body').delegate('.right-arrow', 'click', function(){
 		        listSwitcher($('.multi-item'), this, '.left-arrow');
