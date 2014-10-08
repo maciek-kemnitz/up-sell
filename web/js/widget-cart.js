@@ -74,6 +74,7 @@ $(function () {
 
             $('body').delegate('[data-dismiss="modal"]', 'click', function () {
 
+	            allowSubmit = true;
 	            var form = $('form[method="post"]').first();
 	            $(form).find('[type="submit"]').click();
             });
