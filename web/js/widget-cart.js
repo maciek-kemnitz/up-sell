@@ -63,7 +63,7 @@ $(function () {
 	            var form = $('form[method="post"]').first();
 	            $(form).append('<input type="text" name="updates['+productId+']" id="updates_'+productId+'" value="1" />');
 
-//	            allowSubmit = true;
+	            allowSubmit = true;
 //	            $(form).find('[type="submit"]').click();
 
 //                var productData = {
