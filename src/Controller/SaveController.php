@@ -33,6 +33,7 @@ class SaveController implements ControllerProviderInterface
 		$controllers->post('/', function (Request $request) use ($app)
 		{
 			$name = $request->request->get('name');
+			$placement = $request->request->get('placement');
 			$headline = $request->request->get('headline');
 			$description = $request->request->get('description');
 			$priceFrom = $request->request->get('price_from');
@@ -73,6 +74,7 @@ class SaveController implements ControllerProviderInterface
 			$upSell->setName($name);
 			$upSell->setHeadline($headline);
 			$upSell->setDescription($description);
+//			$upSell->setPlacement($placement);
 
 			if ($discountType)
 			{
