@@ -1,474 +1,478 @@
 <style>
-	#up-sell-modal .muted {
-        color: #8b9ba1;
-    }
+#up-sell-modal .muted {
+	color: #8b9ba1;
+}
 
-	#up-sell-modal .pull-right {
-        float: right;
-    }
+#up-sell-modal .pull-right {
+	float: right;
+}
 
-	#up-sell-modal .btn-up-black {
-        -moz-border-radius: 2px;
-        -moz-box-shadow: #090808 0px 0px 0px;
-        -moz-transition: all 0.5s ease;
-        -ms-transition: all 0.5s ease;
-        -o-transition: all 0.5s ease;
-        -webkit-border-radius: 5px;
-        -webkit-box-shadow: #6E7849 0 0 10px;
-        -webkit-transition: all 0.5s ease;
-        background-color: #090808;
-        border-radius: 2px;
-        border: 0px solid #090808;
-        box-shadow: #090808 0px 0px 0px;
-        color: #ffffff;
-        display: inline-block;
+#up-sell-modal .btn-up-black {
+	-moz-border-radius: 2px;
+	-moz-box-shadow: #090808 0px 0px 0px;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	-webkit-border-radius: 5px;
+	-webkit-box-shadow: #6E7849 0 0 10px;
+	-webkit-transition: all 0.5s ease;
+	background-color: #090808;
+	border-radius: 2px;
+	border: 0px solid #090808;
+	box-shadow: #090808 0px 0px 0px;
+	color: #ffffff;
+	display: inline-block;
 
-        margin: auto;
-        padding: 8px 17px;
-        text-decoration: none;
-        text-shadow: #000000 5px 5px 15px;
-        transition: all 0.5s ease;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 15px;
-    }
+	margin: auto;
+	padding: 8px 17px;
+	text-decoration: none;
+	text-shadow: #000000 5px 5px 15px;
+	transition: all 0.5s ease;
+	cursor: pointer;
+	font-weight: bold;
+	font-size: 15px;
+}
 
-	#up-sell-modal .btn-up-black:hover {
-        opacity: 0.9;
-    }
+#up-sell-modal .btn-up-black:hover {
+	opacity: 0.9;
+}
 
-	#up-sell-modal .btn-up-gray {
-        -moz-border-radius: 2px;
-        -moz-box-shadow: #090808 0px 0px 0px;
-        -moz-transition: all 0.5s ease;
-        -ms-transition: all 0.5s ease;
-        -o-transition: all 0.5s ease;
-        -webkit-border-radius: 5px;
-        -webkit-box-shadow: #6E7849 0 0 10px;
-        -webkit-transition: all 0.5s ease;
-        background-color: #999999;
-        border-radius: 2px;
-        border: 0px solid #090808;
-        box-shadow: #090808 0px 0px 0px;
-        color: #ffffff;
-        display: inline-block;
+#up-sell-modal .btn-up-gray {
+	-moz-border-radius: 2px;
+	-moz-box-shadow: #090808 0px 0px 0px;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	-webkit-border-radius: 5px;
+	-webkit-box-shadow: #6E7849 0 0 10px;
+	-webkit-transition: all 0.5s ease;
+	background-color: #999999;
+	border-radius: 2px;
+	border: 0px solid #090808;
+	box-shadow: #090808 0px 0px 0px;
+	color: #ffffff;
+	display: inline-block;
 
-        margin: auto;
-        padding: 8px 17px;
-        text-decoration: none;
-        transition: all 0.5s ease;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 15px;
-    }
+	margin: auto;
+	padding: 8px 17px;
+	text-decoration: none;
+	transition: all 0.5s ease;
+	cursor: pointer;
+	font-weight: bold;
+	font-size: 15px;
+}
 
-	#up-sell-modal .btn-up-gray:hover {
-        opacity: 0.9;
-    }
-
-
+#up-sell-modal .btn-up-gray:hover {
+	opacity: 0.9;
+}
 
 
-    #up-sell-modal {
-        font-family: helvetica;
-        letter-spacing: -1px;
-    }
-
-    /*.modal-body {*/
-        /*overflow: hidden !important;*/
-    /*}*/
-
-    /*.modal-body div {*/
-        /*overflow: hidden;*/
-    /*}*/
-
-	#up-sell-modal .up-sell-content {
-        position: relative;
-    }
-
-	#up-sell-modal .up-sell-content-inner {
-        margin-top: 63px;
-    }
-
-    /*.up-sell-heading {*/
-        /*margin-bottom: 63px;*/
-    /*}*/
-
-	#up-sell-modal .up-sell-heading h1 {
-        margin-top: 0px;
-        margin-bottom: 5px;
-
-    }
-
-	#up-sell-modal .clearfix{
-        *zoom:1;
-    }
-	#up-sell-modal .clearfix:before, .clearfix:after {
-        display:table;
-        content:"";
-        line-height:0;
-    }
-	#up-sell-modal .clearfix:after {
-        clear:both;
-    }
-
-	#up-sell-modal .up-sell-img {
-        float: left;
-        margin-left: 25px;
-    }
-
-	#up-sell-modal .up-sell-description-container {
-        margin-left: 305px;
-    }
-
-	#up-sell-modal .product-name {
-        margin-bottom: 10px;
-        margin-top: 0px;
-        padding-top: 10px;
-    }
-
-	#up-sell-modal del {
-        font-size: 18px;
-        font-weight: bold;
-        display: block;
-    }
-
-	#up-sell-modal .up-price {
-        margin: 15px 0;
-    }
-
-	#up-sell-modal .up-price h2 {
-        margin: 0;
-    }
-
-	#up-sell-modal .up-sell-bottom {
-        padding-top: 15px;
-        margin-top: 50px;
-        /*width: 100%;*/
-        border-top: solid 1px #CCCCCC;
-    }
-
-	#up-sell-modal .to-basket {
-        margin-right: 5px;
-        font-size: 12px;
-        cursor: pointer;
-    }
-
-	#up-sell-modal.up-sell-modal {
-        position: fixed;
-        top: 5%;
-        /*left: 10%;*/
-        max-width: 900px;
-        z-index: 1050;
-        /*width: 560px;*/
-        /*width: 800px;*/
-        width: 80%;
-        /*height: 80%;*/
-        /*margin-left: -280px;*/
-        /*margin-left: -335px;*/
-        background-color: #ffffff;
-        border: 1px solid #999;
-        border: 1px solid rgba(0, 0, 0, 0.3);
-        *border: 1px solid #999;
-        -webkit-border-radius: 6px;
-        -moz-border-radius: 6px;
-        border-radius: 6px;
-        outline: none;
-        -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-        -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-        -webkit-background-clip: padding-box;
-        -moz-background-clip: padding-box;
-        background-clip: padding-box;
-        padding: 20px 40px;
-    }
-
-	#up-sell-modal.up-sell-modal.fade {
-        top: -25%;
-        -webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
-        -moz-transition: opacity 0.3s linear, top 0.3s ease-out;
-        -o-transition: opacity 0.3s linear, top 0.3s ease-out;
-        transition: opacity 0.3s linear, top 0.3s ease-out;
-    }
-
-	#up-sell-modal.up-sell-modal.fade.in {
-        top: 6%;
-    }
-
-	#up-sell-modal .up-sell-modal-header {
-        padding-top: 20px;
-        /*border-bottom: 1px solid #eee;*/
-    }
 
 
-    /*.modal-header h3 {*/
-        /*margin: 0;*/
-        /*line-height: 30px;*/
-    /*}*/
+#up-sell-modal {
+	font-family: inherit;
+	/*letter-spacing: -1px;*/
+}
 
-	#up-sell-modal .up-sell-modal-body {
-        position: relative;
-        max-height: 400px;
+/*.modal-body {*/
+/*overflow: hidden !important;*/
+/*}*/
 
-        overflow-y: auto;
-    }
+/*.modal-body div {*/
+/*overflow: hidden;*/
+/*}*/
 
-	#up-sell-modal .up-sell-modal-form {
-        margin-bottom: 0;
-    }
+#up-sell-modal .up-sell-content {
+	position: relative;
+}
 
-	#up-sell-modal .up-sell-modal-footer {
-        padding: 14px 15px 15px;
-        margin-bottom: 0;
-        text-align: right;
-        background-color: #f5f5f5;
-        border-top: 1px solid #ddd;
-        -webkit-border-radius: 0 0 6px 6px;
-        -moz-border-radius: 0 0 6px 6px;
-        border-radius: 0 0 6px 6px;
-        *zoom: 1;
-        -webkit-box-shadow: inset 0 1px 0 #ffffff;
-        -moz-box-shadow: inset 0 1px 0 #ffffff;
-        box-shadow: inset 0 1px 0 #ffffff;
-    }
+#up-sell-modal .up-sell-content-inner {
+	margin-top: 63px;
+}
 
-	#up-sell-modal .up-sell-modal-footer:before,
-	#up-sell-modal .up-sell-modal-footer:after {
-        display: table;
-        line-height: 0;
-        content: "";
-    }
+/*.up-sell-heading {*/
+/*margin-bottom: 63px;*/
+/*}*/
 
-	#up-sell-modal .up-sell-modal-footer:after {
-        clear: both;
-    }
+#up-sell-modal .up-sell-heading h1 {
+	margin-top: 0px;
+	margin-bottom: 5px;
 
-	#up-sell-modal .up-sell-modal-footer .btn + .btn {
-        margin-bottom: 0;
-        margin-left: 5px;
-    }
+}
 
-	#up-sell-modal .up-sell-modal-footer .btn-group .btn + .btn {
-        margin-left: -1px;
-    }
+#up-sell-modal .clearfix{
+	*zoom:1;
+}
+#up-sell-modal .clearfix:before, .clearfix:after {
+	display:table;
+	content:"";
+	line-height:0;
+}
+#up-sell-modal .clearfix:after {
+	clear:both;
+}
 
-	#up-sell-modal .up-sell-modal-footer .btn-block + .btn-block {
-        margin-left: 0;
-    }
+#up-sell-modal .up-sell-img {
+	float: left;
+	margin-left: 25px;
+}
 
-	#up-sell-modal .up-sell-modal-backdrop {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 1040;
-        background-color: #B2B2B2;
-    }
+#up-sell-modal .up-sell-description-container {
+	margin-left: 305px;
+}
 
-	#up-sell-modal .up-sell-modal-backdrop.fade {
-        opacity: 0;
-    }
+#up-sell-modal .product-name {
+	margin-bottom: 10px;
+	margin-top: 0px;
+	padding-top: 10px;
+}
 
-	#up-sell-modal .up-sell-modal-backdrop,
-	#up-sell-modal .up-sell-modal-backdrop.fade.in {
-        opacity: 0.8;
-        filter: alpha(opacity=80);
-    }
+#up-sell-modal del {
+	font-size: 18px;
+	font-weight: bold;
+	display: block;
+}
 
-	#up-sell-modal .up-sell-multi {
-        margin: 30px auto;
-        text-align: center;
-        padding: 0;
-        margin: 30px 0 0 0;
-        /*width: 60%;*/
+#up-sell-modal .up-price {
+	margin: 15px 0;
+}
 
-    }
+#up-sell-modal .up-price h2 {
+	margin: 0;
+	font-size:20px;
+	line-height: 22px;
+}
 
-	#up-sell-modal .up-sell-multi .up-sell-description-container {
-        text-align: center;
-        margin: 10px 0 0 0;
-    }
+#up-sell-modal .up-sell-bottom {
+	padding-top: 15px;
+	margin-top: 50px;
+	/*width: 100%;*/
+	border-top: solid 1px #CCCCCC;
+}
 
-	#up-sell-modal .up-sell-multi del {
-        display: inline;
-        margin-right: 10px;
-    }
+#up-sell-modal .to-basket {
+	margin-right: 5px;
+	font-size: 12px;
+	cursor: pointer;
+}
 
-	#up-sell-modal .multi-item {
-        text-align: center;
-        display: inline-block;
-        width: 30%;
-        /*float: left;*/
-        /*margin: 0 50px;*/
-    }
+#up-sell-modal.up-sell-modal {
+	position: fixed;
+	top: 5%;
+	/*left: 10%;*/
+	max-width: 900px;
+	z-index: 1050;
+	/*width: 560px;*/
+	/*width: 800px;*/
+	width: 80%;
+	/*height: 80%;*/
+	/*margin-left: -280px;*/
+	/*margin-left: -335px;*/
+	background-color: #ffffff;
+	border: 1px solid #999;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	*border: 1px solid #999;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	outline: none;
+	-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding-box;
+	background-clip: padding-box;
+	padding: 20px 40px;
+}
 
-	#up-sell-modal .multi-item .product-name {
-        font-weight: bold;
-        font-size: 16px;
-    }
+#up-sell-modal.up-sell-modal.fade {
+	top: -25%;
+	-webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
+	-moz-transition: opacity 0.3s linear, top 0.3s ease-out;
+	-o-transition: opacity 0.3s linear, top 0.3s ease-out;
+	transition: opacity 0.3s linear, top 0.3s ease-out;
+}
 
-	#up-sell-modal .multi-item select {
-        display: block;
-        margin: 10px auto;
-    }
+#up-sell-modal.up-sell-modal.fade.in {
+	top: 6%;
+}
 
-	#up-sell-modal .up-sell-img img {
-        max-width: 240px;
-        max-height: 280px;
-    }
+#up-sell-modal .up-sell-modal-header {
+	padding-top: 20px;
+	/*border-bottom: 1px solid #eee;*/
+}
 
-	#up-sell-modal .multi-item img {
-        max-width: 180px;
-        max-height: 210px;
-    }
 
-	#up-sell-modal .right-arrow {
-        position: absolute;
-        top: 50%;
-        right: 0px;
-        cursor: pointer;
-    }
+/*.modal-header h3 {*/
+/*margin: 0;*/
+/*line-height: 30px;*/
+/*}*/
 
-	#up-sell-modal .left-arrow {
-        position: absolute;
-        top: 50%;
-        cursor: pointer;
-    }
+#up-sell-modal .up-sell-modal-body {
+	position: relative;
+	max-height: 400px;
+
+	overflow-y: auto;
+}
+
+#up-sell-modal .up-sell-modal-form {
+	margin-bottom: 0;
+}
+
+#up-sell-modal .up-sell-modal-footer {
+	padding: 14px 15px 15px;
+	margin-bottom: 0;
+	text-align: right;
+	background-color: #f5f5f5;
+	border-top: 1px solid #ddd;
+	-webkit-border-radius: 0 0 6px 6px;
+	-moz-border-radius: 0 0 6px 6px;
+	border-radius: 0 0 6px 6px;
+	*zoom: 1;
+	-webkit-box-shadow: inset 0 1px 0 #ffffff;
+	-moz-box-shadow: inset 0 1px 0 #ffffff;
+	box-shadow: inset 0 1px 0 #ffffff;
+}
+
+#up-sell-modal .up-sell-modal-footer:before,
+#up-sell-modal .up-sell-modal-footer:after {
+	display: table;
+	line-height: 0;
+	content: "";
+}
+
+#up-sell-modal .up-sell-modal-footer:after {
+	clear: both;
+}
+
+#up-sell-modal .up-sell-modal-footer .btn + .btn {
+	margin-bottom: 0;
+	margin-left: 5px;
+}
+
+#up-sell-modal .up-sell-modal-footer .btn-group .btn + .btn {
+	margin-left: -1px;
+}
+
+#up-sell-modal .up-sell-modal-footer .btn-block + .btn-block {
+	margin-left: 0;
+}
+
+#up-sell-modal .up-sell-modal-backdrop {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1040;
+	background-color: #B2B2B2;
+}
+
+#up-sell-modal .up-sell-modal-backdrop.fade {
+	opacity: 0;
+}
+
+#up-sell-modal .up-sell-modal-backdrop,
+#up-sell-modal .up-sell-modal-backdrop.fade.in {
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+
+#up-sell-modal .up-sell-multi {
+	margin: 30px auto;
+	text-align: center;
+	padding: 0;
+	margin: 30px 0 0 0;
+	/*width: 60%;*/
+
+}
+
+#up-sell-modal .up-sell-multi .up-sell-description-container {
+	text-align: center;
+	margin: 10px 0 0 0;
+}
+
+#up-sell-modal .up-sell-multi del {
+	display: inline;
+	margin-right: 10px;
+}
+
+#up-sell-modal .multi-item {
+	text-align: center;
+	display: inline-block;
+	width: 30%;
+	vertical-align: top;
+	/*float: left;*/
+	/*margin: 0 50px;*/
+}
+
+#up-sell-modal .multi-item .product-name {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+#up-sell-modal .multi-item select {
+	display: block;
+	margin: 10px auto;
+}
+#up-sell-modal .up-sell-img{
+	height:180px;
+	line-height: 180px;
+	vertical-align: middle;
+}
+#up-sell-modal .up-sell-img img {
+	max-width: 180px;
+	max-height: 180px;
+}
+
+#up-sell-modal .multi-item img {
+	max-width: 180px;
+	max-height: 210px;
+}
+
+#up-sell-modal .right-arrow {
+	position: absolute;
+	top: 50%;
+	right: 0px;
+	cursor: pointer;
+}
+
+#up-sell-modal .left-arrow {
+	position: absolute;
+	top: 50%;
+	cursor: pointer;
+}
 
 
 </style>
 <div id="up-sell-modal" class="up-sell-modal hide fade in" style="display: none;">
-    <div class="up-sell-modal-header">
-        <div class="up-sell-heading">
-            <h1>{{ upSell.getHeadline() }}</h1>
-            <small>{{ upSell.getDescription() }}</small>
-        </div>
-    </div>
-    <div class="up-sell-modal-body">
-        <div class="up-sell-content clearfix">
-            {% if products.count() > 3 %}
-                <div class="right-arrow">
-                    <img width="30px" height="80px" src="http://{{ app.request.host }}/img/rightArrow.png">
-                </div>
-                <div class="left-arrow" style="display: none;">
-                    <img width="30px" height="80px" src="http://{{ app.request.host }}/img/leftArrow.png">
-                </div>
-            {% endif %}
+	<div class="up-sell-modal-header">
+		<div class="up-sell-heading">
+			<h1>{{ upSell.getHeadline() }}</h1>
+			<small>{{ upSell.getDescription() }}</small>
+		</div>
+	</div>
+	<div class="up-sell-modal-body">
+		<div class="up-sell-content clearfix">
+			{% if products.count() > 3 %}
+				<div class="right-arrow">
+					<img width="30px" height="80px" src="http://{{ app.request.host }}/img/rightArrow.png">
+				</div>
+				<div class="left-arrow" style="display: none;">
+					<img width="30px" height="80px" src="http://{{ app.request.host }}/img/leftArrow.png">
+				</div>
+			{% endif %}
 
-            {% if rProducts.count() > 1 %}
-                <ul class="up-sell-multi">
-                {% for rProduct in rProducts %}
-	                {% set product = rProduct.getProduct() %}
-                    <li class="multi-item"{% if loop.index > 3 %} style="display: none;"{% endif %}>
-                        <div >
-                            <img  src="{{ product.getImgUrl() }}"/>
-                        </div>
-                        <div class="up-sell-description-container">
+			{% if rProducts.count() > 1 %}
+				<ul class="up-sell-multi">
+					{% for rProduct in rProducts %}
+						{% set product = rProduct.getProduct() %}
+						<li class="multi-item"{% if loop.index > 3 %} style="display: none;"{% endif %}>
+							<div >
+								<img  src="{{ product.getImgUrl() }}"/>
+							</div>
+							<div class="up-sell-description-container">
                             <span class="product-name">
                                 {{ product.getName()|length > 70 ? product.getName()|striptags|slice(0, 70) ~ '...' : product.getName()|striptags  }}
                             </span>
 
-                            {% if upSell.getSelectedVariant(product) %}
-                                <br>
-                                <span class="product-name">
+								{% if upSell.getSelectedVariant(product) %}
+									<br>
+									<span class="product-name">
                                     {{ variants[product.getId()][rProduct.getVariantSelected()].var_type}}
                                 </span>
-                                <div class="up-price">
-                                    <h2>{{ variants[product.getId()][rProduct.getVariantSelected()].price|number_format(2, '.', ',') }} zł</h2>
-                                </div>
+									<div class="up-price">
+										<h2>{{ variants[product.getId()][rProduct.getVariantSelected()].price|number_format(2, '.', ',') }} zÅ</h2>
+									</div>
 
-                                <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ rProduct.getVariantSelected() }}">Do koszyka</button>
-                            {% else %}
-                                <div class="up-price">
-                                    <h2 id="{{ product.getId() }}-price">{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
-                                </div>
+									<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ rProduct.getVariantSelected() }}">Do koszyka</button>
+								{% else %}
+									<div class="up-price">
+										<h2 id="{{ product.getId() }}-price">{{ product.getOriginalPrice|number_format(2, '.', ',') }} zÅ</h2>
+									</div>
 
-                                {% if product.getId() in variants|keys and variants[product.getId()] is not null %}
-                                    <select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
-                                        {% for key, variant in variants[product.getId()] %}
-                                            {% if loop.first %}
-                                                <option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
-                                            {% else %}
-                                                <option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                {% endif %}
-                                <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
-                            {% endif %}
-                        </div>
-                    </li>
-                {% endfor %}
-                </ul>
-            {% else %}
-	            {% for rProduct in rProducts %}
-		            {% set product = rProduct.getProduct() %}
-                <div class="up-sell-content-inner">
-                    <div class="up-sell-img">
-                        <img src="{{ product.getImgUrl() }}"/>
-                    </div>
-                    <div class="up-sell-description-container">
-                        {% set selectedVariant = rProduct.getVariantSelected() %}
-	                    {% if selectedVariant %}
-                            {% set variant = variants[product.getId()][selectedVariant] %}
-	                    {% endif %}
-                        <h2 class=" product-name">
-                            {{ product.getName()|length > 70 ? product.getName()|striptags|slice(0, 70) ~ '...' : product.getName()|striptags  }} {% if selectedVariant %}{{ variant.var_type }}{% endif %}
-                        </h2>
-                        <small class="muted">
-                            {% if product.getDescription() != null %}
-                                {{ product.getDescription()|length > 200 ? product.getDescription()|striptags|slice(0, 200) ~ '...' : product.getDescription()|striptags  }}
-                            {% endif %}
-                        </small>
-                        <div class="up-price">
-                            {% if selectedVariant %}
-                                <h2>{{ variant.price|number_format(2, '.', ',') }} zł</h2>
-                            {% else %}
-                                <h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
-                            {% endif %}
-                        </div>
+									{% if product.getId() in variants|keys and variants[product.getId()] is not null %}
+										<select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
+											{% for key, variant in variants[product.getId()] %}
+												{% if loop.first %}
+													<option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
+												{% else %}
+													<option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
+												{% endif %}
+											{% endfor %}
+										</select>
+									{% endif %}
+									<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
+								{% endif %}
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			{% else %}
+				{% for rProduct in rProducts %}
+					{% set product = rProduct.getProduct() %}
+					<div class="up-sell-content-inner">
+						<div class="up-sell-img">
+							<img src="{{ product.getImgUrl() }}"/>
+						</div>
+						<div class="up-sell-description-container">
+							{% set selectedVariant = rProduct.getVariantSelected() %}
+							{% if selectedVariant %}
+								{% set variant = variants[product.getId()][selectedVariant] %}
+							{% endif %}
+							<h2 class=" product-name">
+								{{ product.getName()|length > 70 ? product.getName()|striptags|slice(0, 70) ~ '...' : product.getName()|striptags  }} {% if selectedVariant %}{{ variant.var_type }}{% endif %}
+							</h2>
+							<small class="muted">
+								{% if product.getDescription() != null %}
+									{{ product.getDescription()|length > 200 ? product.getDescription()|striptags|slice(0, 200) ~ '...' : product.getDescription()|striptags  }}
+								{% endif %}
+							</small>
+							<div class="up-price">
+								{% if selectedVariant %}
+									<h2>{{ variant.price|number_format(2, '.', ',') }} zÅ</h2>
+								{% else %}
+									<h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zÅ</h2>
+								{% endif %}
+							</div>
 
 
-                        {% if selectedVariant %}
-                            <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ selectedVariant }}">Do koszyka</button>
-                        {% else %}
-                            <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
-                            {% if product.getId() in variants|keys and variants[product.getId()] is not null %}
-                                <select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
-                                    {% for key, variant in variants[product.getId()] %}
-                                        {% if loop.first %}
-                                            <option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
-                                        {% else %}
-                                            <option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            {% endif %}
-                        {% endif %}
+							{% if selectedVariant %}
+								<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ selectedVariant }}">Do koszyka</button>
+							{% else %}
+								<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
+								{% if product.getId() in variants|keys and variants[product.getId()] is not null %}
+									<select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
+										{% for key, variant in variants[product.getId()] %}
+											{% if loop.first %}
+												<option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
+											{% else %}
+												<option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
+											{% endif %}
+										{% endfor %}
+									</select>
+								{% endif %}
+							{% endif %}
 
-                    </div>
-                </div>
-                {% endfor %}
-            {% endif %}
-        </div>
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</div>
 
-    </div>
-    <div class="up-sell-bottom clearfix">
-        <div class="pull-right">
-	        {% if placement == "product" %}
-                <span class="muted to-basket" data-dismiss="modal">Przejdź od razu do koszyka »</span>
-	        {% endif %}
-            <button class="btn-up-gray" data-dismiss="modal">Nie dziękuję!</button>
-        </div>
-    </div>
+	</div>
+	<div class="up-sell-bottom clearfix">
+		<div class="pull-right">
+			<span class="muted to-basket" data-dismiss="modal">PrzejdÅº od razu do koszyka Â»</span>
+			<button class="btn-up-gray" data-dismiss="modal">Nie dziÄkujÄ!</button>
+		</div>
+	</div>
 </div>
 
 <script type="text/javascript">
 
-    {% if variantSelected is defined %}
-        var variantSelected = {{ variantSelected }};
-    {% endif %}
+	{% if variantSelected is defined %}
+	var variantSelected = {{ variantSelected }};
+	{% endif %}
 
 </script>
-
