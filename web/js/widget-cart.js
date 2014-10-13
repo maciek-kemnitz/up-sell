@@ -59,16 +59,21 @@ $(function () {
                 {
                     productId = $(select).find(":selected").val()
                 }
-                console.log(productId);
 
-                var productData = {
-                    'id': productId
-                };
+	            var form = $('form[method="post"]').first();
+	            $(form).append('<input type="text" name="updates['+productId+']" id="updates_'+productId+'" value="1" />');
 
+	            allowSubmit = true;
+	            $(form).find('[type="submit"]').click();
 
-                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
-                    window.location.href = "http://" + window.location.hostname + "/koszyk";
-                });
+//                var productData = {
+//                    'id': productId
+//                };
+//
+//
+//                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
+//                    window.location.href = "http://" + window.location.hostname + "/koszyk";
+//                });
 
             });
 
@@ -122,3 +127,5 @@ function listSwitcher(items, currentPointer, oppositePointer)
 
 	$(oppositePointer).show();
 }
+
+//<input type="text" name="updates[VARIANT_ID]" id="updates_VARIANT_ID" value="ILOSC" />
