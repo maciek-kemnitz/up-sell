@@ -382,13 +382,13 @@
                                     {{ variants[product.getId()][rProduct.getVariantSelected()].var_type}}
                                 </span>
 									<div class="up-price">
-										<h2>{{ variants[product.getId()][rProduct.getVariantSelected()].price|number_format(2, '.', ',') }} zÅ</h2>
+										<h2>{{ variants[product.getId()][rProduct.getVariantSelected()].price|number_format(2, '.', ',') }} zł</h2>
 									</div>
 
 									<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ rProduct.getVariantSelected() }}">Do koszyka</button>
 								{% else %}
 									<div class="up-price">
-										<h2 id="{{ product.getId() }}-price">{{ product.getOriginalPrice|number_format(2, '.', ',') }} zÅ</h2>
+										<h2 id="{{ product.getId() }}-price">{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
 									</div>
 
 									{% if product.getId() in variants|keys and variants[product.getId()] is not null %}
@@ -430,9 +430,9 @@
 							</small>
 							<div class="up-price">
 								{% if selectedVariant %}
-									<h2>{{ variant.price|number_format(2, '.', ',') }} zÅ</h2>
+									<h2>{{ variant.price|number_format(2, '.', ',') }} zł</h2>
 								{% else %}
-									<h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zÅ</h2>
+									<h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
 								{% endif %}
 							</div>
 
