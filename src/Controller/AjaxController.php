@@ -142,24 +142,24 @@ class AjaxController implements ControllerProviderInterface
 			}
 
 
-			/** @var UpSell $upSellByRelation */
-			$upSellByRelation = $uppSells->getFirst();
-			$rProducts = $upSellByRelation->getRelatedProducts();
+			/** @var UpSell $uppSell */
+			$uppSell = $uppSells->getFirst();
+			$rProducts = $uppSell->getRelatedProducts();
 
 			/** @var Product[] $upSellProducts */
-			$upSellProducts = $upSellByRelation->getProducts();
+			$upSellProducts = $uppSell->getProducts();
 			$variants = [];
 			foreach ($upSellProducts as $product)
 			{
-				if (false == in_array($product->getId(), $variantsInCart))
+				if (false == in_array($product->getShoploProductId(), $variantsInCart))
 				{
 					$variants[$product->getId()] = json_decode($product->getVariants(), true);
 				}
 			}
 
 			$params = [
-				'upSell' => $upSellByRelation,
-				'products' => $upSellByRelation->getProducts(),
+				'upSell' => $uppSell,
+				'products' => $uppSell->getProducts(),
 				'variants' => $variants,
 				'rProducts' => $rProducts,
 				'placement' => "cart"
@@ -168,7 +168,7 @@ class AjaxController implements ControllerProviderInterface
 			/** @var ProductInCart $productInCart */
 			$productInCart = ProductInCartQuery::create()
 				->filterByProductId($variants)
-				->filterByUpSell($upSellByRelation)
+				->filterByUpSell($uppSell)
 				->findOne();
 
 			if (null !== $productInCart && $productInCart->getVariantSelected())
