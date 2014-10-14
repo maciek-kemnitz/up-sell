@@ -108,7 +108,7 @@ class AjaxController implements ControllerProviderInterface
 
 		$controllers->post('/up-sell/cart', function (Request $request) use ($app)
 		{
-			$variants 		= $request->request->get('variants');
+			$variantsInCart	= $request->request->get('variants');
 			$shopDomain		= $request->request->get('shopDomain');
 			$cartValue 		= $request->request->get('cartValue');
 
@@ -117,7 +117,7 @@ class AjaxController implements ControllerProviderInterface
 				->filterByStatus(UpSellPeer::STATUS_ACTIVE)
 				->filterByPlacement(UpSellPeer::PLACEMENT_CART)
 					->useProductInCartQuery()
-						->filterByProductId($variants)
+						->filterByProductId($variantsInCart)
 					->endUse()
 				->orderBy(UpSellPeer::ORDER)
 				->distinct()
@@ -151,15 +151,10 @@ class AjaxController implements ControllerProviderInterface
 			$variants = [];
 			foreach ($upSellProducts as $product)
 			{
-				if (false == in_array($product->getId(), $variants))
+				if (false == in_array($product->getId(), $variantsInCart))
 				{
 					$variants[$product->getId()] = json_decode($product->getVariants(), true);
 				}
-			}
-
-			if (count($variants) == 0)
-			{
-				return new JsonResponse(['status' => 'no up-sell']);
 			}
 
 			$params = [
