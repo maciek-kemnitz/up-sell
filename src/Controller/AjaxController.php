@@ -157,6 +157,11 @@ class AjaxController implements ControllerProviderInterface
 				}
 			}
 
+			if (!$variants->count())
+			{
+				return new JsonResponse(['status' => 'no up-sell']);
+			}
+
 			$params = [
 				'upSell' => $uppSell,
 				'products' => $uppSell->getProducts(),
