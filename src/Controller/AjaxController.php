@@ -151,7 +151,7 @@ class AjaxController implements ControllerProviderInterface
 			$variants = [];
 			foreach ($upSellProducts as $product)
 			{
-				if (in_array($product->getId(), $variants))
+				if (false == in_array($product->getId(), $variants))
 				{
 					$variants[$product->getId()] = json_decode($product->getVariants(), true);
 				}
