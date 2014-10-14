@@ -157,7 +157,7 @@ class AjaxController implements ControllerProviderInterface
 				}
 			}
 
-			if (!$variants->count())
+			if (0 == count($variants))
 			{
 				return new JsonResponse(['status' => 'no up-sell']);
 			}
