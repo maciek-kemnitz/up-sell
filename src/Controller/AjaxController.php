@@ -108,9 +108,9 @@ class AjaxController implements ControllerProviderInterface
 
 		$controllers->post('/up-sell/cart', function (Request $request) use ($app)
 		{
-			$variants 				= $request->request->get('variants');
-			$shopDomain				= $request->request->get('shopDomain');
-			$cartValue 				= $request->request->get('cartValue');
+			$variants 		= $request->request->get('variants');
+			$shopDomain		= $request->request->get('shopDomain');
+			$cartValue 		= $request->request->get('cartValue');
 
 			$uppSells = UpSellQuery::create()
 				->filterByShopDomain($shopDomain)
@@ -151,7 +151,15 @@ class AjaxController implements ControllerProviderInterface
 			$variants = [];
 			foreach ($upSellProducts as $product)
 			{
-				$variants[$product->getId()] = json_decode($product->getVariants(), true);
+				if (in_array($product->getId(), $variants))
+				{
+					$variants[$product->getId()] = json_decode($product->getVariants(), true);
+				}
+			}
+
+			if (count($variants) == 0)
+			{
+				return new JsonResponse(['status' => 'no up-sell']);
 			}
 
 			$params = [
