@@ -60,20 +60,13 @@ $(function () {
                     productId = $(select).find(":selected").val()
                 }
 
-	            var form = $('form[method="post"]').first();
-	            $(form).append('<input type="text" name="updates['+productId+']" id="updates_'+productId+'" value="1" />');
+                var productData = {
+                    'id': productId
+                };
 
-	            allowSubmit = true;
-//	            $(form).find('[type="submit"]').click();
-
-//                var productData = {
-//                    'id': productId
-//                };
-//
-//
-//                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
-//                    window.location.href = "http://" + window.location.hostname + "/koszyk";
-//                });
+                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
+                    window.location.href = "http://" + window.location.hostname + "/koszyk";
+                });
 
             });
 
