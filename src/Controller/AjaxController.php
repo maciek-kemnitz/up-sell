@@ -184,6 +184,7 @@ class AjaxController implements ControllerProviderInterface
 
 			$data = [
 				"status" => "ok",
+				"variants" => json_encode($variants),
 				"html"	=> $app['twig']->render('widget.page.html.twig', $params),
 
 			];
