@@ -5,9 +5,9 @@
 	<section class="control-group bottom box clearfix">
 		<ul class="table-columns">
 			<li>
-				<select name="placement" class="stats-select pull-right">
-					<option value="product">Strona Produktu</option>
-					<option value="cart">Strona Koszyka</option>
+				<select name="placement" id="placement" class="stats-select pull-right">
+					<option {% if upSell != null and upSell.getPlacement == 'product' %}selected{% endif %} value="product">Strona Produktu</option>
+					<option {% if upSell != null and upSell.getPlacement == 'cart' %}selected{% endif %} value="cart">Strona Koszyka</option>
 				</select>
 			</li>
 		</ul>

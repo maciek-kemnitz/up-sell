@@ -74,7 +74,7 @@ class SaveController implements ControllerProviderInterface
 			$upSell->setName($name);
 			$upSell->setHeadline($headline);
 			$upSell->setDescription($description);
-//			$upSell->setPlacement($placement);
+			$upSell->setPlacement($placement);
 
 			if ($discountType)
 			{

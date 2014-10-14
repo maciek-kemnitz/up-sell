@@ -30,11 +30,9 @@
                                 <tr>
                                     {% include 'main-settings.block.html.twig' with {'upSell': upSell is defined ? upSell : null} %}
                                 </tr>
-	                            {% if false %}
 	                            <try>
 		                            {% include 'where-settings.block.html.twig' with {'upSell': upSell is defined ? upSell : null} %}
 	                            </try>
-	                            {% endif %}
                                 <tr>
                                     {% include 'when-settings.block.html.twig' with {'upSell': upSell is defined ? upSell : null} %}
                                 </tr>
