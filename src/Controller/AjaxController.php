@@ -40,6 +40,7 @@ class AjaxController implements ControllerProviderInterface
 			$uppSells = UpSellQuery::create()
 				->filterByShopDomain($shopDomain)
 				->filterByStatus(UpSellPeer::STATUS_ACTIVE)
+				->filterByPlacement(UpSellPeer::PLACEMENT_PRODUCT)
 				->useProductInCartQuery()
 					->filterByProductId($productId)
 				->endUse()
@@ -53,6 +54,7 @@ class AjaxController implements ControllerProviderInterface
 					->priceInRange($futureCartValue)
 					->filterByUsePriceRange(UpSellPeer::USE_PRICE_RANGE_1)
 					->filterByStatus(UpSellPeer::STATUS_ACTIVE)
+					->filterByPlacement(UpSellPeer::PLACEMENT_PRODUCT)
 					->filterByShopDomain($shopDomain)
 					->orderBy(UpSellPeer::ORDER, \Criteria::ASC)
 					->find();
