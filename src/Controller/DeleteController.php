@@ -35,7 +35,7 @@ class DeleteController implements ControllerProviderInterface
 
 			if (null === $upSell)
 			{
-				throw new NotFoundHttpException();
+				return new RedirectResponse('/');
 			}
 
 			/** @var ShoploApi $shoploApi */
