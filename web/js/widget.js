@@ -10,6 +10,9 @@ $(function () {
             var modalWidth = screenWidth * 0.8;
             var paddingLeft = 40;
 
+	        var upSellId = ajaxResult['up_sell_id'];
+	        var shopDomain = ajaxResult['shopDomain'];
+
             if (modalWidth > 900) {
                 modalWidth = 900;
             }
@@ -46,6 +49,15 @@ $(function () {
                 $('#up-sell-modal').addClass('modalMargin');
                 $('#up-sell-modal').css('display', 'block');
                 $('#up-sell-modal').addClass('in');
+
+	            var statsData = {
+		            'shopDomain': shopDomain,
+		            'up_sell_id': upSellId,
+		            'variant_id': productId,
+		            'placement': 'product'
+	            };
+
+	            $.post("http://up-sell.pl/ajax/widget-stats", statsData);
 
                 $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData);
 

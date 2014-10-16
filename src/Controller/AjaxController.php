@@ -4,21 +4,16 @@ namespace src\Controller;
 
 use Shoplo\ShoploApi;
 use Silex\Application;
-use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
-
-use src\Lib\Database;
 use src\Model\Product;
 use src\Model\ProductInCart;
 use src\Model\ProductInCartQuery;
 use src\Model\ProductQuery;
-use src\Model\RelatedProduct;
 use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
 use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class AjaxController implements ControllerProviderInterface
@@ -100,6 +95,8 @@ class AjaxController implements ControllerProviderInterface
 
 			$data = [
 				"status" => "ok",
+				"up_sell_id" => $upSellByRelation->getId(),
+				"shopDomain" => $shopDomain,
 				"html"	=> $app['twig']->render('widget.page.html.twig', $params),
 
 			];
@@ -187,6 +184,8 @@ class AjaxController implements ControllerProviderInterface
 			$data = [
 				"status" => "ok",
 				"variants" => json_encode($variants),
+				"up_sell_id" => $uppSell->getId(),
+				"shopDomain" => $shopDomain,
 				"html"	=> $app['twig']->render('widget.page.html.twig', $params),
 
 			];
@@ -209,10 +208,10 @@ class AjaxController implements ControllerProviderInterface
 			$shopDomain = $shoploApi->shop->retrieve()['permanent_domain'];
 
 			$products = ProductQuery::create()
-							->filterByName($query.'%', \Criteria::LIKE)
-							->filterByShopDomain($shopDomain)
-							->limit(20)
-							->find();
+				->filterByName($query.'%', \Criteria::LIKE)
+				->filterByShopDomain($shopDomain)
+				->limit(20)
+				->find();
 
 			$view = $app['twig']->render('autocomplete-products.html.twig', ['products'=>$products]);
 

@@ -125,5 +125,35 @@ CREATE TABLE `up_sell`
     INDEX `shop_id` (`shop_domain`)
 ) ENGINE=InnoDB;
 
+-- ---------------------------------------------------------------------
+-- widget_stats
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `widget_stats`;
+
+CREATE TABLE `widget_stats`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `shop_domain` VARCHAR(255) NOT NULL,
+    `up_sell_id` INTEGER NOT NULL,
+    `variant_id` INTEGER NOT NULL,
+    `placement` enum('product','cart') DEFAULT 'product' NOT NULL,
+    `created_at` DATETIME NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `shop_id` (`shop_domain`),
+    INDEX `widget_stats_FI_1` (`up_sell_id`),
+    INDEX `widget_stats_FI_2` (`variant_id`),
+    CONSTRAINT `widget_stats_FK_1`
+        FOREIGN KEY (`up_sell_id`)
+        REFERENCES `up_sell` (`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `widget_stats_FK_2`
+        FOREIGN KEY (`variant_id`)
+        REFERENCES `product` (`shoplo_product_id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
