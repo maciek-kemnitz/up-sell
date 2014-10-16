@@ -45,7 +45,7 @@ class WidgetStatsTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('shop_domain', 'ShopDomain', 'VARCHAR', true, 255, null);
         $this->addForeignKey('up_sell_id', 'UpSellId', 'INTEGER', 'up_sell', 'id', true, null, null);
-        $this->addForeignKey('variant_id', 'VariantId', 'INTEGER', 'product', 'shoplo_product_id', true, null, null);
+        $this->addForeignKey('variant_id', 'VariantId', 'INTEGER', 'product', 'shoplo_product_id', false, null, null);
         $this->addColumn('placement', 'Placement', 'CHAR', true, null, 'product');
         $this->getColumn('placement', false)->setValueSet(array (
   0 => 'product',

@@ -16,15 +16,15 @@ class WidgetStatsController implements ControllerProviderInterface
 
 		$controllers->post('/', function (Request $request) use ($app)
 		{
-			$shopDomain = $request->query->get('shopDomain');
-			$upSellId = $request->query->get('up_sell_id');
-			$variant_id = $request->query->get('variant_id');
-			$placement = $request->query->get('placement');
+			$shopDomain = $request->request->get('shopDomain');
+			$upSellId = $request->request->get('up_sell_id');
+			$variantId = $request->request->has('variant_id') ? $request->request->get('variant_id') : null;
+			$placement = $request->request->get('placement');
 
 			$widgetStats = new WidgetStats();
 			$widgetStats->setShopDomain($shopDomain);
 			$widgetStats->setUpSellId($upSellId);
-			$widgetStats->setVariantId($variant_id);
+			$widgetStats->setVariantId($variantId);
 			$widgetStats->setPlacement($placement);
 			$widgetStats->setCreatedAt(new \DateTime());
 			$widgetStats->save();

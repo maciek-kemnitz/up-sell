@@ -136,7 +136,7 @@ CREATE TABLE `widget_stats`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `shop_domain` VARCHAR(255) NOT NULL,
     `up_sell_id` INTEGER NOT NULL,
-    `variant_id` INTEGER NOT NULL,
+    `variant_id` INTEGER,
     `placement` enum('product','cart') DEFAULT 'product' NOT NULL,
     `created_at` DATETIME NOT NULL,
     PRIMARY KEY (`id`),

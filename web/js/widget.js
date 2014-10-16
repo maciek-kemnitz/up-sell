@@ -53,7 +53,6 @@ $(function () {
 	            var statsData = {
 		            'shopDomain': shopDomain,
 		            'up_sell_id': upSellId,
-		            'variant_id': productId,
 		            'placement': 'product'
 	            };
 
@@ -79,12 +78,20 @@ $(function () {
                 {
                     productId = $(select).find(":selected").val()
                 }
-                console.log(productId);
+
 
                 var productData = {
                     'id': productId
                 };
 
+	            var statsData = {
+		            'shopDomain': shopDomain,
+		            'up_sell_id': upSellId,
+		            'variant_id': productId,
+		            'placement': 'product'
+	            };
+
+	            $.post("http://up-sell.pl/ajax/widget-stats", statsData);
 
                 $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
                     window.location.href = "http://" + window.location.hostname + "/koszyk";

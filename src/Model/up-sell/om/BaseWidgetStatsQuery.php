@@ -601,7 +601,7 @@ abstract class BaseWidgetStatsQuery extends ModelCriteria
      *
      * @return WidgetStatsQuery The current query, for fluid interface
      */
-    public function joinProduct($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinProduct($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Product');
@@ -636,7 +636,7 @@ abstract class BaseWidgetStatsQuery extends ModelCriteria
      *
      * @return   \src\Model\ProductQuery A secondary query class using the current class as primary query
      */
-    public function useProductQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useProductQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinProduct($relationAlias, $joinType)
