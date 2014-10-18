@@ -11,6 +11,9 @@ $(function () {
             var modalWidth = screenWidth * 0.8;
             var paddingLeft = 40;
 
+	        var upSellId = ajaxResult['up_sell_id'];
+	        var shopDomain = ajaxResult['shopDomain'];
+
             if (modalWidth > 900) {
                 modalWidth = 900;
             }
@@ -42,6 +45,14 @@ $(function () {
                 $('#up-sell-modal').css('display', 'block');
                 $('#up-sell-modal').addClass('in');
 
+	            var statsData = {
+		            'shopDomain': shopDomain,
+		            'up_sell_id': upSellId,
+		            'placement': 'cart'
+	            };
+
+	            $.post("http://up-sell.pl/ajax/up-sell/stats", statsData, 'json');
+
                 return false;
             });
 
@@ -63,6 +74,15 @@ $(function () {
                 var productData = {
                     'id': productId
                 };
+
+	            var statsData = {
+		            'shopDomain': shopDomain,
+		            'up_sell_id': upSellId,
+		            'variant_id': productId,
+		            'placement': 'cart'
+	            };
+
+	            $.post("http://up-sell.pl/ajax/up-sell/stats", statsData, 'json');
 
                 $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
                     window.location.href = "http://" + window.location.hostname + "/koszyk";

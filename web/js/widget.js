@@ -56,7 +56,6 @@ $(function () {
 		            'placement': 'product'
 	            };
 
-
 	            $.post("http://up-sell.pl/ajax/up-sell/stats", statsData, 'json');
 
                 $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData);
