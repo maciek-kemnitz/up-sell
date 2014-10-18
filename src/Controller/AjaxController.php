@@ -262,10 +262,10 @@ class AjaxController implements ControllerProviderInterface
 
 		$controllers->post('/up-sell/stats', function (Request $request) use ($app)
 		{
-//			$shopDomain = $request->request->get('shopDomain');
-//			$upSellId = $request->request->get('up_sell_id');
-//			$variantId = $request->request->has('variant_id') ? $request->request->get('variant_id') : null;
-//			$placement = $request->request->get('placement');
+			$shopDomain = $request->request->get('shopDomain');
+			$upSellId = $request->request->get('up_sell_id');
+			$variantId = $request->request->has('variant_id') ? $request->request->get('variant_id') : null;
+			$placement = $request->request->get('placement');
 //
 //			$widgetStats = new WidgetStats();
 //			$widgetStats->setShopDomain($shopDomain);
