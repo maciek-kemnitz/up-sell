@@ -19,7 +19,6 @@ $app->mount('/save', new \src\Controller\SaveController());
 $app->mount('/ajax', new \src\Controller\AjaxController());
 $app->mount('/delete', new \src\Controller\DeleteController());
 $app->mount('/status', new \src\Controller\UpSellStatusController());
-$app->mount('/ajax/widget-stats', new \src\Controller\WidgetStatsController());
 
 
 $app->run();

@@ -22,11 +22,6 @@ class AjaxController implements ControllerProviderInterface
 	{
 		$controllers = $app['controllers_factory'];
 
-		$controllers->post('/up-sell/test', function (Request $request) use ($app)
-		{
-			return new JsonResponse(['status' => 'no up-sell']);
-		});
-
 		$controllers->post('/up-sell/product', function (Request $request) use ($app)
 		{
 			$productId 				= $request->request->get('productId');
@@ -257,6 +252,24 @@ class AjaxController implements ControllerProviderInterface
 
 
 			return new JsonResponse($result);
+		});
+
+		$controllers->post('/up-sell/stats', function (Request $request) use ($app)
+		{
+			$shopDomain = $request->request->get('shopDomain');
+			$upSellId = $request->request->get('up_sell_id');
+			$variantId = $request->request->has('variant_id') ? $request->request->get('variant_id') : null;
+			$placement = $request->request->get('placement');
+
+			$widgetStats = new WidgetStats();
+			$widgetStats->setShopDomain($shopDomain);
+			$widgetStats->setUpSellId($upSellId);
+			$widgetStats->setVariantId($variantId);
+			$widgetStats->setPlacement($placement);
+			$widgetStats->setCreatedAt(new \DateTime());
+			$widgetStats->save();
+
+			return new JsonResponse();
 		});
 
 		return $controllers;
