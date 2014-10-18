@@ -267,6 +267,9 @@ class AjaxController implements ControllerProviderInterface
 			$variantId = $request->request->has('variant_id') ? $request->request->get('variant_id') : null;
 			$placement = $request->request->get('placement');
 //
+			$data = [
+				$shopDomain, $upSellId, $variantId, $placement
+			];
 //			$widgetStats = new WidgetStats();
 //			$widgetStats->setShopDomain($shopDomain);
 //			$widgetStats->setUpSellId($upSellId);
@@ -275,7 +278,7 @@ class AjaxController implements ControllerProviderInterface
 //			$widgetStats->setCreatedAt(new \DateTime());
 //			$widgetStats->save();
 
-			return new JsonResponse();
+			return new JsonResponse($data);
 		});
 
 		return $controllers;
