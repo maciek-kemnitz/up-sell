@@ -22,6 +22,11 @@ class AjaxController implements ControllerProviderInterface
 	{
 		$controllers = $app['controllers_factory'];
 
+		$controllers->post('/up-sell/test', function (Request $request) use ($app)
+		{
+			return new JsonResponse(['status' => 'no up-sell']);
+		});
+
 		$controllers->post('/up-sell/product', function (Request $request) use ($app)
 		{
 			$productId 				= $request->request->get('productId');
