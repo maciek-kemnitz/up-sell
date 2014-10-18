@@ -56,7 +56,7 @@ $(function () {
 		            'placement': 'product'
 	            };
 
-	            $.post("http://up-sell.pl/ajax/widget-stats", statsData);
+	            $.post("http://up-sell.pl/ajax/widget-stats", statsData, 'json');
 
                 $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData);
 
@@ -91,7 +91,7 @@ $(function () {
 		            'placement': 'product'
 	            };
 
-	            $.post("http://up-sell.pl/ajax/widget-stats", statsData);
+	            $.post("http://up-sell.pl/ajax/widget-stats", statsData, 'json');
 
                 $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData, function (ajaxResult) {
                     window.location.href = "http://" + window.location.hostname + "/koszyk";
