@@ -12,6 +12,7 @@ use src\Model\ProductQuery;
 use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
+use src\Model\WidgetStats;
 use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +22,11 @@ class AjaxController implements ControllerProviderInterface
 	public function connect(Application $app)
 	{
 		$controllers = $app['controllers_factory'];
+
+		$controllers->post('/up-sell/test', function (Request $request) use ($app)
+		{
+			return new JsonResponse(['status' => 'no up-sell']);
+		});
 
 		$controllers->post('/up-sell/product', function (Request $request) use ($app)
 		{
@@ -256,18 +262,18 @@ class AjaxController implements ControllerProviderInterface
 
 		$controllers->post('/up-sell/stats', function (Request $request) use ($app)
 		{
-			$shopDomain = $request->request->get('shopDomain');
-			$upSellId = $request->request->get('up_sell_id');
-			$variantId = $request->request->has('variant_id') ? $request->request->get('variant_id') : null;
-			$placement = $request->request->get('placement');
-
-			$widgetStats = new WidgetStats();
-			$widgetStats->setShopDomain($shopDomain);
-			$widgetStats->setUpSellId($upSellId);
-			$widgetStats->setVariantId($variantId);
-			$widgetStats->setPlacement($placement);
-			$widgetStats->setCreatedAt(new \DateTime());
-			$widgetStats->save();
+//			$shopDomain = $request->request->get('shopDomain');
+//			$upSellId = $request->request->get('up_sell_id');
+//			$variantId = $request->request->has('variant_id') ? $request->request->get('variant_id') : null;
+//			$placement = $request->request->get('placement');
+//
+//			$widgetStats = new WidgetStats();
+//			$widgetStats->setShopDomain($shopDomain);
+//			$widgetStats->setUpSellId($upSellId);
+//			$widgetStats->setVariantId($variantId);
+//			$widgetStats->setPlacement($placement);
+//			$widgetStats->setCreatedAt(new \DateTime());
+//			$widgetStats->save();
 
 			return new JsonResponse();
 		});
