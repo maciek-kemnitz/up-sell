@@ -270,13 +270,14 @@ class AjaxController implements ControllerProviderInterface
 			$data = [
 				$shopDomain, $upSellId, $variantId, $placement
 			];
-//			$widgetStats = new WidgetStats();
-//			$widgetStats->setShopDomain($shopDomain);
-//			$widgetStats->setUpSellId($upSellId);
-//			$widgetStats->setVariantId($variantId);
-//			$widgetStats->setPlacement($placement);
-//			$widgetStats->setCreatedAt(new \DateTime());
-//			$widgetStats->save();
+
+			$widgetStats = new WidgetStats();
+			$widgetStats->setShopDomain($shopDomain);
+			$widgetStats->setUpSellId(intval($upSellId));
+			$widgetStats->setVariantId($variantId);
+			$widgetStats->setPlacement($placement);
+			$widgetStats->setCreatedAt(new \DateTime());
+			$widgetStats->save();
 
 			return new JsonResponse($data);
 		});
