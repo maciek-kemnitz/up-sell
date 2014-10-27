@@ -61,6 +61,7 @@ class ProductTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('WidgetStats', 'src\\Model\\WidgetStats', RelationMap::ONE_TO_MANY, array('shoplo_product_id' => 'variant_id', ), 'CASCADE', 'CASCADE', 'WidgetStatss');
     } // buildRelations()
 
 } // ProductTableMap

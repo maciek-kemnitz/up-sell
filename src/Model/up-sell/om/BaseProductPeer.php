@@ -11,6 +11,7 @@ use \PropelException;
 use \PropelPDO;
 use src\Model\Product;
 use src\Model\ProductPeer;
+use src\Model\WidgetStatsPeer;
 use src\Model\map\ProductTableMap;
 
 /**
@@ -417,6 +418,9 @@ abstract class BaseProductPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in WidgetStatsPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        WidgetStatsPeer::clearInstancePool();
     }
 
     /**
@@ -646,6 +650,7 @@ abstract class BaseProductPeer
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
+            $affectedRows += ProductPeer::doOnDeleteCascade(new Criteria(ProductPeer::DATABASE_NAME), $con);
             $affectedRows += BasePeer::doDeleteAll(ProductPeer::TABLE_NAME, $con, ProductPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -679,24 +684,14 @@ abstract class BaseProductPeer
         }
 
         if ($values instanceof Criteria) {
-            // invalidate the cache for all objects of this type, since we have no
-            // way of knowing (without running a query) what objects should be invalidated
-            // from the cache based on this Criteria.
-            ProductPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
         } elseif ($values instanceof Product) { // it's a model object
-            // invalidate the cache for this single object
-            ProductPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(ProductPeer::DATABASE_NAME);
             $criteria->add(ProductPeer::ID, (array) $values, Criteria::IN);
-            // invalidate the cache for this object(s)
-            foreach ((array) $values as $singleval) {
-                ProductPeer::removeInstanceFromPool($singleval);
-            }
         }
 
         // Set the correct dbName
@@ -709,6 +704,23 @@ abstract class BaseProductPeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
+            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+            $c = clone $criteria;
+            $affectedRows += ProductPeer::doOnDeleteCascade($c, $con);
+
+            // Because this db requires some delete cascade/set null emulation, we have to
+            // clear the cached instance *after* the emulation has happened (since
+            // instances get re-added by the select statement contained therein).
+            if ($values instanceof Criteria) {
+                ProductPeer::clearInstancePool();
+            } elseif ($values instanceof Product) { // it's a model object
+                ProductPeer::removeInstanceFromPool($values);
+            } else { // it's a primary key, or an array of pks
+                foreach ((array) $values as $singleval) {
+                    ProductPeer::removeInstanceFromPool($singleval);
+                }
+            }
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             ProductPeer::clearRelatedInstancePool();
             $con->commit();
@@ -718,6 +730,39 @@ abstract class BaseProductPeer
             $con->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+     * feature (like MySQL or SQLite).
+     *
+     * This method is not very speedy because it must perform a query first to get
+     * the implicated records and then perform the deletes by calling those Peer classes.
+     *
+     * This method should be used within a transaction if possible.
+     *
+     * @param      Criteria $criteria
+     * @param      PropelPDO $con
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+    {
+        // initialize var to track total num of affected rows
+        $affectedRows = 0;
+
+        // first find the objects that are implicated by the $criteria
+        $objects = ProductPeer::doSelect($criteria, $con);
+        foreach ($objects as $obj) {
+
+
+            // delete related WidgetStats objects
+            $criteria = new Criteria(WidgetStatsPeer::DATABASE_NAME);
+
+            $criteria->add(WidgetStatsPeer::VARIANT_ID, $obj->getShoploProductId());
+            $affectedRows += WidgetStatsPeer::doDelete($criteria, $con);
+        }
+
+        return $affectedRows;
     }
 
     /**

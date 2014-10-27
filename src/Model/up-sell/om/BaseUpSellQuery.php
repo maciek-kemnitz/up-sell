@@ -17,6 +17,7 @@ use src\Model\RelatedProduct;
 use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
+use src\Model\WidgetStats;
 
 /**
  * Base class that represents a query for the 'up_sell' table.
@@ -64,6 +65,10 @@ use src\Model\UpSellQuery;
  * @method UpSellQuery leftJoinRelatedProduct($relationAlias = null) Adds a LEFT JOIN clause to the query using the RelatedProduct relation
  * @method UpSellQuery rightJoinRelatedProduct($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RelatedProduct relation
  * @method UpSellQuery innerJoinRelatedProduct($relationAlias = null) Adds a INNER JOIN clause to the query using the RelatedProduct relation
+ *
+ * @method UpSellQuery leftJoinWidgetStats($relationAlias = null) Adds a LEFT JOIN clause to the query using the WidgetStats relation
+ * @method UpSellQuery rightJoinWidgetStats($relationAlias = null) Adds a RIGHT JOIN clause to the query using the WidgetStats relation
+ * @method UpSellQuery innerJoinWidgetStats($relationAlias = null) Adds a INNER JOIN clause to the query using the WidgetStats relation
  *
  * @method UpSell findOne(PropelPDO $con = null) Return the first UpSell matching the query
  * @method UpSell findOneOrCreate(PropelPDO $con = null) Return the first UpSell matching the query, or a new UpSell object populated from the query conditions when no match is found
@@ -923,6 +928,80 @@ abstract class BaseUpSellQuery extends ModelCriteria
         return $this
             ->joinRelatedProduct($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'RelatedProduct', '\src\Model\RelatedProductQuery');
+    }
+
+    /**
+     * Filter the query by a related WidgetStats object
+     *
+     * @param   WidgetStats|PropelObjectCollection $widgetStats  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UpSellQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByWidgetStats($widgetStats, $comparison = null)
+    {
+        if ($widgetStats instanceof WidgetStats) {
+            return $this
+                ->addUsingAlias(UpSellPeer::ID, $widgetStats->getUpSellId(), $comparison);
+        } elseif ($widgetStats instanceof PropelObjectCollection) {
+            return $this
+                ->useWidgetStatsQuery()
+                ->filterByPrimaryKeys($widgetStats->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByWidgetStats() only accepts arguments of type WidgetStats or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the WidgetStats relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UpSellQuery The current query, for fluid interface
+     */
+    public function joinWidgetStats($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('WidgetStats');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'WidgetStats');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the WidgetStats relation WidgetStats object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   \src\Model\WidgetStatsQuery A secondary query class using the current class as primary query
+     */
+    public function useWidgetStatsQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinWidgetStats($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'WidgetStats', '\src\Model\WidgetStatsQuery');
     }
 
     /**

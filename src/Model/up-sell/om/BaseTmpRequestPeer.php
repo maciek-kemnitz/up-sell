@@ -9,109 +9,55 @@ use \PDOStatement;
 use \Propel;
 use \PropelException;
 use \PropelPDO;
-use src\Model\UpSell;
-use src\Model\UpSellPeer;
-use src\Model\WidgetStatsPeer;
-use src\Model\map\UpSellTableMap;
+use src\Model\TmpRequest;
+use src\Model\TmpRequestPeer;
+use src\Model\map\TmpRequestTableMap;
 
 /**
- * Base static class for performing query and update operations on the 'up_sell' table.
+ * Base static class for performing query and update operations on the 'tmp_request' table.
  *
  *
  *
  * @package propel.generator.up-sell.om
  */
-abstract class BaseUpSellPeer
+abstract class BaseTmpRequestPeer
 {
 
     /** the default database name for this class */
     const DATABASE_NAME = 'up-sell';
 
     /** the table name for this class */
-    const TABLE_NAME = 'up_sell';
+    const TABLE_NAME = 'tmp_request';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'src\\Model\\UpSell';
+    const OM_CLASS = 'src\\Model\\TmpRequest';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'src\\Model\\map\\UpSellTableMap';
+    const TM_CLASS = 'src\\Model\\map\\TmpRequestTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 14;
+    const NUM_COLUMNS = 2;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 14;
+    const NUM_HYDRATE_COLUMNS = 2;
 
     /** the column name for the id field */
-    const ID = 'up_sell.id';
+    const ID = 'tmp_request.id';
 
-    /** the column name for the shop_domain field */
-    const SHOP_DOMAIN = 'up_sell.shop_domain';
-
-    /** the column name for the name field */
-    const NAME = 'up_sell.name';
-
-    /** the column name for the headline field */
-    const HEADLINE = 'up_sell.headline';
-
-    /** the column name for the description field */
-    const DESCRIPTION = 'up_sell.description';
-
-    /** the column name for the price_from field */
-    const PRICE_FROM = 'up_sell.price_from';
-
-    /** the column name for the price_to field */
-    const PRICE_TO = 'up_sell.price_to';
-
-    /** the column name for the order field */
-    const ORDER = 'up_sell.order';
-
-    /** the column name for the use_price_range field */
-    const USE_PRICE_RANGE = 'up_sell.use_price_range';
-
-    /** the column name for the created_at field */
-    const CREATED_AT = 'up_sell.created_at';
-
-    /** the column name for the status field */
-    const STATUS = 'up_sell.status';
-
-    /** the column name for the discount_type field */
-    const DISCOUNT_TYPE = 'up_sell.discount_type';
-
-    /** the column name for the discount_amount field */
-    const DISCOUNT_AMOUNT = 'up_sell.discount_amount';
-
-    /** the column name for the placement field */
-    const PLACEMENT = 'up_sell.placement';
-
-    /** The enumerated values for the use_price_range field */
-    const USE_PRICE_RANGE_0 = '0';
-    const USE_PRICE_RANGE_1 = '1';
-
-    /** The enumerated values for the status field */
-    const STATUS_ACTIVE = 'active';
-    const STATUS_DISABLED = 'disabled';
-
-    /** The enumerated values for the discount_type field */
-    const DISCOUNT_TYPE_NONE = 'none';
-    const DISCOUNT_TYPE_PERCENT = 'percent';
-    const DISCOUNT_TYPE_AMOUNT = 'amount';
-
-    /** The enumerated values for the placement field */
-    const PLACEMENT_PRODUCT = 'product';
-    const PLACEMENT_CART = 'cart';
+    /** the column name for the data field */
+    const DATA = 'tmp_request.data';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identity map to hold any loaded instances of UpSell objects.
+     * An identity map to hold any loaded instances of TmpRequest objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
-     * @var        array UpSell[]
+     * @var        array TmpRequest[]
      */
     public static $instances = array();
 
@@ -120,51 +66,30 @@ abstract class BaseUpSellPeer
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. UpSellPeer::$fieldNames[UpSellPeer::TYPE_PHPNAME][0] = 'Id'
+     * e.g. TmpRequestPeer::$fieldNames[TmpRequestPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'ShopDomain', 'Name', 'Headline', 'Description', 'PriceFrom', 'PriceTo', 'Order', 'UsePriceRange', 'CreatedAt', 'Status', 'DiscountType', 'DiscountAmount', 'Placement', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shopDomain', 'name', 'headline', 'description', 'priceFrom', 'priceTo', 'order', 'usePriceRange', 'createdAt', 'status', 'discountType', 'discountAmount', 'placement', ),
-        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID, UpSellPeer::SHOP_DOMAIN, UpSellPeer::NAME, UpSellPeer::HEADLINE, UpSellPeer::DESCRIPTION, UpSellPeer::PRICE_FROM, UpSellPeer::PRICE_TO, UpSellPeer::ORDER, UpSellPeer::USE_PRICE_RANGE, UpSellPeer::CREATED_AT, UpSellPeer::STATUS, UpSellPeer::DISCOUNT_TYPE, UpSellPeer::DISCOUNT_AMOUNT, UpSellPeer::PLACEMENT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOP_DOMAIN', 'NAME', 'HEADLINE', 'DESCRIPTION', 'PRICE_FROM', 'PRICE_TO', 'ORDER', 'USE_PRICE_RANGE', 'CREATED_AT', 'STATUS', 'DISCOUNT_TYPE', 'DISCOUNT_AMOUNT', 'PLACEMENT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'shop_domain', 'name', 'headline', 'description', 'price_from', 'price_to', 'order', 'use_price_range', 'created_at', 'status', 'discount_type', 'discount_amount', 'placement', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Data', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'data', ),
+        BasePeer::TYPE_COLNAME => array (TmpRequestPeer::ID, TmpRequestPeer::DATA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'DATA', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'data', ),
+        BasePeer::TYPE_NUM => array (0, 1, )
     );
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. UpSellPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. TmpRequestPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShopDomain' => 1, 'Name' => 2, 'Headline' => 3, 'Description' => 4, 'PriceFrom' => 5, 'PriceTo' => 6, 'Order' => 7, 'UsePriceRange' => 8, 'CreatedAt' => 9, 'Status' => 10, 'DiscountType' => 11, 'DiscountAmount' => 12, 'Placement' => 13, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shopDomain' => 1, 'name' => 2, 'headline' => 3, 'description' => 4, 'priceFrom' => 5, 'priceTo' => 6, 'order' => 7, 'usePriceRange' => 8, 'createdAt' => 9, 'status' => 10, 'discountType' => 11, 'discountAmount' => 12, 'placement' => 13, ),
-        BasePeer::TYPE_COLNAME => array (UpSellPeer::ID => 0, UpSellPeer::SHOP_DOMAIN => 1, UpSellPeer::NAME => 2, UpSellPeer::HEADLINE => 3, UpSellPeer::DESCRIPTION => 4, UpSellPeer::PRICE_FROM => 5, UpSellPeer::PRICE_TO => 6, UpSellPeer::ORDER => 7, UpSellPeer::USE_PRICE_RANGE => 8, UpSellPeer::CREATED_AT => 9, UpSellPeer::STATUS => 10, UpSellPeer::DISCOUNT_TYPE => 11, UpSellPeer::DISCOUNT_AMOUNT => 12, UpSellPeer::PLACEMENT => 13, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOP_DOMAIN' => 1, 'NAME' => 2, 'HEADLINE' => 3, 'DESCRIPTION' => 4, 'PRICE_FROM' => 5, 'PRICE_TO' => 6, 'ORDER' => 7, 'USE_PRICE_RANGE' => 8, 'CREATED_AT' => 9, 'STATUS' => 10, 'DISCOUNT_TYPE' => 11, 'DISCOUNT_AMOUNT' => 12, 'PLACEMENT' => 13, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shop_domain' => 1, 'name' => 2, 'headline' => 3, 'description' => 4, 'price_from' => 5, 'price_to' => 6, 'order' => 7, 'use_price_range' => 8, 'created_at' => 9, 'status' => 10, 'discount_type' => 11, 'discount_amount' => 12, 'placement' => 13, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
-    );
-
-    /** The enumerated values for this table */
-    protected static $enumValueSets = array(
-        UpSellPeer::USE_PRICE_RANGE => array(
-            UpSellPeer::USE_PRICE_RANGE_0,
-            UpSellPeer::USE_PRICE_RANGE_1,
-        ),
-        UpSellPeer::STATUS => array(
-            UpSellPeer::STATUS_ACTIVE,
-            UpSellPeer::STATUS_DISABLED,
-        ),
-        UpSellPeer::DISCOUNT_TYPE => array(
-            UpSellPeer::DISCOUNT_TYPE_NONE,
-            UpSellPeer::DISCOUNT_TYPE_PERCENT,
-            UpSellPeer::DISCOUNT_TYPE_AMOUNT,
-        ),
-        UpSellPeer::PLACEMENT => array(
-            UpSellPeer::PLACEMENT_PRODUCT,
-            UpSellPeer::PLACEMENT_CART,
-        ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Data' => 1, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'data' => 1, ),
+        BasePeer::TYPE_COLNAME => array (TmpRequestPeer::ID => 0, TmpRequestPeer::DATA => 1, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'DATA' => 1, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'data' => 1, ),
+        BasePeer::TYPE_NUM => array (0, 1, )
     );
 
     /**
@@ -179,10 +104,10 @@ abstract class BaseUpSellPeer
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = UpSellPeer::getFieldNames($toType);
-        $key = isset(UpSellPeer::$fieldKeys[$fromType][$name]) ? UpSellPeer::$fieldKeys[$fromType][$name] : null;
+        $toNames = TmpRequestPeer::getFieldNames($toType);
+        $key = isset(TmpRequestPeer::$fieldKeys[$fromType][$name]) ? TmpRequestPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(UpSellPeer::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(TmpRequestPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -199,56 +124,11 @@ abstract class BaseUpSellPeer
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, UpSellPeer::$fieldNames)) {
+        if (!array_key_exists($type, TmpRequestPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return UpSellPeer::$fieldNames[$type];
-    }
-
-    /**
-     * Gets the list of values for all ENUM columns
-     * @return array
-     */
-    public static function getValueSets()
-    {
-      return UpSellPeer::$enumValueSets;
-    }
-
-    /**
-     * Gets the list of values for an ENUM column
-     *
-     * @param string $colname The ENUM column name.
-     *
-     * @return array list of possible values for the column
-     */
-    public static function getValueSet($colname)
-    {
-        $valueSets = UpSellPeer::getValueSets();
-
-        if (!isset($valueSets[$colname])) {
-            throw new PropelException(sprintf('Column "%s" has no ValueSet.', $colname));
-        }
-
-        return $valueSets[$colname];
-    }
-
-    /**
-     * Gets the SQL value for the ENUM column value
-     *
-     * @param string $colname ENUM column name.
-     * @param string $enumVal ENUM value.
-     *
-     * @return int SQL value
-     */
-    public static function getSqlValueForEnum($colname, $enumVal)
-    {
-        $values = UpSellPeer::getValueSet($colname);
-        if (!in_array($enumVal, $values)) {
-            throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $colname));
-        }
-
-        return array_search($enumVal, $values);
+        return TmpRequestPeer::$fieldNames[$type];
     }
 
     /**
@@ -260,12 +140,12 @@ abstract class BaseUpSellPeer
      *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
      * </code>
      * @param      string $alias The alias for the current table.
-     * @param      string $column The column name for current table. (i.e. UpSellPeer::COLUMN_NAME).
+     * @param      string $column The column name for current table. (i.e. TmpRequestPeer::COLUMN_NAME).
      * @return string
      */
     public static function alias($alias, $column)
     {
-        return str_replace(UpSellPeer::TABLE_NAME.'.', $alias.'.', $column);
+        return str_replace(TmpRequestPeer::TABLE_NAME.'.', $alias.'.', $column);
     }
 
     /**
@@ -283,35 +163,11 @@ abstract class BaseUpSellPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(UpSellPeer::ID);
-            $criteria->addSelectColumn(UpSellPeer::SHOP_DOMAIN);
-            $criteria->addSelectColumn(UpSellPeer::NAME);
-            $criteria->addSelectColumn(UpSellPeer::HEADLINE);
-            $criteria->addSelectColumn(UpSellPeer::DESCRIPTION);
-            $criteria->addSelectColumn(UpSellPeer::PRICE_FROM);
-            $criteria->addSelectColumn(UpSellPeer::PRICE_TO);
-            $criteria->addSelectColumn(UpSellPeer::ORDER);
-            $criteria->addSelectColumn(UpSellPeer::USE_PRICE_RANGE);
-            $criteria->addSelectColumn(UpSellPeer::CREATED_AT);
-            $criteria->addSelectColumn(UpSellPeer::STATUS);
-            $criteria->addSelectColumn(UpSellPeer::DISCOUNT_TYPE);
-            $criteria->addSelectColumn(UpSellPeer::DISCOUNT_AMOUNT);
-            $criteria->addSelectColumn(UpSellPeer::PLACEMENT);
+            $criteria->addSelectColumn(TmpRequestPeer::ID);
+            $criteria->addSelectColumn(TmpRequestPeer::DATA);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.shop_domain');
-            $criteria->addSelectColumn($alias . '.name');
-            $criteria->addSelectColumn($alias . '.headline');
-            $criteria->addSelectColumn($alias . '.description');
-            $criteria->addSelectColumn($alias . '.price_from');
-            $criteria->addSelectColumn($alias . '.price_to');
-            $criteria->addSelectColumn($alias . '.order');
-            $criteria->addSelectColumn($alias . '.use_price_range');
-            $criteria->addSelectColumn($alias . '.created_at');
-            $criteria->addSelectColumn($alias . '.status');
-            $criteria->addSelectColumn($alias . '.discount_type');
-            $criteria->addSelectColumn($alias . '.discount_amount');
-            $criteria->addSelectColumn($alias . '.placement');
+            $criteria->addSelectColumn($alias . '.data');
         }
     }
 
@@ -331,21 +187,21 @@ abstract class BaseUpSellPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(UpSellPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(TmpRequestPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            UpSellPeer::addSelectColumns($criteria);
+            TmpRequestPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(UpSellPeer::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(TmpRequestPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
-            $con = Propel::getConnection(UpSellPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(TmpRequestPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
         // BasePeer returns a PDOStatement
         $stmt = BasePeer::doCount($criteria, $con);
@@ -364,7 +220,7 @@ abstract class BaseUpSellPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return UpSell
+     * @return TmpRequest
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -372,7 +228,7 @@ abstract class BaseUpSellPeer
     {
         $critcopy = clone $criteria;
         $critcopy->setLimit(1);
-        $objects = UpSellPeer::doSelect($critcopy, $con);
+        $objects = TmpRequestPeer::doSelect($critcopy, $con);
         if ($objects) {
             return $objects[0];
         }
@@ -390,7 +246,7 @@ abstract class BaseUpSellPeer
      */
     public static function doSelect(Criteria $criteria, PropelPDO $con = null)
     {
-        return UpSellPeer::populateObjects(UpSellPeer::doSelectStmt($criteria, $con));
+        return TmpRequestPeer::populateObjects(TmpRequestPeer::doSelectStmt($criteria, $con));
     }
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -408,16 +264,16 @@ abstract class BaseUpSellPeer
     public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(UpSellPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(TmpRequestPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         if (!$criteria->hasSelectClause()) {
             $criteria = clone $criteria;
-            UpSellPeer::addSelectColumns($criteria);
+            TmpRequestPeer::addSelectColumns($criteria);
         }
 
         // Set the correct dbName
-        $criteria->setDbName(UpSellPeer::DATABASE_NAME);
+        $criteria->setDbName(TmpRequestPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -431,7 +287,7 @@ abstract class BaseUpSellPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param UpSell $obj A UpSell object.
+     * @param TmpRequest $obj A TmpRequest object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
@@ -440,7 +296,7 @@ abstract class BaseUpSellPeer
             if ($key === null) {
                 $key = (string) $obj->getId();
             } // if key === null
-            UpSellPeer::$instances[$key] = $obj;
+            TmpRequestPeer::$instances[$key] = $obj;
         }
     }
 
@@ -452,7 +308,7 @@ abstract class BaseUpSellPeer
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param      mixed $value A UpSell object or a primary key value.
+     * @param      mixed $value A TmpRequest object or a primary key value.
      *
      * @return void
      * @throws PropelException - if the value is invalid.
@@ -460,17 +316,17 @@ abstract class BaseUpSellPeer
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
-            if (is_object($value) && $value instanceof UpSell) {
+            if (is_object($value) && $value instanceof TmpRequest) {
                 $key = (string) $value->getId();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or UpSell object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or TmpRequest object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
                 throw $e;
             }
 
-            unset(UpSellPeer::$instances[$key]);
+            unset(TmpRequestPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -481,14 +337,14 @@ abstract class BaseUpSellPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return UpSell Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return TmpRequest Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(UpSellPeer::$instances[$key])) {
-                return UpSellPeer::$instances[$key];
+            if (isset(TmpRequestPeer::$instances[$key])) {
+                return TmpRequestPeer::$instances[$key];
             }
         }
 
@@ -503,22 +359,19 @@ abstract class BaseUpSellPeer
     public static function clearInstancePool($and_clear_all_references = false)
     {
       if ($and_clear_all_references) {
-        foreach (UpSellPeer::$instances as $instance) {
+        foreach (TmpRequestPeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
-        UpSellPeer::$instances = array();
+        TmpRequestPeer::$instances = array();
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to up_sell
+     * Method to invalidate the instance pool of all tables related to tmp_request
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
     {
-        // Invalidate objects in WidgetStatsPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        WidgetStatsPeer::clearInstancePool();
     }
 
     /**
@@ -568,11 +421,11 @@ abstract class BaseUpSellPeer
         $results = array();
 
         // set the class once to avoid overhead in the loop
-        $cls = UpSellPeer::getOMClass();
+        $cls = TmpRequestPeer::getOMClass();
         // populate the object(s)
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key = UpSellPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj = UpSellPeer::getInstanceFromPool($key))) {
+            $key = TmpRequestPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj = TmpRequestPeer::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
@@ -581,7 +434,7 @@ abstract class BaseUpSellPeer
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                UpSellPeer::addInstanceToPool($obj, $key);
+                TmpRequestPeer::addInstanceToPool($obj, $key);
             } // if key exists
         }
         $stmt->closeCursor();
@@ -595,21 +448,21 @@ abstract class BaseUpSellPeer
      * @param      int $startcol The 0-based offset for reading from the resultset row.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
-     * @return array (UpSell object, last column rank)
+     * @return array (TmpRequest object, last column rank)
      */
     public static function populateObject($row, $startcol = 0)
     {
-        $key = UpSellPeer::getPrimaryKeyHashFromRow($row, $startcol);
-        if (null !== ($obj = UpSellPeer::getInstanceFromPool($key))) {
+        $key = TmpRequestPeer::getPrimaryKeyHashFromRow($row, $startcol);
+        if (null !== ($obj = TmpRequestPeer::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $startcol, true); // rehydrate
-            $col = $startcol + UpSellPeer::NUM_HYDRATE_COLUMNS;
+            $col = $startcol + TmpRequestPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = UpSellPeer::OM_CLASS;
+            $cls = TmpRequestPeer::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
-            UpSellPeer::addInstanceToPool($obj, $key);
+            TmpRequestPeer::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -624,7 +477,7 @@ abstract class BaseUpSellPeer
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(UpSellPeer::DATABASE_NAME)->getTable(UpSellPeer::TABLE_NAME);
+        return Propel::getDatabaseMap(TmpRequestPeer::DATABASE_NAME)->getTable(TmpRequestPeer::TABLE_NAME);
     }
 
     /**
@@ -632,9 +485,9 @@ abstract class BaseUpSellPeer
      */
     public static function buildTableMap()
     {
-      $dbMap = Propel::getDatabaseMap(BaseUpSellPeer::DATABASE_NAME);
-      if (!$dbMap->hasTable(BaseUpSellPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \src\Model\map\UpSellTableMap());
+      $dbMap = Propel::getDatabaseMap(BaseTmpRequestPeer::DATABASE_NAME);
+      if (!$dbMap->hasTable(BaseTmpRequestPeer::TABLE_NAME)) {
+        $dbMap->addTableObject(new \src\Model\map\TmpRequestTableMap());
       }
     }
 
@@ -646,13 +499,13 @@ abstract class BaseUpSellPeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
-        return UpSellPeer::OM_CLASS;
+        return TmpRequestPeer::OM_CLASS;
     }
 
     /**
-     * Performs an INSERT on the database, given a UpSell or Criteria object.
+     * Performs an INSERT on the database, given a TmpRequest or Criteria object.
      *
-     * @param      mixed $values Criteria or UpSell object containing data that is used to create the INSERT statement.
+     * @param      mixed $values Criteria or TmpRequest object containing data that is used to create the INSERT statement.
      * @param      PropelPDO $con the PropelPDO connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -661,22 +514,22 @@ abstract class BaseUpSellPeer
     public static function doInsert($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(UpSellPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(TmpRequestPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
         } else {
-            $criteria = $values->buildCriteria(); // build Criteria from UpSell object
+            $criteria = $values->buildCriteria(); // build Criteria from TmpRequest object
         }
 
-        if ($criteria->containsKey(UpSellPeer::ID) && $criteria->keyContainsValue(UpSellPeer::ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.UpSellPeer::ID.')');
+        if ($criteria->containsKey(TmpRequestPeer::ID) && $criteria->keyContainsValue(TmpRequestPeer::ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.TmpRequestPeer::ID.')');
         }
 
 
         // Set the correct dbName
-        $criteria->setDbName(UpSellPeer::DATABASE_NAME);
+        $criteria->setDbName(TmpRequestPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -693,9 +546,9 @@ abstract class BaseUpSellPeer
     }
 
     /**
-     * Performs an UPDATE on the database, given a UpSell or Criteria object.
+     * Performs an UPDATE on the database, given a TmpRequest or Criteria object.
      *
-     * @param      mixed $values Criteria or UpSell object containing data that is used to create the UPDATE statement.
+     * @param      mixed $values Criteria or TmpRequest object containing data that is used to create the UPDATE statement.
      * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
      * @return int             The number of affected rows (if supported by underlying database driver).
      * @throws PropelException Any exceptions caught during processing will be
@@ -704,35 +557,35 @@ abstract class BaseUpSellPeer
     public static function doUpdate($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(UpSellPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(TmpRequestPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(UpSellPeer::DATABASE_NAME);
+        $selectCriteria = new Criteria(TmpRequestPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(UpSellPeer::ID);
-            $value = $criteria->remove(UpSellPeer::ID);
+            $comparison = $criteria->getComparison(TmpRequestPeer::ID);
+            $value = $criteria->remove(TmpRequestPeer::ID);
             if ($value) {
-                $selectCriteria->add(UpSellPeer::ID, $value, $comparison);
+                $selectCriteria->add(TmpRequestPeer::ID, $value, $comparison);
             } else {
-                $selectCriteria->setPrimaryTableName(UpSellPeer::TABLE_NAME);
+                $selectCriteria->setPrimaryTableName(TmpRequestPeer::TABLE_NAME);
             }
 
-        } else { // $values is UpSell object
+        } else { // $values is TmpRequest object
             $criteria = $values->buildCriteria(); // gets full criteria
             $selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
         }
 
         // set the correct dbName
-        $criteria->setDbName(UpSellPeer::DATABASE_NAME);
+        $criteria->setDbName(TmpRequestPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
 
     /**
-     * Deletes all rows from the up_sell table.
+     * Deletes all rows from the tmp_request table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -741,20 +594,19 @@ abstract class BaseUpSellPeer
     public static function doDeleteAll(PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(UpSellPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(TmpRequestPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
         $affectedRows = 0; // initialize var to track total num of affected rows
         try {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            $affectedRows += UpSellPeer::doOnDeleteCascade(new Criteria(UpSellPeer::DATABASE_NAME), $con);
-            $affectedRows += BasePeer::doDeleteAll(UpSellPeer::TABLE_NAME, $con, UpSellPeer::DATABASE_NAME);
+            $affectedRows += BasePeer::doDeleteAll(TmpRequestPeer::TABLE_NAME, $con, TmpRequestPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            UpSellPeer::clearInstancePool();
-            UpSellPeer::clearRelatedInstancePool();
+            TmpRequestPeer::clearInstancePool();
+            TmpRequestPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -765,9 +617,9 @@ abstract class BaseUpSellPeer
     }
 
     /**
-     * Performs a DELETE on the database, given a UpSell or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a TmpRequest or Criteria object OR a primary key value.
      *
-     * @param      mixed $values Criteria or UpSell object or primary key or array of primary keys
+     * @param      mixed $values Criteria or TmpRequest object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param      PropelPDO $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -778,22 +630,32 @@ abstract class BaseUpSellPeer
      public static function doDelete($values, PropelPDO $con = null)
      {
         if ($con === null) {
-            $con = Propel::getConnection(UpSellPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(TmpRequestPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
+            // invalidate the cache for all objects of this type, since we have no
+            // way of knowing (without running a query) what objects should be invalidated
+            // from the cache based on this Criteria.
+            TmpRequestPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
-        } elseif ($values instanceof UpSell) { // it's a model object
+        } elseif ($values instanceof TmpRequest) { // it's a model object
+            // invalidate the cache for this single object
+            TmpRequestPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(UpSellPeer::DATABASE_NAME);
-            $criteria->add(UpSellPeer::ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(TmpRequestPeer::DATABASE_NAME);
+            $criteria->add(TmpRequestPeer::ID, (array) $values, Criteria::IN);
+            // invalidate the cache for this object(s)
+            foreach ((array) $values as $singleval) {
+                TmpRequestPeer::removeInstanceFromPool($singleval);
+            }
         }
 
         // Set the correct dbName
-        $criteria->setDbName(UpSellPeer::DATABASE_NAME);
+        $criteria->setDbName(TmpRequestPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -802,25 +664,8 @@ abstract class BaseUpSellPeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
-            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
-            $c = clone $criteria;
-            $affectedRows += UpSellPeer::doOnDeleteCascade($c, $con);
-
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            if ($values instanceof Criteria) {
-                UpSellPeer::clearInstancePool();
-            } elseif ($values instanceof UpSell) { // it's a model object
-                UpSellPeer::removeInstanceFromPool($values);
-            } else { // it's a primary key, or an array of pks
-                foreach ((array) $values as $singleval) {
-                    UpSellPeer::removeInstanceFromPool($singleval);
-                }
-            }
-
             $affectedRows += BasePeer::doDelete($criteria, $con);
-            UpSellPeer::clearRelatedInstancePool();
+            TmpRequestPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -831,46 +676,13 @@ abstract class BaseUpSellPeer
     }
 
     /**
-     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
-     * feature (like MySQL or SQLite).
-     *
-     * This method is not very speedy because it must perform a query first to get
-     * the implicated records and then perform the deletes by calling those Peer classes.
-     *
-     * This method should be used within a transaction if possible.
-     *
-     * @param      Criteria $criteria
-     * @param      PropelPDO $con
-     * @return int The number of affected rows (if supported by underlying database driver).
-     */
-    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
-    {
-        // initialize var to track total num of affected rows
-        $affectedRows = 0;
-
-        // first find the objects that are implicated by the $criteria
-        $objects = UpSellPeer::doSelect($criteria, $con);
-        foreach ($objects as $obj) {
-
-
-            // delete related WidgetStats objects
-            $criteria = new Criteria(WidgetStatsPeer::DATABASE_NAME);
-
-            $criteria->add(WidgetStatsPeer::UP_SELL_ID, $obj->getId());
-            $affectedRows += WidgetStatsPeer::doDelete($criteria, $con);
-        }
-
-        return $affectedRows;
-    }
-
-    /**
-     * Validates all modified columns of given UpSell object.
+     * Validates all modified columns of given TmpRequest object.
      * If parameter $columns is either a single column name or an array of column names
      * than only those columns are validated.
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param UpSell $obj The object to validate.
+     * @param TmpRequest $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -880,8 +692,8 @@ abstract class BaseUpSellPeer
         $columns = array();
 
         if ($cols) {
-            $dbMap = Propel::getDatabaseMap(UpSellPeer::DATABASE_NAME);
-            $tableMap = $dbMap->getTable(UpSellPeer::TABLE_NAME);
+            $dbMap = Propel::getDatabaseMap(TmpRequestPeer::DATABASE_NAME);
+            $tableMap = $dbMap->getTable(TmpRequestPeer::TABLE_NAME);
 
             if (! is_array($cols)) {
                 $cols = array($cols);
@@ -897,7 +709,7 @@ abstract class BaseUpSellPeer
 
         }
 
-        return BasePeer::doValidate(UpSellPeer::DATABASE_NAME, UpSellPeer::TABLE_NAME, $columns);
+        return BasePeer::doValidate(TmpRequestPeer::DATABASE_NAME, TmpRequestPeer::TABLE_NAME, $columns);
     }
 
     /**
@@ -905,23 +717,23 @@ abstract class BaseUpSellPeer
      *
      * @param int $pk the primary key.
      * @param      PropelPDO $con the connection to use
-     * @return UpSell
+     * @return TmpRequest
      */
     public static function retrieveByPK($pk, PropelPDO $con = null)
     {
 
-        if (null !== ($obj = UpSellPeer::getInstanceFromPool((string) $pk))) {
+        if (null !== ($obj = TmpRequestPeer::getInstanceFromPool((string) $pk))) {
             return $obj;
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(UpSellPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(TmpRequestPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria = new Criteria(UpSellPeer::DATABASE_NAME);
-        $criteria->add(UpSellPeer::ID, $pk);
+        $criteria = new Criteria(TmpRequestPeer::DATABASE_NAME);
+        $criteria->add(TmpRequestPeer::ID, $pk);
 
-        $v = UpSellPeer::doSelect($criteria, $con);
+        $v = TmpRequestPeer::doSelect($criteria, $con);
 
         return !empty($v) > 0 ? $v[0] : null;
     }
@@ -931,31 +743,31 @@ abstract class BaseUpSellPeer
      *
      * @param      array $pks List of primary keys
      * @param      PropelPDO $con the connection to use
-     * @return UpSell[]
+     * @return TmpRequest[]
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
     public static function retrieveByPKs($pks, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(UpSellPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(TmpRequestPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         $objs = null;
         if (empty($pks)) {
             $objs = array();
         } else {
-            $criteria = new Criteria(UpSellPeer::DATABASE_NAME);
-            $criteria->add(UpSellPeer::ID, $pks, Criteria::IN);
-            $objs = UpSellPeer::doSelect($criteria, $con);
+            $criteria = new Criteria(TmpRequestPeer::DATABASE_NAME);
+            $criteria->add(TmpRequestPeer::ID, $pks, Criteria::IN);
+            $objs = TmpRequestPeer::doSelect($criteria, $con);
         }
 
         return $objs;
     }
 
-} // BaseUpSellPeer
+} // BaseTmpRequestPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseUpSellPeer::buildTableMap();
+BaseTmpRequestPeer::buildTableMap();
 

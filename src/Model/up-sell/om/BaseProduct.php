@@ -9,11 +9,15 @@ use \Exception;
 use \PDO;
 use \Persistent;
 use \Propel;
+use \PropelCollection;
 use \PropelException;
+use \PropelObjectCollection;
 use \PropelPDO;
 use src\Model\Product;
 use src\Model\ProductPeer;
 use src\Model\ProductQuery;
+use src\Model\WidgetStats;
+use src\Model\WidgetStatsQuery;
 
 /**
  * Base class that represents a row from the 'product' table.
@@ -110,6 +114,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
     protected $variants;
 
     /**
+     * @var        PropelObjectCollection|WidgetStats[] Collection to store aggregation of WidgetStats objects.
+     */
+    protected $collWidgetStatss;
+    protected $collWidgetStatssPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -128,6 +138,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $widgetStatssScheduledForDeletion = null;
 
     /**
      * Get the [id] column value.
@@ -595,6 +611,8 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collWidgetStatss = null;
+
         } // if (deep)
     }
 
@@ -717,6 +735,23 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->widgetStatssScheduledForDeletion !== null) {
+                if (!$this->widgetStatssScheduledForDeletion->isEmpty()) {
+                    WidgetStatsQuery::create()
+                        ->filterByPrimaryKeys($this->widgetStatssScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->widgetStatssScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collWidgetStatss !== null) {
+                foreach ($this->collWidgetStatss as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -921,6 +956,14 @@ abstract class BaseProduct extends BaseObject implements Persistent
             }
 
 
+                if ($this->collWidgetStatss !== null) {
+                    foreach ($this->collWidgetStatss as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -1006,10 +1049,11 @@ abstract class BaseProduct extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Product'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -1034,6 +1078,11 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->collWidgetStatss) {
+                $result['WidgetStatss'] = $this->collWidgetStatss->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -1230,6 +1279,24 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $copyObj->setSku($this->getSku());
         $copyObj->setDescription($this->getDescription());
         $copyObj->setVariants($this->getVariants());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            foreach ($this->getWidgetStatss() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addWidgetStats($relObj->copy($deepCopy));
+                }
+            }
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1276,6 +1343,272 @@ abstract class BaseProduct extends BaseObject implements Persistent
         return self::$peer;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('WidgetStats' == $relationName) {
+            $this->initWidgetStatss();
+        }
+    }
+
+    /**
+     * Clears out the collWidgetStatss collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Product The current object (for fluent API support)
+     * @see        addWidgetStatss()
+     */
+    public function clearWidgetStatss()
+    {
+        $this->collWidgetStatss = null; // important to set this to null since that means it is uninitialized
+        $this->collWidgetStatssPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collWidgetStatss collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialWidgetStatss($v = true)
+    {
+        $this->collWidgetStatssPartial = $v;
+    }
+
+    /**
+     * Initializes the collWidgetStatss collection.
+     *
+     * By default this just sets the collWidgetStatss collection to an empty array (like clearcollWidgetStatss());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initWidgetStatss($overrideExisting = true)
+    {
+        if (null !== $this->collWidgetStatss && !$overrideExisting) {
+            return;
+        }
+        $this->collWidgetStatss = new PropelObjectCollection();
+        $this->collWidgetStatss->setModel('WidgetStats');
+    }
+
+    /**
+     * Gets an array of WidgetStats objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Product is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|WidgetStats[] List of WidgetStats objects
+     * @throws PropelException
+     */
+    public function getWidgetStatss($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collWidgetStatssPartial && !$this->isNew();
+        if (null === $this->collWidgetStatss || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collWidgetStatss) {
+                // return empty collection
+                $this->initWidgetStatss();
+            } else {
+                $collWidgetStatss = WidgetStatsQuery::create(null, $criteria)
+                    ->filterByProduct($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collWidgetStatssPartial && count($collWidgetStatss)) {
+                      $this->initWidgetStatss(false);
+
+                      foreach ($collWidgetStatss as $obj) {
+                        if (false == $this->collWidgetStatss->contains($obj)) {
+                          $this->collWidgetStatss->append($obj);
+                        }
+                      }
+
+                      $this->collWidgetStatssPartial = true;
+                    }
+
+                    $collWidgetStatss->getInternalIterator()->rewind();
+
+                    return $collWidgetStatss;
+                }
+
+                if ($partial && $this->collWidgetStatss) {
+                    foreach ($this->collWidgetStatss as $obj) {
+                        if ($obj->isNew()) {
+                            $collWidgetStatss[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collWidgetStatss = $collWidgetStatss;
+                $this->collWidgetStatssPartial = false;
+            }
+        }
+
+        return $this->collWidgetStatss;
+    }
+
+    /**
+     * Sets a collection of WidgetStats objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $widgetStatss A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Product The current object (for fluent API support)
+     */
+    public function setWidgetStatss(PropelCollection $widgetStatss, PropelPDO $con = null)
+    {
+        $widgetStatssToDelete = $this->getWidgetStatss(new Criteria(), $con)->diff($widgetStatss);
+
+
+        $this->widgetStatssScheduledForDeletion = $widgetStatssToDelete;
+
+        foreach ($widgetStatssToDelete as $widgetStatsRemoved) {
+            $widgetStatsRemoved->setProduct(null);
+        }
+
+        $this->collWidgetStatss = null;
+        foreach ($widgetStatss as $widgetStats) {
+            $this->addWidgetStats($widgetStats);
+        }
+
+        $this->collWidgetStatss = $widgetStatss;
+        $this->collWidgetStatssPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related WidgetStats objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related WidgetStats objects.
+     * @throws PropelException
+     */
+    public function countWidgetStatss(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collWidgetStatssPartial && !$this->isNew();
+        if (null === $this->collWidgetStatss || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collWidgetStatss) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getWidgetStatss());
+            }
+            $query = WidgetStatsQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByProduct($this)
+                ->count($con);
+        }
+
+        return count($this->collWidgetStatss);
+    }
+
+    /**
+     * Method called to associate a WidgetStats object to this object
+     * through the WidgetStats foreign key attribute.
+     *
+     * @param    WidgetStats $l WidgetStats
+     * @return Product The current object (for fluent API support)
+     */
+    public function addWidgetStats(WidgetStats $l)
+    {
+        if ($this->collWidgetStatss === null) {
+            $this->initWidgetStatss();
+            $this->collWidgetStatssPartial = true;
+        }
+
+        if (!in_array($l, $this->collWidgetStatss->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddWidgetStats($l);
+
+            if ($this->widgetStatssScheduledForDeletion and $this->widgetStatssScheduledForDeletion->contains($l)) {
+                $this->widgetStatssScheduledForDeletion->remove($this->widgetStatssScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	WidgetStats $widgetStats The widgetStats object to add.
+     */
+    protected function doAddWidgetStats($widgetStats)
+    {
+        $this->collWidgetStatss[]= $widgetStats;
+        $widgetStats->setProduct($this);
+    }
+
+    /**
+     * @param	WidgetStats $widgetStats The widgetStats object to remove.
+     * @return Product The current object (for fluent API support)
+     */
+    public function removeWidgetStats($widgetStats)
+    {
+        if ($this->getWidgetStatss()->contains($widgetStats)) {
+            $this->collWidgetStatss->remove($this->collWidgetStatss->search($widgetStats));
+            if (null === $this->widgetStatssScheduledForDeletion) {
+                $this->widgetStatssScheduledForDeletion = clone $this->collWidgetStatss;
+                $this->widgetStatssScheduledForDeletion->clear();
+            }
+            $this->widgetStatssScheduledForDeletion[]= $widgetStats;
+            $widgetStats->setProduct(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Product is new, it will return
+     * an empty collection; or if this Product has previously
+     * been saved, it will retrieve related WidgetStatss from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Product.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|WidgetStats[] List of WidgetStats objects
+     */
+    public function getWidgetStatssJoinUpSell($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = WidgetStatsQuery::create(null, $criteria);
+        $query->joinWith('UpSell', $join_behavior);
+
+        return $this->getWidgetStatss($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -1314,10 +1647,19 @@ abstract class BaseProduct extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collWidgetStatss) {
+                foreach ($this->collWidgetStatss as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collWidgetStatss instanceof PropelCollection) {
+            $this->collWidgetStatss->clearIterator();
+        }
+        $this->collWidgetStatss = null;
     }
 
     /**

@@ -155,5 +155,37 @@ CREATE TABLE `widget_stats`
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- ---------------------------------------------------------------------
+-- up_sell_stats
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `up_sell_stats`;
+
+CREATE TABLE `up_sell_stats`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `shop_domain` VARCHAR(255) NOT NULL,
+    `full_value` DOUBLE NOT NULL,
+    `up_sell_value` DOUBLE,
+    `placement` enum('product','cart') DEFAULT 'product' NOT NULL,
+    `order_id` INTEGER,
+    `created_at` DATETIME NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `shop_domain` (`shop_domain`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- tmp_request
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tmp_request`;
+
+CREATE TABLE `tmp_request`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `data` TEXT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

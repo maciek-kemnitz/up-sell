@@ -1,0 +1,341 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="http://www.shoplo.com/css/admin!admin-4486067.css">
+    <link rel="stylesheet" type="text/css" href="{{ app.request.basepath }}/css/styles.css">
+
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script src="{{ app.request.basepath }}/js/raphael.min.js"></script>
+	<script src="{{ app.request.basepath }}/js/elycharts.min.js"></script>
+</head>
+
+
+
+<body class="content-ready sidebar-collapsed" style="">
+<iframe src="http://{{ shop['permanent_domain'] }}/admin/adminnavbar" style="width:230px;height:1000px;border:0;position:fixed;top:0;left:0;"></iframe>
+
+
+<section id="home-page" class="main-container">
+    <section class="content-container">
+        <section class="content-dashboard">
+            <article class="content">
+                <section class="scroll-area right-frame bottom-frame">
+                    <section class="box bottom-frame">
+                        <h2 class="pull-left">Product UpSell</h2>
+                        <section class="filters">
+                            <a class="btn-dark pull-right" data-icon="/" href="/logout">Wyloguj</a>
+                            <a class="btn-dark pull-right" href="/campaign">Aktywne kampanie</a>
+                            <a class="btn-dark pull-right" data-icon="m" href="/add">Dodaj</a>
+                        </section>
+                    </section>
+                    <section class="scroll-content">
+	                    <ul class="table-columns four-in-row bottom-frame stats" data-ajax-url="http://mk-10.shoplo.com/ajax?method=admin.dashboard.get&amp;andrew=1">
+		                    <li class="box current" data-tutorial="#dashboard-indicators-tutorial" data-original-title="" title="">
+			                    <span class="label day hide">dzisiaj</span>
+			                    <span class="label week hide">Ten tydzień</span>
+			                    <span class="label month">Ten miesiąc</span>
+			                    <span class="value fall" data-icon="5"><b>0.00</b> <sup class="">PLN</sup></span>
+		                    </li>
+		                    <li class="box previous left-frame">
+			                    <span class="label day hide">Wczoraj</span>
+			                    <span class="label week hide">Poprzedni tydzień</span>
+			                    <span class="label month">Poprzedni miesiąc</span>
+			                    <span class="value balance"><b>0.00</b> <sup class="">PLN</sup></span>
+		                    </li>
+		                    <li class="box variantion left-frame" data-tutorial="#dashboard-indicators-change-tutorial" data-original-title="" title="">
+			                    <span class="label">Zmień</span>
+			                    <span class="value fall" data-icon="5"><b>0</b> <sup>%</sup></span>
+		                    </li>
+		                    <li class="box left-frame">
+			                    <select class="date-select simple-select last" data-icon="r">
+				                    <option value="day">dzisiaj</option>
+				                    <option value="week" selected="selected">ostatnie 7 dni</option>
+				                    <option value="month">ostatnie 30 dni</option>
+			                    </select>
+		                    </li>
+	                    </ul>
+	                    <section class="chart">
+		                    <div id="chart"></div>
+		                    <script type="text/javascript">
+
+
+
+
+			                    var fontFamily = 'Open Sans',
+					                    redColor = '#f55161',
+					                    greenColor = '#3cbb9b',
+					                    blueColor = '#0f9ddd',
+					                    grayColor = '#abacb2';
+
+			                    $.elycharts.templates['shoplo'] = {
+				                    type: 'line',
+				                    margins: [30, 30, 60, 30],
+				                    series: {
+					                    serie1: {
+						                    rounded: false,
+						                    plotProps: {
+							                    'stroke-width': 3,
+							                    stroke: "red"
+						                    },
+						                    dot: true,
+						                    dotProps: {
+							                    size: 5,
+							                    fill: '#fff',
+							                    stroke: "red",
+							                    'stroke-width': 3
+						                    },
+						                    highlight: {
+							                    scale: 1.5
+						                    },
+						                    tooltip: {
+							                    width: 44,
+							                    height: 40,
+							                    roundedCorners: 2,
+							                    padding: [5, 8],
+							                    offset: [12, 22],
+							                    contentStyle: {
+								                    color: '#fff',
+								                    'font-size': '15px',
+								                    'font-weight': '600',
+								                    'font-family': fontFamily,
+								                    'text-align': 'center'
+							                    },
+							                    frameProps: {
+								                    fill: "red",
+								                    'stroke-width': 0
+							                    }
+						                    },
+						                    startAnimation: {
+							                    active: true,
+							                    type: 'grow',
+							                    speed: 500,
+							                    easing: '>'
+						                    }
+					                    },
+					                    serie2: {
+						                    rounded: false,
+						                    plotProps: {
+							                    'stroke-width': 3,
+							                    stroke: greenColor
+						                    },
+						                    dot: true,
+						                    dotProps: {
+							                    size: 5,
+							                    fill: '#fff',
+							                    stroke: greenColor,
+							                    'stroke-width': 3
+						                    },
+						                    highlight: {
+							                    scale: 1.5
+						                    },
+						                    tooltip: {
+							                    width: 44,
+							                    height: 40,
+							                    roundedCorners: 2,
+							                    padding: [5, 8],
+							                    offset: [12, 22],
+							                    contentStyle: {
+								                    color: '#fff',
+								                    'font-size': '15px',
+								                    'font-weight': '600',
+								                    'font-family': fontFamily,
+								                    'text-align': 'center'
+							                    },
+							                    frameProps: {
+								                    fill: greenColor,
+								                    'stroke-width': 0
+							                    }
+						                    },
+						                    startAnimation: {
+							                    active: true,
+							                    type: 'grow',
+							                    speed: 500,
+							                    easing: '>'
+						                    }
+					                    },
+					                    serie3: {
+						                    rounded: false,
+						                    plotProps: {
+							                    'stroke-width': 3,
+							                    stroke: blueColor
+						                    },
+						                    dot: true,
+						                    dotProps: {
+							                    size: 5,
+							                    fill: '#fff',
+							                    stroke: blueColor,
+							                    'stroke-width': 3
+						                    },
+						                    highlight: {
+							                    scale: 1.5
+						                    },
+						                    tooltip: {
+							                    width: 44,
+							                    height: 40,
+							                    roundedCorners: 2,
+							                    padding: [5, 8],
+							                    offset: [12, 22],
+							                    contentStyle: {
+								                    color: '#fff',
+								                    'font-size': '15px',
+								                    'font-weight': '600',
+								                    'font-family': fontFamily,
+								                    'text-align': 'center'
+							                    },
+							                    frameProps: {
+								                    fill: blueColor,
+								                    'stroke-width': 0
+							                    }
+						                    },
+						                    startAnimation: {
+							                    active: true,
+							                    type: 'grow',
+							                    speed: 500,
+							                    easing: '>'
+						                    }
+					                    }
+				                    },
+				                    defaultAxis: {
+					                    labels: true,
+					                    labelsDistance: 15,
+					                    labelsAnchor: 'middle',
+					                    labelsProps: {
+						                    fill: grayColor,
+						                    'font-family': fontFamily
+					                    }
+				                    },
+				                    axis: {
+					                    l: {
+						                    labels: true
+					                    }
+				                    },
+				                    features: {
+					                    tooltip: {
+						                    moveDelay: 100
+					                    },
+					                    grid: {
+						                    draw: [false, true]
+					                    }
+				                    }
+			                    };
+
+
+			                    $("#chart").chart({
+				                    type: 'line',
+				                    template: 'shoplo',
+				                    tooltips: {
+					                    serie1: [1, 2, 3, 4],
+					                    serie2: [1, 4, 12, 5],
+//					serie3: [1, 10, 23, 8]
+				                    },
+				                    values: {
+					                    serie1: [1, 2, 3, 4],
+					                    serie2: [1, 4, 12, 5],
+//					serie3: [1, 10, 23, 8]
+				                    },
+
+				                    labels: ["a", "b", "c", "d"]
+			                    });
+
+		                    </script>
+	                    </section>
+                    </section>
+                </section>
+            </article>
+    </section>
+</section>
+
+
+</section>
+<script src="http://www.shoplo.com/js/admin!bootstrap-admin!bootstrap.select-admin!bootstrap.checkbox-admin!jquery.custom-admin!jquery.validate-admin!jquery.sortable-admin!jquery.slimscroll-admin!jquery.numberAnimate-admin!jquery.touchtoclick-admin!admin-admin!main-11240606.js"></script>
+<script src="http://www.shoplo.com/js/admin!autocompleter-0.js"></script>
+<script>
+    ADMIN.ROOT = 'local.up-sell.pl';
+    ADMIN.STATIC_ROOT = 'local.up-sell.pl';
+    ADMIN.USER = {
+        ID: '0',
+        TOKEN: '',
+        LANG: {% if js_dict is defined %}eval(js_dict){% else %}''{% endif %},
+        IC: {% if ins_com is defined and ins_com %}true{% else %}false{% endif %}
+    };
+    ADMIN.SHOP = {
+        CURRENCY: '{% if shop is defined and shop%}{{ shop.currency }}{% endif %}'
+    };
+
+    ADMIN.run();
+</script>
+<script type="text/javascript">
+    $(function(){
+
+	    $('#search').keyup(function(){
+
+		    var query = $(this).val().toLowerCase();
+
+			$('#sortable').find('.list-item').each(function(){
+
+				var name = $(this).find('#up-sell-name').text().toLowerCase().trim();
+
+				if (name.indexOf(query) == -1)
+				{
+					$(this).hide();
+				}
+				else
+				{
+					$(this).show();
+				}
+			});
+	    });
+
+//        $( "#sortable" ).sortable({
+//
+//            placeholder: "sortable-placeholder",
+//            cursor: 'pointer',
+//
+//            start: function( event, ui ) {
+//              $(ui.item).addClass('left-frame');
+//              $(ui.item).addClass('right-frame');
+//              $(ui.item).addClass('sorted-item');
+//            },
+//
+//            stop: function( event, ui ) {
+//                $(ui.item).removeClass('left-frame');
+//                $(ui.item).removeClass('right-frame');
+//                $(ui.item).removeClass('sorted-item');
+//            },
+//            update: function( event, ui ) {
+//                var index = 1;
+//                var data = [];
+//				alert('wi?');
+//                $('#sortable').fadeTo( "slow" , 0.2);
+//                $('.loader').toggle('slow');
+//
+//
+//                $("#sortable").find('ul').each(function(){
+//
+//                    data.push($(this).data('up-sell-id'));
+//
+//                }).delay( 10000 );
+//
+//                var userData = {
+//                    'data': data
+//                };
+//
+//
+//
+//                $.post('/ajax/sort', userData, function (ajaxResult) {
+//                        if(ajaxResult.status == 'ok'){
+//                            setTimeout(function(){
+//                                $('#sortable').fadeTo("slow", 1);
+//                                $('.loader').toggle();
+//                            }, 2000);
+//
+//                        }
+//
+//                }
+//                , 'json');
+//            }
+//        });
+    });
+</script>
+</body>
+</html>
