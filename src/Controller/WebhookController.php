@@ -22,7 +22,7 @@ class WebhookController implements ControllerProviderInterface
 	{
 		$controllers = $app['controllers_factory'];
 
-		$controllers->get('/order/created', function (Request $request) use ($app)
+		$controllers->post('/order/created', function (Request $request) use ($app)
 		{
 			$requestParams = $request->request->all();
 			$queryParams = $request->query->all();
