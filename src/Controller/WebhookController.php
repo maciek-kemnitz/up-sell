@@ -13,8 +13,9 @@ use Silex\Application;
 use Silex\ControllerProviderInterface;
 use src\Lib\ShoploObject;
 use src\Model\TmpRequest;
-use src\Service\ServiceRegistry;
+
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class WebhookController implements ControllerProviderInterface
 {
@@ -24,17 +25,24 @@ class WebhookController implements ControllerProviderInterface
 
 		$controllers->post('/order/created', function (Request $request) use ($app)
 		{
-			$requestParams = $request->request->all();
-			$queryParams = $request->query->all();
+			$hmac_key = $_SERVER['HTTP_SHOPLO_HMAC_SHA256'];
+			$calculated_key = base64_encode(hash_hmac('sha256', http_build_query($_POST), SECRET_KEY));
+			if ($hmac_key != $calculated_key)
+			{
+				return new AccessDeniedHttpException();
+			}
 
-			$tab = [
-				'request' =>$requestParams,
-				'query' => $queryParams
-			];
+			$requestParams = $request->request->all();
 
 			$tmpRequest = new TmpRequest();
-			$tmpRequest->setData(json_encode($tab));
+			$tmpRequest->setData(json_encode($requestParams));
 			$tmpRequest->save();
+
+
+
+
+
+
 			exit;
 //			/** @var ShoploObject $shoploApi */
 //			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
