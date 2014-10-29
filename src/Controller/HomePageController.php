@@ -15,6 +15,7 @@ use src\Model\RelatedProduct;
 use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
+use src\Model\WidgetStatsQuery;
 use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +37,8 @@ class HomePageController implements ControllerProviderInterface
 					"productId": {$product->variants[0]->id},
 					"shopDomain": "{$shop->permanent_domain}",
 					"cartValue": {$cart->total_price},
-					"productPrice": {$product->price}
+					"productPrice": {$product->price},
+					"userKey": {$cart->user_key}
 					};
 				</script>
 				<script src="http://up-sell.pl/js/widget.js"></script>',
@@ -44,6 +46,7 @@ class HomePageController implements ControllerProviderInterface
 					var userData = {
 						"shopDomain": "{$shop->permanent_domain}",
 						"cartValue": {$cart->total_price},
+						"userKey": {$cart->user_key}
 						"variants": [
 							{foreach from=$cart->items name=loop item="item"}
 								"{$item->variant->id}"{if not $smarty.foreach.loop.last},{/if}
@@ -100,6 +103,36 @@ class HomePageController implements ControllerProviderInterface
 
 		});
 
+		$controllers->get('/tmp/lets_see', function (Request $request) use ($app)
+		{
+			/** @var ShoploObject $shoploApi */
+			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
+			$shop 		= $shoploApi->getShop();
+
+			$upSells = UpSellQuery::create()
+			                      ->filterByShopDomain($shop['permanent_domain'])
+			                      ->orderByOrder()
+			                      ->find();
+
+			$showStats = WidgetStatsQuery::create()
+			                             ->filterByShopDomain($shoploApi->getPermanentDomain())
+			                             ->filterByCreatedAt(['min' => new \DateTime('- 1 month'), 'max' => new \DateTime()])
+			                             ->find();
+
+			//stats
+			//get order on webhook
+			//find stats matching user_key
+			//find checkout for order
+			//find products metching checkout and stats
+			//save order full value, upsell value, created_at
+			//checkout.order_id => order.id
+			//checkout.user_key => widget_stats.user_key
+
+
+
+			return $app['twig']->render('landing.page.html.twig', ['product'=>$shoploApi->getProducts(), 'uppSells' => $upSells, 'shop'=>$shop]);
+		});
+
 		$controllers->get('/logout', function (Request $request) use ($app)
 		{
 			session_unset();
@@ -122,7 +155,7 @@ class HomePageController implements ControllerProviderInterface
 
 			/** @var UpSell[] $upSells */
 			$upSells = UpSellQuery::create()
-						->findByShopDomain($oldShopDomain);
+				->findByShopDomain($oldShopDomain);
 
 			foreach ($upSells as $upSell)
 			{
@@ -186,8 +219,8 @@ class HomePageController implements ControllerProviderInterface
 		$controllers->get('/robots.txt', function (Request $request) use ($app)
 		{
 			$response = new Response(
-			"User-agent: *
-			Allow: /");
+				"User-agent: *
+				Allow: /");
 			$response->headers->set('Content-Type', 'text/plain');
 			$response->setCharset('UTF-8');
 			return $response;
