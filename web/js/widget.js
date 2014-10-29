@@ -53,7 +53,8 @@ $(function () {
 	            var statsData = {
 		            'shopDomain': shopDomain,
 		            'up_sell_id': upSellId,
-		            'placement': 'product'
+		            'placement': 'product',
+		            'user_key': userKey
 	            };
 
 	            $.post("http://up-sell.pl/ajax/up-sell/stats", statsData, 'json');
@@ -66,7 +67,7 @@ $(function () {
             $('body').delegate('#variant-select', 'change', function (){
                 var newPrice = $(this).find(":selected").data('price');
                 var id = '#'+$(this).data('product-id') + "-price";
-                console.log(id);
+
                 $(id).html(newPrice + ' zł');
             });
 
@@ -88,7 +89,8 @@ $(function () {
 		            'shopDomain': shopDomain,
 		            'up_sell_id': upSellId,
 		            'variant_id': productId,
-		            'placement': 'product'
+		            'placement': 'product',
+		            'user_key': userKey
 	            };
 
 	            $.post("http://up-sell.pl/ajax/up-sell/stats", statsData, 'json');

@@ -48,7 +48,8 @@ $(function () {
 	            var statsData = {
 		            'shopDomain': shopDomain,
 		            'up_sell_id': upSellId,
-		            'placement': 'cart'
+		            'placement': 'cart',
+		            'user_key': userKey
 	            };
 
 	            $.post("http://up-sell.pl/ajax/up-sell/stats", statsData, 'json');
@@ -79,7 +80,8 @@ $(function () {
 		            'shopDomain': shopDomain,
 		            'up_sell_id': upSellId,
 		            'variant_id': productId,
-		            'placement': 'cart'
+		            'placement': 'cart',
+		            'user_key': userKey
 	            };
 
 	            $.post("http://up-sell.pl/ajax/up-sell/stats", statsData, 'json');
