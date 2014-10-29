@@ -276,7 +276,7 @@ class AjaxController implements ControllerProviderInterface
 			$widgetStats->setUpSellId(intval($upSellId));
 			$widgetStats->setVariantId($variantId);
 			$widgetStats->setPlacement($placement);
-			$widgetStats->setCreatedAt(new \DateTime('now', new \DateTimeZone('Europe/Warsaw')));
+			$widgetStats->setCreatedAt(new \DateTime());
 			$widgetStats->setUserKey($userKey);
 			$widgetStats->save();
 
