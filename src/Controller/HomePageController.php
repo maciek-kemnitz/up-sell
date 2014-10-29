@@ -63,11 +63,6 @@ class HomePageController implements ControllerProviderInterface
 			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
 			$shop 		= $shoploApi->getShop();
 
-			$upSells = UpSellQuery::create()
-				->filterByShopDomain($shop['permanent_domain'])
-				->orderByOrder()
-				->find();
-
 			$themes = $shoploApi->getThemes();
 
 			foreach ($themes as $theme)
@@ -80,7 +75,7 @@ class HomePageController implements ControllerProviderInterface
 					$template 		= $shoploApi->getAssetByThemeIdAndName($themeId, $productTemplate[$i]);
 					$currentContent = $template['content'];
 
-					if (null === $snippet)
+					if (null === $snippet || strpos($snippet['content'], trim($snippetContent[$i])) === false)
 					{
 						$shoploApi->createAsset($themeId, $snippetName[$i], $snippetContent[$i]);
 					}
@@ -98,6 +93,11 @@ class HomePageController implements ControllerProviderInterface
 					}
 				}
 			}
+
+			$upSells = UpSellQuery::create()
+				->filterByShopDomain($shop['permanent_domain'])
+				->orderByOrder()
+				->find();
 
 			return $app['twig']->render('home.page.html.twig', ['product'=>$shoploApi->getProducts(), 'uppSells' => $upSells, 'shop'=>$shop]);
 
