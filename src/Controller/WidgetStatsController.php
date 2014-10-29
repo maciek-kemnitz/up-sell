@@ -31,7 +31,7 @@ class WidgetStatsController implements ControllerProviderInterface
 			$widgetStats->setUserKey($userKey);
 			$widgetStats->save();
 
-			return new JsonResponse();
+			return new JsonResponse([$userKey]);
 		});
 
 		return $controllers;
