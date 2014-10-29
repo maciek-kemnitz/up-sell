@@ -28,6 +28,7 @@ use src\Model\WidgetStatsQuery;
  * @method WidgetStatsQuery orderByUpSellId($order = Criteria::ASC) Order by the up_sell_id column
  * @method WidgetStatsQuery orderByVariantId($order = Criteria::ASC) Order by the variant_id column
  * @method WidgetStatsQuery orderByPlacement($order = Criteria::ASC) Order by the placement column
+ * @method WidgetStatsQuery orderByUserKey($order = Criteria::ASC) Order by the user_key column
  * @method WidgetStatsQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  *
  * @method WidgetStatsQuery groupById() Group by the id column
@@ -35,6 +36,7 @@ use src\Model\WidgetStatsQuery;
  * @method WidgetStatsQuery groupByUpSellId() Group by the up_sell_id column
  * @method WidgetStatsQuery groupByVariantId() Group by the variant_id column
  * @method WidgetStatsQuery groupByPlacement() Group by the placement column
+ * @method WidgetStatsQuery groupByUserKey() Group by the user_key column
  * @method WidgetStatsQuery groupByCreatedAt() Group by the created_at column
  *
  * @method WidgetStatsQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -56,6 +58,7 @@ use src\Model\WidgetStatsQuery;
  * @method WidgetStats findOneByUpSellId(int $up_sell_id) Return the first WidgetStats filtered by the up_sell_id column
  * @method WidgetStats findOneByVariantId(int $variant_id) Return the first WidgetStats filtered by the variant_id column
  * @method WidgetStats findOneByPlacement(string $placement) Return the first WidgetStats filtered by the placement column
+ * @method WidgetStats findOneByUserKey(string $user_key) Return the first WidgetStats filtered by the user_key column
  * @method WidgetStats findOneByCreatedAt(string $created_at) Return the first WidgetStats filtered by the created_at column
  *
  * @method array findById(int $id) Return WidgetStats objects filtered by the id column
@@ -63,6 +66,7 @@ use src\Model\WidgetStatsQuery;
  * @method array findByUpSellId(int $up_sell_id) Return WidgetStats objects filtered by the up_sell_id column
  * @method array findByVariantId(int $variant_id) Return WidgetStats objects filtered by the variant_id column
  * @method array findByPlacement(string $placement) Return WidgetStats objects filtered by the placement column
+ * @method array findByUserKey(string $user_key) Return WidgetStats objects filtered by the user_key column
  * @method array findByCreatedAt(string $created_at) Return WidgetStats objects filtered by the created_at column
  *
  * @package    propel.generator.up-sell.om
@@ -171,7 +175,7 @@ abstract class BaseWidgetStatsQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `shop_domain`, `up_sell_id`, `variant_id`, `placement`, `created_at` FROM `widget_stats` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `shop_domain`, `up_sell_id`, `variant_id`, `placement`, `user_key`, `created_at` FROM `widget_stats` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -446,6 +450,35 @@ abstract class BaseWidgetStatsQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(WidgetStatsPeer::PLACEMENT, $placement, $comparison);
+    }
+
+    /**
+     * Filter the query on the user_key column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUserKey('fooValue');   // WHERE user_key = 'fooValue'
+     * $query->filterByUserKey('%fooValue%'); // WHERE user_key LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $userKey The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return WidgetStatsQuery The current query, for fluid interface
+     */
+    public function filterByUserKey($userKey = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($userKey)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $userKey)) {
+                $userKey = str_replace('*', '%', $userKey);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(WidgetStatsPeer::USER_KEY, $userKey, $comparison);
     }
 
     /**

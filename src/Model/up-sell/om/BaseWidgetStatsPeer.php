@@ -38,13 +38,13 @@ abstract class BaseWidgetStatsPeer
     const TM_CLASS = 'src\\Model\\map\\WidgetStatsTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /** the column name for the id field */
     const ID = 'widget_stats.id';
@@ -60,6 +60,9 @@ abstract class BaseWidgetStatsPeer
 
     /** the column name for the placement field */
     const PLACEMENT = 'widget_stats.placement';
+
+    /** the column name for the user_key field */
+    const USER_KEY = 'widget_stats.user_key';
 
     /** the column name for the created_at field */
     const CREATED_AT = 'widget_stats.created_at';
@@ -87,12 +90,12 @@ abstract class BaseWidgetStatsPeer
      * e.g. WidgetStatsPeer::$fieldNames[WidgetStatsPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'ShopDomain', 'UpSellId', 'VariantId', 'Placement', 'CreatedAt', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shopDomain', 'upSellId', 'variantId', 'placement', 'createdAt', ),
-        BasePeer::TYPE_COLNAME => array (WidgetStatsPeer::ID, WidgetStatsPeer::SHOP_DOMAIN, WidgetStatsPeer::UP_SELL_ID, WidgetStatsPeer::VARIANT_ID, WidgetStatsPeer::PLACEMENT, WidgetStatsPeer::CREATED_AT, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOP_DOMAIN', 'UP_SELL_ID', 'VARIANT_ID', 'PLACEMENT', 'CREATED_AT', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'shop_domain', 'up_sell_id', 'variant_id', 'placement', 'created_at', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'ShopDomain', 'UpSellId', 'VariantId', 'Placement', 'UserKey', 'CreatedAt', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'shopDomain', 'upSellId', 'variantId', 'placement', 'userKey', 'createdAt', ),
+        BasePeer::TYPE_COLNAME => array (WidgetStatsPeer::ID, WidgetStatsPeer::SHOP_DOMAIN, WidgetStatsPeer::UP_SELL_ID, WidgetStatsPeer::VARIANT_ID, WidgetStatsPeer::PLACEMENT, WidgetStatsPeer::USER_KEY, WidgetStatsPeer::CREATED_AT, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'SHOP_DOMAIN', 'UP_SELL_ID', 'VARIANT_ID', 'PLACEMENT', 'USER_KEY', 'CREATED_AT', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'shop_domain', 'up_sell_id', 'variant_id', 'placement', 'user_key', 'created_at', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -102,12 +105,12 @@ abstract class BaseWidgetStatsPeer
      * e.g. WidgetStatsPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShopDomain' => 1, 'UpSellId' => 2, 'VariantId' => 3, 'Placement' => 4, 'CreatedAt' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shopDomain' => 1, 'upSellId' => 2, 'variantId' => 3, 'placement' => 4, 'createdAt' => 5, ),
-        BasePeer::TYPE_COLNAME => array (WidgetStatsPeer::ID => 0, WidgetStatsPeer::SHOP_DOMAIN => 1, WidgetStatsPeer::UP_SELL_ID => 2, WidgetStatsPeer::VARIANT_ID => 3, WidgetStatsPeer::PLACEMENT => 4, WidgetStatsPeer::CREATED_AT => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOP_DOMAIN' => 1, 'UP_SELL_ID' => 2, 'VARIANT_ID' => 3, 'PLACEMENT' => 4, 'CREATED_AT' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shop_domain' => 1, 'up_sell_id' => 2, 'variant_id' => 3, 'placement' => 4, 'created_at' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ShopDomain' => 1, 'UpSellId' => 2, 'VariantId' => 3, 'Placement' => 4, 'UserKey' => 5, 'CreatedAt' => 6, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'shopDomain' => 1, 'upSellId' => 2, 'variantId' => 3, 'placement' => 4, 'userKey' => 5, 'createdAt' => 6, ),
+        BasePeer::TYPE_COLNAME => array (WidgetStatsPeer::ID => 0, WidgetStatsPeer::SHOP_DOMAIN => 1, WidgetStatsPeer::UP_SELL_ID => 2, WidgetStatsPeer::VARIANT_ID => 3, WidgetStatsPeer::PLACEMENT => 4, WidgetStatsPeer::USER_KEY => 5, WidgetStatsPeer::CREATED_AT => 6, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'SHOP_DOMAIN' => 1, 'UP_SELL_ID' => 2, 'VARIANT_ID' => 3, 'PLACEMENT' => 4, 'USER_KEY' => 5, 'CREATED_AT' => 6, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'shop_domain' => 1, 'up_sell_id' => 2, 'variant_id' => 3, 'placement' => 4, 'user_key' => 5, 'created_at' => 6, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /** The enumerated values for this table */
@@ -239,6 +242,7 @@ abstract class BaseWidgetStatsPeer
             $criteria->addSelectColumn(WidgetStatsPeer::UP_SELL_ID);
             $criteria->addSelectColumn(WidgetStatsPeer::VARIANT_ID);
             $criteria->addSelectColumn(WidgetStatsPeer::PLACEMENT);
+            $criteria->addSelectColumn(WidgetStatsPeer::USER_KEY);
             $criteria->addSelectColumn(WidgetStatsPeer::CREATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.id');
@@ -246,6 +250,7 @@ abstract class BaseWidgetStatsPeer
             $criteria->addSelectColumn($alias . '.up_sell_id');
             $criteria->addSelectColumn($alias . '.variant_id');
             $criteria->addSelectColumn($alias . '.placement');
+            $criteria->addSelectColumn($alias . '.user_key');
             $criteria->addSelectColumn($alias . '.created_at');
         }
     }

@@ -20,6 +20,7 @@ class WidgetStatsController implements ControllerProviderInterface
 			$upSellId = $request->request->get('up_sell_id');
 			$variantId = $request->request->has('variant_id') ? $request->request->get('variant_id') : null;
 			$placement = $request->request->get('placement');
+			$userKey = $request->request->get('user_key');
 
 			$widgetStats = new WidgetStats();
 			$widgetStats->setShopDomain($shopDomain);
@@ -27,6 +28,7 @@ class WidgetStatsController implements ControllerProviderInterface
 			$widgetStats->setVariantId($variantId);
 			$widgetStats->setPlacement($placement);
 			$widgetStats->setCreatedAt(new \DateTime());
+			$widgetStats->setUserKey($userKey);
 			$widgetStats->save();
 
 			return new JsonResponse();

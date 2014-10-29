@@ -111,6 +111,7 @@
 		<column name="up_sell_id" type="INTEGER" required="true"/>
 		<column name="variant_id" type="INTEGER" required="false"/>
 		<column name="placement" phpName="Placement" type="CHAR" sqlType="enum('product','cart')" required="true" defaultValue="product"/>
+		<column name="user_key" phpName="UserKey" type="VARCHAR" size="255" required="false"/>
 		<column name="created_at" phpName="CreatedAt" type="TIMESTAMP" required="true"/>
 		<index name="shop_id">
 			<index-column name="shop_domain"/>
