@@ -23,17 +23,13 @@ class AjaxController implements ControllerProviderInterface
 	{
 		$controllers = $app['controllers_factory'];
 
-		$controllers->post('/up-sell/test', function (Request $request) use ($app)
-		{
-			return new JsonResponse(['status' => 'no up-sell']);
-		});
-
 		$controllers->post('/up-sell/product', function (Request $request) use ($app)
 		{
 			$productId 				= $request->request->get('productId');
 			$shopDomain				= $request->request->get('shopDomain');
 			$cartValue 				= $request->request->get('cartValue');
 			$productCurrentPrice 	= $request->request->get('productPrice');
+			$userKey 	            = $request->request->get('userKey');
 
 			$futureCartValue = $cartValue + $productCurrentPrice;
 
@@ -103,6 +99,7 @@ class AjaxController implements ControllerProviderInterface
 				"status" => "ok",
 				"up_sell_id" => $upSellByRelation->getId(),
 				"shopDomain" => $shopDomain,
+				"user_key" => $userKey,
 				"html"	=> $app['twig']->render('widget.page.html.twig', $params),
 
 			];
@@ -116,6 +113,7 @@ class AjaxController implements ControllerProviderInterface
 			$variantsInCart	= $request->request->get('variants');
 			$shopDomain		= $request->request->get('shopDomain');
 			$cartValue 		= $request->request->get('cartValue');
+			$userKey        = $request->request->get('userKey');
 
 			$uppSells = UpSellQuery::create()
 				->filterByShopDomain($shopDomain)
@@ -192,6 +190,7 @@ class AjaxController implements ControllerProviderInterface
 				"variants" => json_encode($variants),
 				"up_sell_id" => $uppSell->getId(),
 				"shopDomain" => $shopDomain,
+				"user_key" => $userKey,
 				"html"	=> $app['twig']->render('widget.page.html.twig', $params),
 
 			];

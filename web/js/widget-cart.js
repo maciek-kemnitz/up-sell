@@ -13,6 +13,7 @@ $(function () {
 
 	        var upSellId = ajaxResult['up_sell_id'];
 	        var shopDomain = ajaxResult['shopDomain'];
+	        var userKey = ajaxResult['user_key'];
 
             if (modalWidth > 900) {
                 modalWidth = 900;
