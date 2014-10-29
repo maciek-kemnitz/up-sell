@@ -46,7 +46,7 @@ class HomePageController implements ControllerProviderInterface
 					var userData = {
 						"shopDomain": "{$shop->permanent_domain}",
 						"cartValue": {$cart->total_price},
-						"userKey": "{$cart->user_key}"
+						"userKey": "{$cart->user_key}",
 						"variants": [
 							{foreach from=$cart->items name=loop item="item"}
 								"{$item->variant->id}"{if not $smarty.foreach.loop.last},{/if}
