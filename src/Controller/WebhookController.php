@@ -15,6 +15,7 @@ use src\Lib\ShoploObject;
 use src\Model\TmpRequest;
 
 use src\Service\ServiceRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -41,7 +42,7 @@ class WebhookController implements ControllerProviderInterface
 
 			if (false === $request->request->has('order'))
 			{
-				exit;
+				return new JsonResponse(['message' => 'no order found']);
 			}
 
 
@@ -56,7 +57,7 @@ class WebhookController implements ControllerProviderInterface
 
 			if (null === $checkout || empty($checkout))
 			{
-				throw new \Exception("Checkout not found for order_id: ". $orderId);
+				return new JsonResponse(['message' => "Checkout not found for order_id: ". $orderId]);
 			}
 
 			$tmpRequest = new TmpRequest();
