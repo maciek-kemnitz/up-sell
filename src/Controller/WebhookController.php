@@ -14,6 +14,7 @@ use Silex\ControllerProviderInterface;
 use src\Lib\ShoploObject;
 use src\Model\TmpRequest;
 
+use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -38,9 +39,33 @@ class WebhookController implements ControllerProviderInterface
 			$tmpRequest->setData(json_encode($requestParams));
 			$tmpRequest->save();
 
+			if (false === $request->request->has('order'))
+			{
+				exit;
+			}
 
 
+			$orderData = $request->request->get('order');
+			$orderId = $orderData['id'];
 
+			/** @var ShoploObject $shoploApi */
+			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
+			$shop 		= $shoploApi->getShop();
+
+			$checkout = $shoploApi->getCheckout($orderId);
+
+			if (null === $checkout || empty($checkout))
+			{
+				throw new \Exception("Checkout not found for order_id: ". $orderId);
+			}
+
+			$tmpRequest = new TmpRequest();
+			$tmpRequest->setData(json_encode($checkout));
+			$tmpRequest->save();
+
+			//find stats for this user_key
+			//find products metching checkout and stats
+			//save order full value, upsell value, created_at
 
 
 			exit;

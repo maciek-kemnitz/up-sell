@@ -167,9 +167,9 @@ class ShoploObject
 		return $this->api->order->retrieve(0,["page"=>1, "limit"=>1000, "created_at_min"=>"2014-10-01"])['orders'];
 	}
 
-	public function getCheckout()
+	public function getCheckout($orderId)
 	{
-		return $this->api->checkout->retrieve(null, ["page"=>1, "limit"=>1000, "created_at_min"=>"2014-10-01"])['carts'];
+		return $this->api->checkout->retrieve(null, ["order_id"=>$orderId])['carts'];
 	}
 
 }
