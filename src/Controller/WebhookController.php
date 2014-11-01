@@ -42,7 +42,7 @@ class WebhookController implements ControllerProviderInterface
 
 			if (false === $request->request->has('order'))
 			{
-				return new JsonResponse(['message' => 'no order found']);
+				throw new \Exception("Order not found");
 			}
 
 
@@ -58,9 +58,10 @@ class WebhookController implements ControllerProviderInterface
 			$tmpRequest = new TmpRequest();
 			$tmpRequest->setData(json_encode($checkout));
 			$tmpRequest->save();
+
 			if (null === $checkout || empty($checkout))
 			{
-				return new JsonResponse(['message' => "Checkout not found for order_id: ". $orderId]);
+				throw new \Exception("Checkout not found for order_id: ". $orderId);
 			}
 
 
