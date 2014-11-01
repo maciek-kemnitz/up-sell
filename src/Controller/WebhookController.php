@@ -39,17 +39,18 @@ class WebhookController implements ControllerProviderInterface
 			$tmpRequest = new TmpRequest();
 			$tmpRequest->setData(json_encode($requestParams));
 			$tmpRequest->save();
-			exit;
+
 
 			if (false === $request->request->has('order'))
 			{
-				throw new \Exception("Order not found");
+				exit;
 			}
 
 
 			$orderData = $request->request->get('order');
 			$orderId = $orderData['id'];
 
+			exit;
 			/** @var ShoploObject $shoploApi */
 			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
 			$shop 		= $shoploApi->getShop();
