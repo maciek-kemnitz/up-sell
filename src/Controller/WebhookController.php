@@ -50,12 +50,13 @@ class WebhookController implements ControllerProviderInterface
 			$orderData = $request->request->get('order');
 			$orderId = $orderData['id'];
 
-			exit;
 			/** @var ShoploObject $shoploApi */
 			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
-			$shop 		= $shoploApi->getShop();
+
 
 			$checkout = $shoploApi->getCheckout($orderId);
+
+			exit;
 
 			$tmpRequest = new TmpRequest();
 			$tmpRequest->setData(json_encode($checkout));
