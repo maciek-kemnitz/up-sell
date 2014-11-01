@@ -55,14 +55,15 @@ class WebhookController implements ControllerProviderInterface
 
 			$checkout = $shoploApi->getCheckout($orderId);
 
+			$tmpRequest = new TmpRequest();
+			$tmpRequest->setData(json_encode($checkout));
+			$tmpRequest->save();
 			if (null === $checkout || empty($checkout))
 			{
 				return new JsonResponse(['message' => "Checkout not found for order_id: ". $orderId]);
 			}
 
-			$tmpRequest = new TmpRequest();
-			$tmpRequest->setData(json_encode($checkout));
-			$tmpRequest->save();
+
 
 			//find stats for this user_key
 			//find products metching checkout and stats
