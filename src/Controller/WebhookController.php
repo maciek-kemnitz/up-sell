@@ -39,6 +39,7 @@ class WebhookController implements ControllerProviderInterface
 			$tmpRequest = new TmpRequest();
 			$tmpRequest->setData(json_encode($requestParams));
 			$tmpRequest->save();
+			exit;
 
 			if (false === $request->request->has('order'))
 			{
