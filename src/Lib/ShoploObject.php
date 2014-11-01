@@ -169,7 +169,7 @@ class ShoploObject
 
 	public function getCheckout($orderId)
 	{
-		return $this->api->checkout->retrieve(null, ["order_id"=>$orderId])['carts'];
+		return $this->api->checkout->retrieve(null, ["order_id" => $orderId])['cart'];
 	}
 
 }
