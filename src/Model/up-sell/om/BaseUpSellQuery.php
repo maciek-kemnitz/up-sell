@@ -26,6 +26,7 @@ use src\Model\WidgetStats;
  *
  * @method UpSellQuery orderById($order = Criteria::ASC) Order by the id column
  * @method UpSellQuery orderByShopDomain($order = Criteria::ASC) Order by the shop_domain column
+ * @method UpSellQuery orderByShopId($order = Criteria::ASC) Order by the shop_id column
  * @method UpSellQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method UpSellQuery orderByHeadline($order = Criteria::ASC) Order by the headline column
  * @method UpSellQuery orderByDescription($order = Criteria::ASC) Order by the description column
@@ -41,6 +42,7 @@ use src\Model\WidgetStats;
  *
  * @method UpSellQuery groupById() Group by the id column
  * @method UpSellQuery groupByShopDomain() Group by the shop_domain column
+ * @method UpSellQuery groupByShopId() Group by the shop_id column
  * @method UpSellQuery groupByName() Group by the name column
  * @method UpSellQuery groupByHeadline() Group by the headline column
  * @method UpSellQuery groupByDescription() Group by the description column
@@ -74,6 +76,7 @@ use src\Model\WidgetStats;
  * @method UpSell findOneOrCreate(PropelPDO $con = null) Return the first UpSell matching the query, or a new UpSell object populated from the query conditions when no match is found
  *
  * @method UpSell findOneByShopDomain(string $shop_domain) Return the first UpSell filtered by the shop_domain column
+ * @method UpSell findOneByShopId(int $shop_id) Return the first UpSell filtered by the shop_id column
  * @method UpSell findOneByName(string $name) Return the first UpSell filtered by the name column
  * @method UpSell findOneByHeadline(string $headline) Return the first UpSell filtered by the headline column
  * @method UpSell findOneByDescription(string $description) Return the first UpSell filtered by the description column
@@ -89,6 +92,7 @@ use src\Model\WidgetStats;
  *
  * @method array findById(int $id) Return UpSell objects filtered by the id column
  * @method array findByShopDomain(string $shop_domain) Return UpSell objects filtered by the shop_domain column
+ * @method array findByShopId(int $shop_id) Return UpSell objects filtered by the shop_id column
  * @method array findByName(string $name) Return UpSell objects filtered by the name column
  * @method array findByHeadline(string $headline) Return UpSell objects filtered by the headline column
  * @method array findByDescription(string $description) Return UpSell objects filtered by the description column
@@ -208,7 +212,7 @@ abstract class BaseUpSellQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `shop_domain`, `name`, `headline`, `description`, `price_from`, `price_to`, `order`, `use_price_range`, `created_at`, `status`, `discount_type`, `discount_amount`, `placement` FROM `up_sell` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `shop_domain`, `shop_id`, `name`, `headline`, `description`, `price_from`, `price_to`, `order`, `use_price_range`, `created_at`, `status`, `discount_type`, `discount_amount`, `placement` FROM `up_sell` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -366,6 +370,48 @@ abstract class BaseUpSellQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UpSellPeer::SHOP_DOMAIN, $shopDomain, $comparison);
+    }
+
+    /**
+     * Filter the query on the shop_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByShopId(1234); // WHERE shop_id = 1234
+     * $query->filterByShopId(array(12, 34)); // WHERE shop_id IN (12, 34)
+     * $query->filterByShopId(array('min' => 12)); // WHERE shop_id >= 12
+     * $query->filterByShopId(array('max' => 12)); // WHERE shop_id <= 12
+     * </code>
+     *
+     * @param     mixed $shopId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return UpSellQuery The current query, for fluid interface
+     */
+    public function filterByShopId($shopId = null, $comparison = null)
+    {
+        if (is_array($shopId)) {
+            $useMinMax = false;
+            if (isset($shopId['min'])) {
+                $this->addUsingAlias(UpSellPeer::SHOP_ID, $shopId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($shopId['max'])) {
+                $this->addUsingAlias(UpSellPeer::SHOP_ID, $shopId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(UpSellPeer::SHOP_ID, $shopId, $comparison);
     }
 
     /**

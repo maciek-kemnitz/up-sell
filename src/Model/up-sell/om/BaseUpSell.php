@@ -66,6 +66,12 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     protected $shop_domain;
 
     /**
+     * The value for the shop_id field.
+     * @var        int
+     */
+    protected $shop_id;
+
+    /**
      * The value for the name field.
      * @var        string
      */
@@ -241,6 +247,17 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     {
 
         return $this->shop_domain;
+    }
+
+    /**
+     * Get the [shop_id] column value.
+     *
+     * @return int
+     */
+    public function getShopId()
+    {
+
+        return $this->shop_id;
     }
 
     /**
@@ -445,6 +462,27 @@ abstract class BaseUpSell extends BaseObject implements Persistent
 
         return $this;
     } // setShopDomain()
+
+    /**
+     * Set the value of [shop_id] column.
+     *
+     * @param  int $v new value
+     * @return UpSell The current object (for fluent API support)
+     */
+    public function setShopId($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->shop_id !== $v) {
+            $this->shop_id = $v;
+            $this->modifiedColumns[] = UpSellPeer::SHOP_ID;
+        }
+
+
+        return $this;
+    } // setShopId()
 
     /**
      * Set the value of [name] column.
@@ -750,18 +788,19 @@ abstract class BaseUpSell extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->shop_domain = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->headline = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->description = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->price_from = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
-            $this->price_to = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
-            $this->order = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-            $this->use_price_range = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->created_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-            $this->status = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-            $this->discount_type = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-            $this->discount_amount = ($row[$startcol + 12] !== null) ? (double) $row[$startcol + 12] : null;
-            $this->placement = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+            $this->shop_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->headline = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->description = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->price_from = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
+            $this->price_to = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
+            $this->order = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+            $this->use_price_range = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->created_at = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->status = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->discount_type = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->discount_amount = ($row[$startcol + 13] !== null) ? (double) $row[$startcol + 13] : null;
+            $this->placement = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -771,7 +810,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 14; // 14 = UpSellPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 15; // 15 = UpSellPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating UpSell object", $e);
@@ -1046,6 +1085,9 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         if ($this->isColumnModified(UpSellPeer::SHOP_DOMAIN)) {
             $modifiedColumns[':p' . $index++]  = '`shop_domain`';
         }
+        if ($this->isColumnModified(UpSellPeer::SHOP_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`shop_id`';
+        }
         if ($this->isColumnModified(UpSellPeer::NAME)) {
             $modifiedColumns[':p' . $index++]  = '`name`';
         }
@@ -1098,6 +1140,9 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                         break;
                     case '`shop_domain`':
                         $stmt->bindValue($identifier, $this->shop_domain, PDO::PARAM_STR);
+                        break;
+                    case '`shop_id`':
+                        $stmt->bindValue($identifier, $this->shop_id, PDO::PARAM_INT);
                         break;
                     case '`name`':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
@@ -1300,39 +1345,42 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                 return $this->getShopDomain();
                 break;
             case 2:
-                return $this->getName();
+                return $this->getShopId();
                 break;
             case 3:
-                return $this->getHeadline();
+                return $this->getName();
                 break;
             case 4:
-                return $this->getDescription();
+                return $this->getHeadline();
                 break;
             case 5:
-                return $this->getPriceFrom();
+                return $this->getDescription();
                 break;
             case 6:
-                return $this->getPriceTo();
+                return $this->getPriceFrom();
                 break;
             case 7:
-                return $this->getOrder();
+                return $this->getPriceTo();
                 break;
             case 8:
-                return $this->getUsePriceRange();
+                return $this->getOrder();
                 break;
             case 9:
-                return $this->getCreatedAt();
+                return $this->getUsePriceRange();
                 break;
             case 10:
-                return $this->getStatus();
+                return $this->getCreatedAt();
                 break;
             case 11:
-                return $this->getDiscountType();
+                return $this->getStatus();
                 break;
             case 12:
-                return $this->getDiscountAmount();
+                return $this->getDiscountType();
                 break;
             case 13:
+                return $this->getDiscountAmount();
+                break;
+            case 14:
                 return $this->getPlacement();
                 break;
             default:
@@ -1366,18 +1414,19 @@ abstract class BaseUpSell extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getShopDomain(),
-            $keys[2] => $this->getName(),
-            $keys[3] => $this->getHeadline(),
-            $keys[4] => $this->getDescription(),
-            $keys[5] => $this->getPriceFrom(),
-            $keys[6] => $this->getPriceTo(),
-            $keys[7] => $this->getOrder(),
-            $keys[8] => $this->getUsePriceRange(),
-            $keys[9] => $this->getCreatedAt(),
-            $keys[10] => $this->getStatus(),
-            $keys[11] => $this->getDiscountType(),
-            $keys[12] => $this->getDiscountAmount(),
-            $keys[13] => $this->getPlacement(),
+            $keys[2] => $this->getShopId(),
+            $keys[3] => $this->getName(),
+            $keys[4] => $this->getHeadline(),
+            $keys[5] => $this->getDescription(),
+            $keys[6] => $this->getPriceFrom(),
+            $keys[7] => $this->getPriceTo(),
+            $keys[8] => $this->getOrder(),
+            $keys[9] => $this->getUsePriceRange(),
+            $keys[10] => $this->getCreatedAt(),
+            $keys[11] => $this->getStatus(),
+            $keys[12] => $this->getDiscountType(),
+            $keys[13] => $this->getDiscountAmount(),
+            $keys[14] => $this->getPlacement(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1435,39 +1484,42 @@ abstract class BaseUpSell extends BaseObject implements Persistent
                 $this->setShopDomain($value);
                 break;
             case 2:
-                $this->setName($value);
+                $this->setShopId($value);
                 break;
             case 3:
-                $this->setHeadline($value);
+                $this->setName($value);
                 break;
             case 4:
-                $this->setDescription($value);
+                $this->setHeadline($value);
                 break;
             case 5:
-                $this->setPriceFrom($value);
+                $this->setDescription($value);
                 break;
             case 6:
-                $this->setPriceTo($value);
+                $this->setPriceFrom($value);
                 break;
             case 7:
-                $this->setOrder($value);
+                $this->setPriceTo($value);
                 break;
             case 8:
-                $this->setUsePriceRange($value);
+                $this->setOrder($value);
                 break;
             case 9:
-                $this->setCreatedAt($value);
+                $this->setUsePriceRange($value);
                 break;
             case 10:
-                $this->setStatus($value);
+                $this->setCreatedAt($value);
                 break;
             case 11:
-                $this->setDiscountType($value);
+                $this->setStatus($value);
                 break;
             case 12:
-                $this->setDiscountAmount($value);
+                $this->setDiscountType($value);
                 break;
             case 13:
+                $this->setDiscountAmount($value);
+                break;
+            case 14:
                 $this->setPlacement($value);
                 break;
         } // switch()
@@ -1496,18 +1548,19 @@ abstract class BaseUpSell extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setShopDomain($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setName($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setHeadline($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setDescription($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setPriceFrom($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setPriceTo($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setOrder($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setUsePriceRange($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setCreatedAt($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setStatus($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setDiscountType($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setDiscountAmount($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setPlacement($arr[$keys[13]]);
+        if (array_key_exists($keys[2], $arr)) $this->setShopId($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setName($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setHeadline($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setDescription($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setPriceFrom($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setPriceTo($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setOrder($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setUsePriceRange($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setCreatedAt($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setStatus($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setDiscountType($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setDiscountAmount($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setPlacement($arr[$keys[14]]);
     }
 
     /**
@@ -1521,6 +1574,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
 
         if ($this->isColumnModified(UpSellPeer::ID)) $criteria->add(UpSellPeer::ID, $this->id);
         if ($this->isColumnModified(UpSellPeer::SHOP_DOMAIN)) $criteria->add(UpSellPeer::SHOP_DOMAIN, $this->shop_domain);
+        if ($this->isColumnModified(UpSellPeer::SHOP_ID)) $criteria->add(UpSellPeer::SHOP_ID, $this->shop_id);
         if ($this->isColumnModified(UpSellPeer::NAME)) $criteria->add(UpSellPeer::NAME, $this->name);
         if ($this->isColumnModified(UpSellPeer::HEADLINE)) $criteria->add(UpSellPeer::HEADLINE, $this->headline);
         if ($this->isColumnModified(UpSellPeer::DESCRIPTION)) $criteria->add(UpSellPeer::DESCRIPTION, $this->description);
@@ -1597,6 +1651,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setShopDomain($this->getShopDomain());
+        $copyObj->setShopId($this->getShopId());
         $copyObj->setName($this->getName());
         $copyObj->setHeadline($this->getHeadline());
         $copyObj->setDescription($this->getDescription());
@@ -2414,6 +2469,7 @@ abstract class BaseUpSell extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->shop_domain = null;
+        $this->shop_id = null;
         $this->name = null;
         $this->headline = null;
         $this->description = null;

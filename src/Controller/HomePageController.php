@@ -63,6 +63,15 @@ class HomePageController implements ControllerProviderInterface
 			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
 			$shop 		= $shoploApi->getShop();
 
+			/** @var UpSell[] $upSells */
+			$upSells = UpSellQuery::create()->findByShopDomain($shoploApi->getPermanentDomain());
+			foreach ($upSells as $upSell)
+			{
+				$upSell->setShopId($shop['id']);
+				$upSell->save();
+			}
+
+
 			$themes = $shoploApi->getThemes();
 
 			foreach ($themes as $theme)

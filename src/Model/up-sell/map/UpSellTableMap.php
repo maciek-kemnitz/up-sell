@@ -44,6 +44,7 @@ class UpSellTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('shop_domain', 'ShopDomain', 'VARCHAR', true, 255, null);
+        $this->addColumn('shop_id', 'ShopId', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
         $this->addColumn('headline', 'Headline', 'LONGVARCHAR', true, null, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', true, null, null);

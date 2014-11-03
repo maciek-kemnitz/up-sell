@@ -109,6 +109,7 @@ CREATE TABLE `up_sell`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `shop_domain` VARCHAR(255) NOT NULL,
+    `shop_id` INTEGER NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `headline` TEXT NOT NULL,
     `description` TEXT NOT NULL,
@@ -173,6 +174,20 @@ CREATE TABLE `up_sell_stats`
     `created_at` DATETIME NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `shop_domain` (`shop_domain`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- tmp_request
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tmp_request`;
+
+CREATE TABLE `tmp_request`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `data` TEXT,
+    `shop_domain` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 # This restores the fkey checks, after having unset them earlier

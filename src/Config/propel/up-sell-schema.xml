@@ -86,6 +86,7 @@
   <table name="up_sell" phpName="UpSell" idMethod="native">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="shop_domain" phpName="ShopDomain" type="VARCHAR" size="255" required="true"/>
+    <column name="shop_id" phpName="ShopId" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="255" required="true"/>
     <column name="headline" phpName="Headline" type="LONGVARCHAR" required="true"/>
     <column name="description" phpName="Description" type="LONGVARCHAR" required="true"/>

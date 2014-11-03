@@ -109,6 +109,7 @@ CREATE TABLE `up_sell`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `shop_domain` VARCHAR(255) NOT NULL,
+    `shop_id` INTEGER NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `headline` TEXT NOT NULL,
     `description` TEXT NOT NULL,
