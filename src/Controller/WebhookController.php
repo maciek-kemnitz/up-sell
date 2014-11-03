@@ -35,9 +35,10 @@ class WebhookController implements ControllerProviderInterface
 			}
 
 			$requestParams = $request->request->all();
+			$headers = $request->headers->all();
 
 			$tmpRequest = new TmpRequest();
-			$tmpRequest->setData(json_encode($requestParams));
+			$tmpRequest->setData(json_encode(['params'=>$requestParams, 'headers' => $headers]));
 			$tmpRequest->save();
 
 
