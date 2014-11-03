@@ -21,9 +21,11 @@ use src\Model\TmpRequestQuery;
  *
  * @method TmpRequestQuery orderById($order = Criteria::ASC) Order by the id column
  * @method TmpRequestQuery orderByData($order = Criteria::ASC) Order by the data column
+ * @method TmpRequestQuery orderByShopDomain($order = Criteria::ASC) Order by the shop_domain column
  *
  * @method TmpRequestQuery groupById() Group by the id column
  * @method TmpRequestQuery groupByData() Group by the data column
+ * @method TmpRequestQuery groupByShopDomain() Group by the shop_domain column
  *
  * @method TmpRequestQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method TmpRequestQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -33,9 +35,11 @@ use src\Model\TmpRequestQuery;
  * @method TmpRequest findOneOrCreate(PropelPDO $con = null) Return the first TmpRequest matching the query, or a new TmpRequest object populated from the query conditions when no match is found
  *
  * @method TmpRequest findOneByData(string $data) Return the first TmpRequest filtered by the data column
+ * @method TmpRequest findOneByShopDomain(string $shop_domain) Return the first TmpRequest filtered by the shop_domain column
  *
  * @method array findById(int $id) Return TmpRequest objects filtered by the id column
  * @method array findByData(string $data) Return TmpRequest objects filtered by the data column
+ * @method array findByShopDomain(string $shop_domain) Return TmpRequest objects filtered by the shop_domain column
  *
  * @package    propel.generator.up-sell.om
  */
@@ -143,7 +147,7 @@ abstract class BaseTmpRequestQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `data` FROM `tmp_request` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `data`, `shop_domain` FROM `tmp_request` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -301,6 +305,35 @@ abstract class BaseTmpRequestQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(TmpRequestPeer::DATA, $data, $comparison);
+    }
+
+    /**
+     * Filter the query on the shop_domain column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByShopDomain('fooValue');   // WHERE shop_domain = 'fooValue'
+     * $query->filterByShopDomain('%fooValue%'); // WHERE shop_domain LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $shopDomain The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return TmpRequestQuery The current query, for fluid interface
+     */
+    public function filterByShopDomain($shopDomain = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($shopDomain)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $shopDomain)) {
+                $shopDomain = str_replace('*', '%', $shopDomain);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(TmpRequestPeer::SHOP_DOMAIN, $shopDomain, $comparison);
     }
 
     /**

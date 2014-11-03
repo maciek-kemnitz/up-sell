@@ -185,6 +185,7 @@ CREATE TABLE `tmp_request`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `data` TEXT,
+    `shop_domain` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 

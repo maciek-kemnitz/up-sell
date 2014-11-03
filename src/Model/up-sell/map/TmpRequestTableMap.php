@@ -44,6 +44,7 @@ class TmpRequestTableMap extends TableMap
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('data', 'Data', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('shop_domain', 'ShopDomain', 'VARCHAR', true, 255, null);
         // validators
     } // initialize()
 

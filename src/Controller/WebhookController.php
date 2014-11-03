@@ -50,46 +50,11 @@ class WebhookController implements ControllerProviderInterface
 			$orderData = $request->request->get('order');
 			$orderId = $orderData['id'];
 
-			/** @var ShoploObject $shoploApi */
-			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
-
-
-			$checkout = $shoploApi->getCheckout($orderId);
-
-			exit;
-
-			$tmpRequest = new TmpRequest();
-			$tmpRequest->setData(json_encode($checkout));
-			$tmpRequest->save();
-
-			if (null === $checkout || empty($checkout))
-			{
-				throw new \Exception("Checkout not found for order_id: ". $orderId);
-			}
-
-
-
-			//find stats for this user_key
-			//find products metching checkout and stats
-			//save order full value, upsell value, created_at
+			//get the shop domain from the header
+			//log the fucking order
 
 
 			exit;
-//			/** @var ShoploObject $shoploApi */
-//			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
-//
-//			$orders = $shoploApi->getOrders();
-//
-//////			var_dump($orders);
-////			foreach ($orders as $order)
-////			{
-////				var_dump($order);
-////				echo "<hr>";
-////			}
-//
-//			$checkouts = $shoploApi->getCheckout();
-//
-//			var_dump($checkouts);
 
 		});
 
