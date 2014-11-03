@@ -50,8 +50,8 @@ abstract class BaseTmpRequestPeer
     /** the column name for the data field */
     const DATA = 'tmp_request.data';
 
-    /** the column name for the shop_domain field */
-    const SHOP_DOMAIN = 'tmp_request.shop_domain';
+    /** the column name for the shop_id field */
+    const SHOP_ID = 'tmp_request.shop_id';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -72,11 +72,11 @@ abstract class BaseTmpRequestPeer
      * e.g. TmpRequestPeer::$fieldNames[TmpRequestPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Data', 'ShopDomain', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'data', 'shopDomain', ),
-        BasePeer::TYPE_COLNAME => array (TmpRequestPeer::ID, TmpRequestPeer::DATA, TmpRequestPeer::SHOP_DOMAIN, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'DATA', 'SHOP_DOMAIN', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'data', 'shop_domain', ),
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Data', 'ShopId', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'data', 'shopId', ),
+        BasePeer::TYPE_COLNAME => array (TmpRequestPeer::ID, TmpRequestPeer::DATA, TmpRequestPeer::SHOP_ID, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'DATA', 'SHOP_ID', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'data', 'shop_id', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, )
     );
 
@@ -87,11 +87,11 @@ abstract class BaseTmpRequestPeer
      * e.g. TmpRequestPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Data' => 1, 'ShopDomain' => 2, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'data' => 1, 'shopDomain' => 2, ),
-        BasePeer::TYPE_COLNAME => array (TmpRequestPeer::ID => 0, TmpRequestPeer::DATA => 1, TmpRequestPeer::SHOP_DOMAIN => 2, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'DATA' => 1, 'SHOP_DOMAIN' => 2, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'data' => 1, 'shop_domain' => 2, ),
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Data' => 1, 'ShopId' => 2, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'data' => 1, 'shopId' => 2, ),
+        BasePeer::TYPE_COLNAME => array (TmpRequestPeer::ID => 0, TmpRequestPeer::DATA => 1, TmpRequestPeer::SHOP_ID => 2, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'DATA' => 1, 'SHOP_ID' => 2, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'data' => 1, 'shop_id' => 2, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, )
     );
 
@@ -168,11 +168,11 @@ abstract class BaseTmpRequestPeer
         if (null === $alias) {
             $criteria->addSelectColumn(TmpRequestPeer::ID);
             $criteria->addSelectColumn(TmpRequestPeer::DATA);
-            $criteria->addSelectColumn(TmpRequestPeer::SHOP_DOMAIN);
+            $criteria->addSelectColumn(TmpRequestPeer::SHOP_ID);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.data');
-            $criteria->addSelectColumn($alias . '.shop_domain');
+            $criteria->addSelectColumn($alias . '.shop_id');
         }
     }
 

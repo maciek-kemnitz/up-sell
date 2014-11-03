@@ -56,10 +56,10 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
     protected $data;
 
     /**
-     * The value for the shop_domain field.
-     * @var        string
+     * The value for the shop_id field.
+     * @var        int
      */
-    protected $shop_domain;
+    protected $shop_id;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -104,14 +104,14 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [shop_domain] column value.
+     * Get the [shop_id] column value.
      *
-     * @return string
+     * @return int
      */
-    public function getShopDomain()
+    public function getShopId()
     {
 
-        return $this->shop_domain;
+        return $this->shop_id;
     }
 
     /**
@@ -157,25 +157,25 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
     } // setData()
 
     /**
-     * Set the value of [shop_domain] column.
+     * Set the value of [shop_id] column.
      *
-     * @param  string $v new value
+     * @param  int $v new value
      * @return TmpRequest The current object (for fluent API support)
      */
-    public function setShopDomain($v)
+    public function setShopId($v)
     {
-        if ($v !== null) {
-            $v = (string) $v;
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
         }
 
-        if ($this->shop_domain !== $v) {
-            $this->shop_domain = $v;
-            $this->modifiedColumns[] = TmpRequestPeer::SHOP_DOMAIN;
+        if ($this->shop_id !== $v) {
+            $this->shop_id = $v;
+            $this->modifiedColumns[] = TmpRequestPeer::SHOP_ID;
         }
 
 
         return $this;
-    } // setShopDomain()
+    } // setShopId()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -211,7 +211,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
 
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->data = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->shop_domain = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->shop_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -439,8 +439,8 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
         if ($this->isColumnModified(TmpRequestPeer::DATA)) {
             $modifiedColumns[':p' . $index++]  = '`data`';
         }
-        if ($this->isColumnModified(TmpRequestPeer::SHOP_DOMAIN)) {
-            $modifiedColumns[':p' . $index++]  = '`shop_domain`';
+        if ($this->isColumnModified(TmpRequestPeer::SHOP_ID)) {
+            $modifiedColumns[':p' . $index++]  = '`shop_id`';
         }
 
         $sql = sprintf(
@@ -459,8 +459,8 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
                     case '`data`':
                         $stmt->bindValue($identifier, $this->data, PDO::PARAM_STR);
                         break;
-                    case '`shop_domain`':
-                        $stmt->bindValue($identifier, $this->shop_domain, PDO::PARAM_STR);
+                    case '`shop_id`':
+                        $stmt->bindValue($identifier, $this->shop_id, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -603,7 +603,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
                 return $this->getData();
                 break;
             case 2:
-                return $this->getShopDomain();
+                return $this->getShopId();
                 break;
             default:
                 return null;
@@ -635,7 +635,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getId(),
             $keys[1] => $this->getData(),
-            $keys[2] => $this->getShopDomain(),
+            $keys[2] => $this->getShopId(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -682,7 +682,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
                 $this->setData($value);
                 break;
             case 2:
-                $this->setShopDomain($value);
+                $this->setShopId($value);
                 break;
         } // switch()
     }
@@ -710,7 +710,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setData($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setShopDomain($arr[$keys[2]]);
+        if (array_key_exists($keys[2], $arr)) $this->setShopId($arr[$keys[2]]);
     }
 
     /**
@@ -724,7 +724,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
 
         if ($this->isColumnModified(TmpRequestPeer::ID)) $criteria->add(TmpRequestPeer::ID, $this->id);
         if ($this->isColumnModified(TmpRequestPeer::DATA)) $criteria->add(TmpRequestPeer::DATA, $this->data);
-        if ($this->isColumnModified(TmpRequestPeer::SHOP_DOMAIN)) $criteria->add(TmpRequestPeer::SHOP_DOMAIN, $this->shop_domain);
+        if ($this->isColumnModified(TmpRequestPeer::SHOP_ID)) $criteria->add(TmpRequestPeer::SHOP_ID, $this->shop_id);
 
         return $criteria;
     }
@@ -789,7 +789,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setData($this->getData());
-        $copyObj->setShopDomain($this->getShopDomain());
+        $copyObj->setShopId($this->getShopId());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -843,7 +843,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
     {
         $this->id = null;
         $this->data = null;
-        $this->shop_domain = null;
+        $this->shop_id = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

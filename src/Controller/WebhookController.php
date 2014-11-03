@@ -34,26 +34,17 @@ class WebhookController implements ControllerProviderInterface
 				return new AccessDeniedHttpException();
 			}
 
-			$requestParams = $request->request->all();
-			$headers = $request->headers->all();
-
-			$tmpRequest = new TmpRequest();
-			$tmpRequest->setData(json_encode(['params'=>$requestParams, 'headers' => $headers]));
-			$tmpRequest->save();
-
-
 			if (false === $request->request->has('order'))
 			{
 				exit;
 			}
 
-
 			$orderData = $request->request->get('order');
-			$orderId = $orderData['id'];
 
-			//get the shop domain from the header
-			//log the fucking order
-
+			$tmpRequest = new TmpRequest();
+			$tmpRequest->setData(json_encode($orderData));
+			$tmpRequest->setShopId($request->headers->get('shoplo-shop-id'));
+			$tmpRequest->save();
 
 			exit;
 

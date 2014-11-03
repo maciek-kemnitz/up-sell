@@ -21,11 +21,11 @@ use src\Model\TmpRequestQuery;
  *
  * @method TmpRequestQuery orderById($order = Criteria::ASC) Order by the id column
  * @method TmpRequestQuery orderByData($order = Criteria::ASC) Order by the data column
- * @method TmpRequestQuery orderByShopDomain($order = Criteria::ASC) Order by the shop_domain column
+ * @method TmpRequestQuery orderByShopId($order = Criteria::ASC) Order by the shop_id column
  *
  * @method TmpRequestQuery groupById() Group by the id column
  * @method TmpRequestQuery groupByData() Group by the data column
- * @method TmpRequestQuery groupByShopDomain() Group by the shop_domain column
+ * @method TmpRequestQuery groupByShopId() Group by the shop_id column
  *
  * @method TmpRequestQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method TmpRequestQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -35,11 +35,11 @@ use src\Model\TmpRequestQuery;
  * @method TmpRequest findOneOrCreate(PropelPDO $con = null) Return the first TmpRequest matching the query, or a new TmpRequest object populated from the query conditions when no match is found
  *
  * @method TmpRequest findOneByData(string $data) Return the first TmpRequest filtered by the data column
- * @method TmpRequest findOneByShopDomain(string $shop_domain) Return the first TmpRequest filtered by the shop_domain column
+ * @method TmpRequest findOneByShopId(int $shop_id) Return the first TmpRequest filtered by the shop_id column
  *
  * @method array findById(int $id) Return TmpRequest objects filtered by the id column
  * @method array findByData(string $data) Return TmpRequest objects filtered by the data column
- * @method array findByShopDomain(string $shop_domain) Return TmpRequest objects filtered by the shop_domain column
+ * @method array findByShopId(int $shop_id) Return TmpRequest objects filtered by the shop_id column
  *
  * @package    propel.generator.up-sell.om
  */
@@ -147,7 +147,7 @@ abstract class BaseTmpRequestQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `data`, `shop_domain` FROM `tmp_request` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `data`, `shop_id` FROM `tmp_request` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -308,32 +308,45 @@ abstract class BaseTmpRequestQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the shop_domain column
+     * Filter the query on the shop_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByShopDomain('fooValue');   // WHERE shop_domain = 'fooValue'
-     * $query->filterByShopDomain('%fooValue%'); // WHERE shop_domain LIKE '%fooValue%'
+     * $query->filterByShopId(1234); // WHERE shop_id = 1234
+     * $query->filterByShopId(array(12, 34)); // WHERE shop_id IN (12, 34)
+     * $query->filterByShopId(array('min' => 12)); // WHERE shop_id >= 12
+     * $query->filterByShopId(array('max' => 12)); // WHERE shop_id <= 12
      * </code>
      *
-     * @param     string $shopDomain The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     mixed $shopId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return TmpRequestQuery The current query, for fluid interface
      */
-    public function filterByShopDomain($shopDomain = null, $comparison = null)
+    public function filterByShopId($shopId = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($shopDomain)) {
+        if (is_array($shopId)) {
+            $useMinMax = false;
+            if (isset($shopId['min'])) {
+                $this->addUsingAlias(TmpRequestPeer::SHOP_ID, $shopId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($shopId['max'])) {
+                $this->addUsingAlias(TmpRequestPeer::SHOP_ID, $shopId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $shopDomain)) {
-                $shopDomain = str_replace('*', '%', $shopDomain);
-                $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(TmpRequestPeer::SHOP_DOMAIN, $shopDomain, $comparison);
+        return $this->addUsingAlias(TmpRequestPeer::SHOP_ID, $shopId, $comparison);
     }
 
     /**
