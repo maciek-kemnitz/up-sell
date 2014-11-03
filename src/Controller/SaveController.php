@@ -48,6 +48,7 @@ class SaveController implements ControllerProviderInterface
 			/** @var ShoploObject $shoploApi */
 			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
 			$shopDomain = $shoploApi->getPermanentDomain();
+			$shop = $shoploApi->getShop();
 
 
 			if ($upSellId)
@@ -71,6 +72,7 @@ class SaveController implements ControllerProviderInterface
 
 
 			$upSell->setShopDomain($shopDomain);
+			$upSell->setShopId($shop['id']);
 			$upSell->setName($name);
 			$upSell->setHeadline($headline);
 			$upSell->setDescription($description);
