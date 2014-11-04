@@ -12,9 +12,15 @@ use src\Model\Product;
 use src\Model\ProductInCart;
 use src\Model\ProductQuery;
 use src\Model\RelatedProduct;
+use src\Model\TmpRequest;
+use src\Model\TmpRequestPeer;
+use src\Model\TmpRequestQuery;
 use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
+use src\Model\UpSellStats;
+use src\Model\WidgetStats;
+use src\Model\WidgetStatsPeer;
 use src\Model\WidgetStatsQuery;
 use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -71,7 +77,6 @@ class HomePageController implements ControllerProviderInterface
 				$upSell->save();
 			}
 
-
 			$themes = $shoploApi->getThemes();
 
 			foreach ($themes as $theme)
@@ -102,6 +107,8 @@ class HomePageController implements ControllerProviderInterface
 					}
 				}
 			}
+
+			$this->calculateStats($shoploApi);
 
 			$upSells = UpSellQuery::create()
 				->filterByShopDomain($shop['permanent_domain'])
@@ -236,5 +243,83 @@ class HomePageController implements ControllerProviderInterface
 		});
 
 		return $controllers;
+	}
+
+	public function calculateStats(ShoploObject $shoploApi)
+	{
+		$shop = $shoploApi->getShop();
+
+		/** @var TmpRequest[] $tmpRequests */
+		$tmpRequests = TmpRequestQuery::create()
+			->filterByStatus(TmpRequestPeer::STATUS_NEW)
+			->filterByShopId($shop['id'])
+			->find();
+
+
+		foreach($tmpRequests as $tmpRequest)
+		{
+			$data = json_decode($tmpRequest->getData(), true);
+			$orderId = $data['id'];
+			$orderCreatedAt = new \DateTime($data['created_at']);
+			$checkout = $shoploApi->getCheckout($orderId);
+			$userKey = $checkout['user_key'];
+			$orderItems = $data["order_items"];
+			$variants = [];
+
+			foreach ($orderItems as $item)
+			{
+				$variantId = $item["variant_id"];
+				$variants[$variantId] = $item;
+
+			}
+
+			/** @var WidgetStats[]|\PropelObjectCollection $widgetStats */
+			$widgetStats = WidgetStatsQuery::create()
+				->filterByUserKey($userKey)
+				->filterByVariantId(array_keys($variants), \Criteria::IN)
+				->filterByShopDomain($shoploApi->getPermanentDomain())
+				->filterByStatus(WidgetStatsPeer::STATUS_NEW)
+				->find();
+
+			$upSellVariants = [];
+
+			if ($widgetStats->count() > 0)
+			{
+				$upSellVariants = $widgetStats->toKeyValue('variantId', 'variantId');
+			}
+
+			$upSellSum = 0;
+			$sum = 0;
+
+			foreach ($variants as $key => $variant)
+			{
+				if (in_array($key, $upSellVariants))
+				{
+					$upSellSum += $variant['price'];
+				}
+
+				$sum += $variant['price'];
+			}
+
+			$newUpsellStats = new UpSellStats();
+			$newUpsellStats->setFullValue($sum);
+			$newUpsellStats->setUpSellValue($upSellSum);
+			$newUpsellStats->setOrderId($orderId);
+			$newUpsellStats->setCreatedAt($orderCreatedAt);
+			$newUpsellStats->setShopDomain($shoploApi->getPermanentDomain());
+			$newUpsellStats->save();
+
+			$tmpRequest->setStatus(TmpRequestPeer::STATUS_CALCULATED);
+			$tmpRequest->save();
+
+			if ($widgetStats->count() > 0)
+			{
+				foreach ($widgetStats as $widgetStat)
+				{
+					$widgetStat->setStatus(WidgetStatsPeer::STATUS_CALCULATED);
+					$widgetStat->save();
+				}
+			}
+		}
 	}
 }

@@ -62,6 +62,13 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
     protected $shop_id;
 
     /**
+     * The value for the status field.
+     * Note: this column has a database default value of: 'new'
+     * @var        string
+     */
+    protected $status;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -80,6 +87,27 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->status = 'new';
+    }
+
+    /**
+     * Initializes internal state of BaseTmpRequest object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [id] column value.
@@ -112,6 +140,17 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
     {
 
         return $this->shop_id;
+    }
+
+    /**
+     * Get the [status] column value.
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+
+        return $this->status;
     }
 
     /**
@@ -178,6 +217,27 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
     } // setShopId()
 
     /**
+     * Set the value of [status] column.
+     *
+     * @param  string $v new value
+     * @return TmpRequest The current object (for fluent API support)
+     */
+    public function setStatus($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->status !== $v) {
+            $this->status = $v;
+            $this->modifiedColumns[] = TmpRequestPeer::STATUS;
+        }
+
+
+        return $this;
+    } // setStatus()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -187,6 +247,10 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->status !== 'new') {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -212,6 +276,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
             $this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->data = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->shop_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->status = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -221,7 +286,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 3; // 3 = TmpRequestPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = TmpRequestPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating TmpRequest object", $e);
@@ -442,6 +507,9 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
         if ($this->isColumnModified(TmpRequestPeer::SHOP_ID)) {
             $modifiedColumns[':p' . $index++]  = '`shop_id`';
         }
+        if ($this->isColumnModified(TmpRequestPeer::STATUS)) {
+            $modifiedColumns[':p' . $index++]  = '`status`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `tmp_request` (%s) VALUES (%s)',
@@ -461,6 +529,9 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
                         break;
                     case '`shop_id`':
                         $stmt->bindValue($identifier, $this->shop_id, PDO::PARAM_INT);
+                        break;
+                    case '`status`':
+                        $stmt->bindValue($identifier, $this->status, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -605,6 +676,9 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
             case 2:
                 return $this->getShopId();
                 break;
+            case 3:
+                return $this->getStatus();
+                break;
             default:
                 return null;
                 break;
@@ -636,6 +710,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
             $keys[0] => $this->getId(),
             $keys[1] => $this->getData(),
             $keys[2] => $this->getShopId(),
+            $keys[3] => $this->getStatus(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -684,6 +759,9 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
             case 2:
                 $this->setShopId($value);
                 break;
+            case 3:
+                $this->setStatus($value);
+                break;
         } // switch()
     }
 
@@ -711,6 +789,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setData($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setShopId($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setStatus($arr[$keys[3]]);
     }
 
     /**
@@ -725,6 +804,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
         if ($this->isColumnModified(TmpRequestPeer::ID)) $criteria->add(TmpRequestPeer::ID, $this->id);
         if ($this->isColumnModified(TmpRequestPeer::DATA)) $criteria->add(TmpRequestPeer::DATA, $this->data);
         if ($this->isColumnModified(TmpRequestPeer::SHOP_ID)) $criteria->add(TmpRequestPeer::SHOP_ID, $this->shop_id);
+        if ($this->isColumnModified(TmpRequestPeer::STATUS)) $criteria->add(TmpRequestPeer::STATUS, $this->status);
 
         return $criteria;
     }
@@ -790,6 +870,7 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
     {
         $copyObj->setData($this->getData());
         $copyObj->setShopId($this->getShopId());
+        $copyObj->setStatus($this->getStatus());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -844,10 +925,12 @@ abstract class BaseTmpRequest extends BaseObject implements Persistent
         $this->id = null;
         $this->data = null;
         $this->shop_id = null;
+        $this->status = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

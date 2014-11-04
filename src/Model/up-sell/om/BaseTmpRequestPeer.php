@@ -36,13 +36,13 @@ abstract class BaseTmpRequestPeer
     const TM_CLASS = 'src\\Model\\map\\TmpRequestTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /** the column name for the id field */
     const ID = 'tmp_request.id';
@@ -52,6 +52,13 @@ abstract class BaseTmpRequestPeer
 
     /** the column name for the shop_id field */
     const SHOP_ID = 'tmp_request.shop_id';
+
+    /** the column name for the status field */
+    const STATUS = 'tmp_request.status';
+
+    /** The enumerated values for the status field */
+    const STATUS_NEW = 'new';
+    const STATUS_CALCULATED = 'calculated';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -72,12 +79,12 @@ abstract class BaseTmpRequestPeer
      * e.g. TmpRequestPeer::$fieldNames[TmpRequestPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Id', 'Data', 'ShopId', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'data', 'shopId', ),
-        BasePeer::TYPE_COLNAME => array (TmpRequestPeer::ID, TmpRequestPeer::DATA, TmpRequestPeer::SHOP_ID, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'DATA', 'SHOP_ID', ),
-        BasePeer::TYPE_FIELDNAME => array ('id', 'data', 'shop_id', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Id', 'Data', 'ShopId', 'Status', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'data', 'shopId', 'status', ),
+        BasePeer::TYPE_COLNAME => array (TmpRequestPeer::ID, TmpRequestPeer::DATA, TmpRequestPeer::SHOP_ID, TmpRequestPeer::STATUS, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID', 'DATA', 'SHOP_ID', 'STATUS', ),
+        BasePeer::TYPE_FIELDNAME => array ('id', 'data', 'shop_id', 'status', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
     /**
@@ -87,12 +94,20 @@ abstract class BaseTmpRequestPeer
      * e.g. TmpRequestPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Data' => 1, 'ShopId' => 2, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'data' => 1, 'shopId' => 2, ),
-        BasePeer::TYPE_COLNAME => array (TmpRequestPeer::ID => 0, TmpRequestPeer::DATA => 1, TmpRequestPeer::SHOP_ID => 2, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'DATA' => 1, 'SHOP_ID' => 2, ),
-        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'data' => 1, 'shop_id' => 2, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Data' => 1, 'ShopId' => 2, 'Status' => 3, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'data' => 1, 'shopId' => 2, 'status' => 3, ),
+        BasePeer::TYPE_COLNAME => array (TmpRequestPeer::ID => 0, TmpRequestPeer::DATA => 1, TmpRequestPeer::SHOP_ID => 2, TmpRequestPeer::STATUS => 3, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'DATA' => 1, 'SHOP_ID' => 2, 'STATUS' => 3, ),
+        BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'data' => 1, 'shop_id' => 2, 'status' => 3, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+    );
+
+    /** The enumerated values for this table */
+    protected static $enumValueSets = array(
+        TmpRequestPeer::STATUS => array(
+            TmpRequestPeer::STATUS_NEW,
+            TmpRequestPeer::STATUS_CALCULATED,
+        ),
     );
 
     /**
@@ -135,6 +150,51 @@ abstract class BaseTmpRequestPeer
     }
 
     /**
+     * Gets the list of values for all ENUM columns
+     * @return array
+     */
+    public static function getValueSets()
+    {
+      return TmpRequestPeer::$enumValueSets;
+    }
+
+    /**
+     * Gets the list of values for an ENUM column
+     *
+     * @param string $colname The ENUM column name.
+     *
+     * @return array list of possible values for the column
+     */
+    public static function getValueSet($colname)
+    {
+        $valueSets = TmpRequestPeer::getValueSets();
+
+        if (!isset($valueSets[$colname])) {
+            throw new PropelException(sprintf('Column "%s" has no ValueSet.', $colname));
+        }
+
+        return $valueSets[$colname];
+    }
+
+    /**
+     * Gets the SQL value for the ENUM column value
+     *
+     * @param string $colname ENUM column name.
+     * @param string $enumVal ENUM value.
+     *
+     * @return int SQL value
+     */
+    public static function getSqlValueForEnum($colname, $enumVal)
+    {
+        $values = TmpRequestPeer::getValueSet($colname);
+        if (!in_array($enumVal, $values)) {
+            throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $colname));
+        }
+
+        return array_search($enumVal, $values);
+    }
+
+    /**
      * Convenience method which changes table.column to alias.column.
      *
      * Using this method you can maintain SQL abstraction while using column aliases.
@@ -169,10 +229,12 @@ abstract class BaseTmpRequestPeer
             $criteria->addSelectColumn(TmpRequestPeer::ID);
             $criteria->addSelectColumn(TmpRequestPeer::DATA);
             $criteria->addSelectColumn(TmpRequestPeer::SHOP_ID);
+            $criteria->addSelectColumn(TmpRequestPeer::STATUS);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.data');
             $criteria->addSelectColumn($alias . '.shop_id');
+            $criteria->addSelectColumn($alias . '.status');
         }
     }
 

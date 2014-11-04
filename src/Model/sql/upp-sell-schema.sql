@@ -140,6 +140,7 @@ CREATE TABLE `widget_stats`
     `variant_id` INTEGER,
     `placement` enum('product','cart') DEFAULT 'product' NOT NULL,
     `user_key` VARCHAR(255),
+    `status` enum('new','calculated') DEFAULT 'new' NOT NULL,
     `created_at` DATETIME NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `shop_id` (`shop_domain`),
@@ -187,6 +188,7 @@ CREATE TABLE `tmp_request`
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `data` TEXT,
     `shop_id` INTEGER NOT NULL,
+    `status` enum('new','calculated') DEFAULT 'new' NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 

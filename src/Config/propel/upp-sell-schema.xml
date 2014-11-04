@@ -113,6 +113,7 @@
 		<column name="variant_id" type="INTEGER" required="false"/>
 		<column name="placement" phpName="Placement" type="CHAR" sqlType="enum('product','cart')" required="true" defaultValue="product"/>
 		<column name="user_key" phpName="UserKey" type="VARCHAR" size="255" required="false"/>
+		<column name="status" phpName="Status" type="CHAR" sqlType="enum('new','calculated')" required="true" defaultValue="new"/>
 		<column name="created_at" phpName="CreatedAt" type="TIMESTAMP" required="true"/>
 		<index name="shop_id">
 			<index-column name="shop_domain"/>
@@ -146,6 +147,7 @@
 		<column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
 		<column name="data" phpName="Data" type="LONGVARCHAR" required="false"/>
 		<column name="shop_id" phpName="ShopId" type="INTEGER" required="true"/>
+		<column name="status" phpName="Status" type="CHAR" sqlType="enum('new','calculated')" required="true" defaultValue="new"/>
 		<vendor type="mysql">
 			<parameter name="Engine" value="InnoDB"/>
 		</vendor>

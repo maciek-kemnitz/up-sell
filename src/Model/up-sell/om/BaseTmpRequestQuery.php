@@ -22,10 +22,12 @@ use src\Model\TmpRequestQuery;
  * @method TmpRequestQuery orderById($order = Criteria::ASC) Order by the id column
  * @method TmpRequestQuery orderByData($order = Criteria::ASC) Order by the data column
  * @method TmpRequestQuery orderByShopId($order = Criteria::ASC) Order by the shop_id column
+ * @method TmpRequestQuery orderByStatus($order = Criteria::ASC) Order by the status column
  *
  * @method TmpRequestQuery groupById() Group by the id column
  * @method TmpRequestQuery groupByData() Group by the data column
  * @method TmpRequestQuery groupByShopId() Group by the shop_id column
+ * @method TmpRequestQuery groupByStatus() Group by the status column
  *
  * @method TmpRequestQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method TmpRequestQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -36,10 +38,12 @@ use src\Model\TmpRequestQuery;
  *
  * @method TmpRequest findOneByData(string $data) Return the first TmpRequest filtered by the data column
  * @method TmpRequest findOneByShopId(int $shop_id) Return the first TmpRequest filtered by the shop_id column
+ * @method TmpRequest findOneByStatus(string $status) Return the first TmpRequest filtered by the status column
  *
  * @method array findById(int $id) Return TmpRequest objects filtered by the id column
  * @method array findByData(string $data) Return TmpRequest objects filtered by the data column
  * @method array findByShopId(int $shop_id) Return TmpRequest objects filtered by the shop_id column
+ * @method array findByStatus(string $status) Return TmpRequest objects filtered by the status column
  *
  * @package    propel.generator.up-sell.om
  */
@@ -147,7 +151,7 @@ abstract class BaseTmpRequestQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `data`, `shop_id` FROM `tmp_request` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `data`, `shop_id`, `status` FROM `tmp_request` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -347,6 +351,35 @@ abstract class BaseTmpRequestQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(TmpRequestPeer::SHOP_ID, $shopId, $comparison);
+    }
+
+    /**
+     * Filter the query on the status column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByStatus('fooValue');   // WHERE status = 'fooValue'
+     * $query->filterByStatus('%fooValue%'); // WHERE status LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $status The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return TmpRequestQuery The current query, for fluid interface
+     */
+    public function filterByStatus($status = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($status)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $status)) {
+                $status = str_replace('*', '%', $status);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(TmpRequestPeer::STATUS, $status, $comparison);
     }
 
     /**

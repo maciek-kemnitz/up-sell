@@ -87,6 +87,13 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
     protected $user_key;
 
     /**
+     * The value for the status field.
+     * Note: this column has a database default value of: 'new'
+     * @var        string
+     */
+    protected $status;
+
+    /**
      * The value for the created_at field.
      * @var        string
      */
@@ -131,6 +138,7 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
     public function applyDefaultValues()
     {
         $this->placement = 'product';
+        $this->status = 'new';
     }
 
     /**
@@ -207,6 +215,17 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
     {
 
         return $this->user_key;
+    }
+
+    /**
+     * Get the [status] column value.
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+
+        return $this->status;
     }
 
     /**
@@ -384,6 +403,27 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
     } // setUserKey()
 
     /**
+     * Set the value of [status] column.
+     *
+     * @param  string $v new value
+     * @return WidgetStats The current object (for fluent API support)
+     */
+    public function setStatus($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->status !== $v) {
+            $this->status = $v;
+            $this->modifiedColumns[] = WidgetStatsPeer::STATUS;
+        }
+
+
+        return $this;
+    } // setStatus()
+
+    /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
@@ -420,6 +460,10 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
                 return false;
             }
 
+            if ($this->status !== 'new') {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -448,7 +492,8 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
             $this->variant_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->placement = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->user_key = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->created_at = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->status = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->created_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -458,7 +503,7 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 7; // 7 = WidgetStatsPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = WidgetStatsPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating WidgetStats object", $e);
@@ -715,6 +760,9 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
         if ($this->isColumnModified(WidgetStatsPeer::USER_KEY)) {
             $modifiedColumns[':p' . $index++]  = '`user_key`';
         }
+        if ($this->isColumnModified(WidgetStatsPeer::STATUS)) {
+            $modifiedColumns[':p' . $index++]  = '`status`';
+        }
         if ($this->isColumnModified(WidgetStatsPeer::CREATED_AT)) {
             $modifiedColumns[':p' . $index++]  = '`created_at`';
         }
@@ -746,6 +794,9 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
                         break;
                     case '`user_key`':
                         $stmt->bindValue($identifier, $this->user_key, PDO::PARAM_STR);
+                        break;
+                    case '`status`':
+                        $stmt->bindValue($identifier, $this->status, PDO::PARAM_STR);
                         break;
                     case '`created_at`':
                         $stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -921,6 +972,9 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
                 return $this->getUserKey();
                 break;
             case 6:
+                return $this->getStatus();
+                break;
+            case 7:
                 return $this->getCreatedAt();
                 break;
             default:
@@ -958,7 +1012,8 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
             $keys[3] => $this->getVariantId(),
             $keys[4] => $this->getPlacement(),
             $keys[5] => $this->getUserKey(),
-            $keys[6] => $this->getCreatedAt(),
+            $keys[6] => $this->getStatus(),
+            $keys[7] => $this->getCreatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1025,6 +1080,9 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
                 $this->setUserKey($value);
                 break;
             case 6:
+                $this->setStatus($value);
+                break;
+            case 7:
                 $this->setCreatedAt($value);
                 break;
         } // switch()
@@ -1057,7 +1115,8 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
         if (array_key_exists($keys[3], $arr)) $this->setVariantId($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setPlacement($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setUserKey($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setCreatedAt($arr[$keys[6]]);
+        if (array_key_exists($keys[6], $arr)) $this->setStatus($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setCreatedAt($arr[$keys[7]]);
     }
 
     /**
@@ -1075,6 +1134,7 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
         if ($this->isColumnModified(WidgetStatsPeer::VARIANT_ID)) $criteria->add(WidgetStatsPeer::VARIANT_ID, $this->variant_id);
         if ($this->isColumnModified(WidgetStatsPeer::PLACEMENT)) $criteria->add(WidgetStatsPeer::PLACEMENT, $this->placement);
         if ($this->isColumnModified(WidgetStatsPeer::USER_KEY)) $criteria->add(WidgetStatsPeer::USER_KEY, $this->user_key);
+        if ($this->isColumnModified(WidgetStatsPeer::STATUS)) $criteria->add(WidgetStatsPeer::STATUS, $this->status);
         if ($this->isColumnModified(WidgetStatsPeer::CREATED_AT)) $criteria->add(WidgetStatsPeer::CREATED_AT, $this->created_at);
 
         return $criteria;
@@ -1144,6 +1204,7 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
         $copyObj->setVariantId($this->getVariantId());
         $copyObj->setPlacement($this->getPlacement());
         $copyObj->setUserKey($this->getUserKey());
+        $copyObj->setStatus($this->getStatus());
         $copyObj->setCreatedAt($this->getCreatedAt());
 
         if ($deepCopy && !$this->startCopy) {
@@ -1320,6 +1381,7 @@ abstract class BaseWidgetStats extends BaseObject implements Persistent
         $this->variant_id = null;
         $this->placement = null;
         $this->user_key = null;
+        $this->status = null;
         $this->created_at = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;

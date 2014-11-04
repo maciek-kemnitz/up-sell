@@ -52,6 +52,11 @@ class WidgetStatsTableMap extends TableMap
   1 => 'cart',
 ));
         $this->addColumn('user_key', 'UserKey', 'VARCHAR', false, 255, null);
+        $this->addColumn('status', 'Status', 'CHAR', true, null, 'new');
+        $this->getColumn('status', false)->setValueSet(array (
+  0 => 'new',
+  1 => 'calculated',
+));
         $this->addColumn('created_at', 'CreatedAt', 'TIMESTAMP', true, null, null);
         // validators
     } // initialize()

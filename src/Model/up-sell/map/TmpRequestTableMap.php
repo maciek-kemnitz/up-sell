@@ -45,6 +45,11 @@ class TmpRequestTableMap extends TableMap
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('data', 'Data', 'LONGVARCHAR', false, null, null);
         $this->addColumn('shop_id', 'ShopId', 'INTEGER', true, null, null);
+        $this->addColumn('status', 'Status', 'CHAR', true, null, 'new');
+        $this->getColumn('status', false)->setValueSet(array (
+  0 => 'new',
+  1 => 'calculated',
+));
         // validators
     } // initialize()
 
