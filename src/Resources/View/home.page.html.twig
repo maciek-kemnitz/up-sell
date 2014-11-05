@@ -224,8 +224,16 @@
 			                    type: 'line',
 			                    template: 'shoplo',
 			                    tooltips: {
-				                    serie1: [1, 2, 3, 4],
-				                    serie2: [1, 4, 12, 5]
+				                    serie1: [
+					                    {% for stats in statsData %}
+					                    "{{ stats.fullValue - stats.upSellValue  }}"{% if not loop.last %},{% endif %}
+					                    {% endfor %}
+				                    ],
+				                    serie2: [
+					                    {% for stats in statsData %}
+					                    "{{ stats.fullValue }}"{% if not loop.last %},{% endif %}
+					                    {% endfor %}
+				                    ]
 			                    },
 			                    values: {
 				                    serie1: [
