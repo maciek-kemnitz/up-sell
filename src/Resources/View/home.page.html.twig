@@ -58,9 +58,6 @@
 	                    <div id="chart"></div>
 	                    <script type="text/javascript">
 
-
-
-
 		                    var fontFamily = 'Open Sans',
 				                    redColor = '#f55161',
 				                    greenColor = '#3cbb9b',
@@ -88,8 +85,8 @@
 						                    scale: 1.5
 					                    },
 					                    tooltip: {
-						                    width: 44,
-						                    height: 40,
+//						                    width: 44,
+//						                    height: 40,
 						                    roundedCorners: 2,
 						                    padding: [5, 8],
 						                    offset: [12, 22],
@@ -129,8 +126,8 @@
 						                    scale: 1.5
 					                    },
 					                    tooltip: {
-						                    width: 44,
-						                    height: 40,
+//						                    width: 44,
+//						                    height: 40,
 						                    roundedCorners: 2,
 						                    padding: [5, 8],
 						                    offset: [12, 22],
@@ -143,47 +140,6 @@
 						                    },
 						                    frameProps: {
 							                    fill: greenColor,
-							                    'stroke-width': 0
-						                    }
-					                    },
-					                    startAnimation: {
-						                    active: true,
-						                    type: 'grow',
-						                    speed: 500,
-						                    easing: '>'
-					                    }
-				                    },
-				                    serie3: {
-					                    rounded: false,
-					                    plotProps: {
-						                    'stroke-width': 3,
-						                    stroke: blueColor
-					                    },
-					                    dot: true,
-					                    dotProps: {
-						                    size: 5,
-						                    fill: '#fff',
-						                    stroke: blueColor,
-						                    'stroke-width': 3
-					                    },
-					                    highlight: {
-						                    scale: 1.5
-					                    },
-					                    tooltip: {
-						                    width: 44,
-						                    height: 40,
-						                    roundedCorners: 2,
-						                    padding: [5, 8],
-						                    offset: [12, 22],
-						                    contentStyle: {
-							                    color: '#fff',
-							                    'font-size': '15px',
-							                    'font-weight': '600',
-							                    'font-family': fontFamily,
-							                    'text-align': 'center'
-						                    },
-						                    frameProps: {
-							                    fill: blueColor,
 							                    'stroke-width': 0
 						                    }
 					                    },
@@ -226,12 +182,12 @@
 			                    tooltips: {
 				                    serie1: [
 					                    {% for stats in statsData %}
-					                    "{{ stats.fullValue - stats.upSellValue  }}"{% if not loop.last %},{% endif %}
+					                    "{{ stats.fullValue - stats.upSellValue  }} zł<br>(bez upsell)"{% if not loop.last %},{% endif %}
 					                    {% endfor %}
 				                    ],
 				                    serie2: [
 					                    {% for stats in statsData %}
-					                    "{{ stats.fullValue }}"{% if not loop.last %},{% endif %}
+					                    "{{ stats.fullValue }} zł<br>(z upsell)"{% if not loop.last %},{% endif %}
 					                    {% endfor %}
 				                    ]
 			                    },
