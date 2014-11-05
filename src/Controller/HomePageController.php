@@ -156,11 +156,11 @@ class HomePageController implements ControllerProviderInterface
 			foreach ($stats as $stat)
 			{
 				$dateString = $stat->getCreatedAt('Y-m-d');
-				$statsData[$dateString]['upSellValue'] += $stat->getUpSellValue() / 100;
-				$statsData[$dateString]['fullValue'] += $stat->getFullValue() / 100;
+				$statsData[$dateString]['upSellValue'] += round($stat->getUpSellValue() / 100,2);
+				$statsData[$dateString]['fullValue'] += round($stat->getFullValue() / 100, 2);
 
-				$upSellRevenue += $stat->getUpSellValue() / 100;
-				$cartValue += $stat->getFullValue() / 100;
+				$upSellRevenue += round($stat->getUpSellValue() / 100,2);
+				$cartValue += round($stat->getFullValue() / 100,2);
 			}
 
 			$avgCartValue = $cartValue / $stats->count();
