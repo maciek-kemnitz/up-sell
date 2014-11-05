@@ -163,7 +163,7 @@ class HomePageController implements ControllerProviderInterface
 				$cartValue += round($stat->getFullValue() / 100,2);
 			}
 
-			$avgCartValue = $cartValue / $stats->count();
+			$avgCartValue = round($cartValue / $stats->count(), 2);
 
 			$this->calculateStats($shoploApi);
 
