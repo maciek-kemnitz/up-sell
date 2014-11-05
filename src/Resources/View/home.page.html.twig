@@ -5,6 +5,8 @@
 
     <script src="//code.jquery.com/jquery-1.9.1.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script src="{{ app.request.basepath }}/js/raphael.min.js"></script>
+	<script src="{{ app.request.basepath }}/js/elycharts.min.js"></script>
 </head>
 
 
@@ -28,13 +30,232 @@
 	                        {% endif %}
                         </section>
                     </section>
+                    <section class="scroll-content">
+		                <ul class="table-columns four-in-row bottom-frame stats" data-ajax-url="http://mk-10.shoplo.com/ajax?method=admin.dashboard.get&amp;andrew=1">
+			                <li class="box current" data-original-title="" title="">
+
+				                <span class="label month">Wyświetleń upsell</span>
+				                <span class="value"><b>{{ upSellShowRate }}</b></span>
+			                </li>
+			                <li class="box previous left-frame">
+
+				                <span class="label month">SPRZEDAŻ UPSELL</span>
+				                <span class="value"><b>{{upSellRevenue}}</b> <sup class="">PLN</sup></span>
+			                </li>
+			                <li class="box variantion left-frame"  data-original-title="" title="">
+				                <span class="label">AVG. CART VALUE</span>
+				                <span class="value"><b>{{ avgCartValue }}</b> <sup>PLN</sup></span>
+			                </li>
+			                <li class="box left-frame">
+				                <select id="stats-date-picker" class="date-select simple-select last pull-right" data-icon="r">
+					                {#<option value="day">dzisiaj</option>#}
+					                <option value="week" selected="selected">ostatnie 7 dni</option>
+					                {#<option value="month">ostatnie 30 dni</option>#}
+				                </select>
+			                </li>
+		                </ul>
+	                    <section class="chart">
+	                    <div id="chart"></div>
+	                    <script type="text/javascript">
+
+
+
+
+		                    var fontFamily = 'Open Sans',
+				                    redColor = '#f55161',
+				                    greenColor = '#3cbb9b',
+				                    blueColor = '#0f9ddd',
+				                    grayColor = '#abacb2';
+
+		                    $.elycharts.templates['shoplo'] = {
+			                    type: 'line',
+			                    margins: [30, 30, 60, 30],
+			                    series: {
+				                    serie1: {
+					                    rounded: false,
+					                    plotProps: {
+						                    'stroke-width': 3,
+						                    stroke: "red"
+					                    },
+					                    dot: true,
+					                    dotProps: {
+						                    size: 5,
+						                    fill: '#fff',
+						                    stroke: "red",
+						                    'stroke-width': 3
+					                    },
+					                    highlight: {
+						                    scale: 1.5
+					                    },
+					                    tooltip: {
+						                    width: 44,
+						                    height: 40,
+						                    roundedCorners: 2,
+						                    padding: [5, 8],
+						                    offset: [12, 22],
+						                    contentStyle: {
+							                    color: '#fff',
+							                    'font-size': '15px',
+							                    'font-weight': '600',
+							                    'font-family': fontFamily,
+							                    'text-align': 'center'
+						                    },
+						                    frameProps: {
+							                    fill: "red",
+							                    'stroke-width': 0
+						                    }
+					                    },
+					                    startAnimation: {
+						                    active: true,
+						                    type: 'grow',
+						                    speed: 500,
+						                    easing: '>'
+					                    }
+				                    },
+				                    serie2: {
+					                    rounded: false,
+					                    plotProps: {
+						                    'stroke-width': 3,
+						                    stroke: greenColor
+					                    },
+					                    dot: true,
+					                    dotProps: {
+						                    size: 5,
+						                    fill: '#fff',
+						                    stroke: greenColor,
+						                    'stroke-width': 3
+					                    },
+					                    highlight: {
+						                    scale: 1.5
+					                    },
+					                    tooltip: {
+						                    width: 44,
+						                    height: 40,
+						                    roundedCorners: 2,
+						                    padding: [5, 8],
+						                    offset: [12, 22],
+						                    contentStyle: {
+							                    color: '#fff',
+							                    'font-size': '15px',
+							                    'font-weight': '600',
+							                    'font-family': fontFamily,
+							                    'text-align': 'center'
+						                    },
+						                    frameProps: {
+							                    fill: greenColor,
+							                    'stroke-width': 0
+						                    }
+					                    },
+					                    startAnimation: {
+						                    active: true,
+						                    type: 'grow',
+						                    speed: 500,
+						                    easing: '>'
+					                    }
+				                    },
+				                    serie3: {
+					                    rounded: false,
+					                    plotProps: {
+						                    'stroke-width': 3,
+						                    stroke: blueColor
+					                    },
+					                    dot: true,
+					                    dotProps: {
+						                    size: 5,
+						                    fill: '#fff',
+						                    stroke: blueColor,
+						                    'stroke-width': 3
+					                    },
+					                    highlight: {
+						                    scale: 1.5
+					                    },
+					                    tooltip: {
+						                    width: 44,
+						                    height: 40,
+						                    roundedCorners: 2,
+						                    padding: [5, 8],
+						                    offset: [12, 22],
+						                    contentStyle: {
+							                    color: '#fff',
+							                    'font-size': '15px',
+							                    'font-weight': '600',
+							                    'font-family': fontFamily,
+							                    'text-align': 'center'
+						                    },
+						                    frameProps: {
+							                    fill: blueColor,
+							                    'stroke-width': 0
+						                    }
+					                    },
+					                    startAnimation: {
+						                    active: true,
+						                    type: 'grow',
+						                    speed: 500,
+						                    easing: '>'
+					                    }
+				                    }
+			                    },
+			                    defaultAxis: {
+				                    labels: true,
+				                    labelsDistance: 15,
+				                    labelsAnchor: 'middle',
+				                    labelsProps: {
+					                    fill: grayColor,
+					                    'font-family': fontFamily
+				                    }
+			                    },
+			                    axis: {
+				                    l: {
+					                    labels: true
+				                    }
+			                    },
+			                    features: {
+				                    tooltip: {
+					                    moveDelay: 100
+				                    },
+				                    grid: {
+					                    draw: [false, true]
+				                    }
+			                    }
+		                    };
+
+
+		                    $("#chart").chart({
+			                    type: 'line',
+			                    template: 'shoplo',
+			                    tooltips: {
+				                    serie1: [1, 2, 3, 4],
+				                    serie2: [1, 4, 12, 5]
+			                    },
+			                    values: {
+				                    serie1: [
+					                    {% for stats in statsData %}
+					                        "{{ stats.fullValue - stats.upSellValue  }}"{% if not loop.last %},{% endif %}
+					                    {% endfor %}
+				                    ],
+				                    serie2: [
+					                    {% for stats in statsData %}
+					                    "{{ stats.fullValue }}"{% if not loop.last %},{% endif %}
+					                    {% endfor %}
+				                    ]
+			                    },
+
+			                    labels: [
+				                    {% for date in statsData|keys %}
+				                        "{{ date }}"{% if not loop.last %},{% endif %}
+				                    {% endfor %}
+			                    ]
+		                    });
+
+	                    </script>
+                    </section>
 	                {% if uppSells|length == 0 %}
 		                <section class="blank-slate box bottom-frame">
 			                <i class="big-icon" data-icon="l"></i>
 			                <h2>Nie posiadasz jeszcze żadnych up-selli</h2>
 		                </section>
 	                {% else %}
-	                    <section class="scroll-content">
+
 
 		                    <section class="box variants clearfix">
 		                        <h2 class="pull-left">Aktywne oferty</h2>
@@ -105,6 +326,10 @@
 </script>
 <script type="text/javascript">
     $(function(){
+
+	    $('#stats-date-picker').change(function(){
+
+	    });
 
 	    $('#search').keyup(function(){
 

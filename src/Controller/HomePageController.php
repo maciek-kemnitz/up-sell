@@ -19,6 +19,7 @@ use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
 use src\Model\UpSellStats;
+use src\Model\UpSellStatsQuery;
 use src\Model\WidgetStats;
 use src\Model\WidgetStatsPeer;
 use src\Model\WidgetStatsQuery;
@@ -108,6 +109,62 @@ class HomePageController implements ControllerProviderInterface
 				}
 			}
 
+			$upSellShowRate = 0;
+			$upSellRevenue = 0;
+			$avgCartValue = 0;
+			$cartValue = 0;
+
+			/** @var WidgetStats[] $widgetStats */
+			$widgetStats = WidgetStatsQuery::create()
+				->filterByShopDomain($shoploApi->getPermanentDomain())
+				->filterByCreatedAt(['min' => new \DateTime("-7 days"), "max" => new \DateTime()])
+				->orderByCreatedAt()
+				->find();
+
+			foreach ($widgetStats as $widget)
+			{
+				if (null === $widget->getVariantId())
+				{
+					$upSellShowRate++;
+				}
+			}
+
+			/** @var UpSellStats[]|\PropelObjectCollection $stats */
+			$stats = UpSellStatsQuery::create()
+				->filterByShopDomain($shoploApi->getPermanentDomain())
+				->filterByCreatedAt(['min' => new \DateTime("-7 days"), "max" => new \DateTime()])
+				->orderByCreatedAt()
+				->find();
+
+
+			$interval = new \DateInterval('P1D');
+			/** @var \DateTime[] $statsRange */
+			$statsRange = new \DatePeriod(new \DateTime('-7 days'), $interval, new \DateTime());
+
+			$statsData = [];
+
+			foreach ($statsRange as $date)
+			{
+				$dateString = $date->format('Y-m-d');
+				if (false == isset($statsData[$dateString]))
+				{
+					$statsData[$dateString]['upSellValue'] = 0;
+					$statsData[$dateString]['fullValue'] = 0;
+				}
+			}
+
+			foreach ($stats as $stat)
+			{
+				$dateString = $stat->getCreatedAt('Y-m-d');
+				$statsData[$dateString]['upSellValue'] += $stat->getUpSellValue();
+				$statsData[$dateString]['fullValue'] += $stat->getFullValue();
+
+				$upSellRevenue += $stat->getUpSellValue();
+				$cartValue += $stat->getFullValue();
+			}
+
+			$avgCartValue = $cartValue / $stats->count();
+
 			$this->calculateStats($shoploApi);
 
 			$upSells = UpSellQuery::create()
@@ -115,38 +172,14 @@ class HomePageController implements ControllerProviderInterface
 				->orderByOrder()
 				->find();
 
-			return $app['twig']->render('home.page.html.twig', ['product'=>$shoploApi->getProducts(), 'uppSells' => $upSells, 'shop'=>$shop]);
+			return $app['twig']->render('home.page.html.twig', [
+				'product'=>$shoploApi->getProducts(), 'uppSells' => $upSells, 'shop'=>$shop,
+				'upSellShowRate' => $upSellShowRate,
+				'upSellRevenue' => $upSellRevenue,
+				'avgCartValue' => $avgCartValue,
+				'statsData' => $statsData
+			]);
 
-		});
-
-		$controllers->get('/tmp/lets_see', function (Request $request) use ($app)
-		{
-			/** @var ShoploObject $shoploApi */
-			$shoploApi 	= $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
-			$shop 		= $shoploApi->getShop();
-
-			$upSells = UpSellQuery::create()
-			                      ->filterByShopDomain($shop['permanent_domain'])
-			                      ->orderByOrder()
-			                      ->find();
-
-			$showStats = WidgetStatsQuery::create()
-			                             ->filterByShopDomain($shoploApi->getPermanentDomain())
-			                             ->filterByCreatedAt(['min' => new \DateTime('- 1 month'), 'max' => new \DateTime()])
-			                             ->find();
-
-			//stats
-			//get order on webhook
-			//find stats matching user_key
-			//find checkout for order
-			//find products metching checkout and stats
-			//save order full value, upsell value, created_at
-			//checkout.order_id => order.id
-			//checkout.user_key => widget_stats.user_key
-
-
-
-			return $app['twig']->render('landing.page.html.twig', ['product'=>$shoploApi->getProducts(), 'uppSells' => $upSells, 'shop'=>$shop]);
 		});
 
 		$controllers->get('/logout', function (Request $request) use ($app)
