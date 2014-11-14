@@ -304,12 +304,6 @@
 
 			    var name = $(this).find('#up-sell-name').text().toLowerCase().trim();
 			    var skus = $(this).find('#up-sell-name').data('skus').toLowerCase().trim();
-			    if (skus.indexOf(query) != -1)
-			    {
-				    console.log(name);
-			    }
-
-
 
 			    if (name.indexOf(query) == -1 && skus.indexOf(query) == -1) {
 				    $(this).hide();
