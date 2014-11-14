@@ -86,7 +86,7 @@ class Product extends BaseProduct
 		$product->setVariants($variantsData);
 
 		$product->setUrl($data['url']);
-		$product->setSku($firstVariant['price']);
+		$product->setSku($firstVariant['sku']);
 		$product->save();
 
 		return $product;
