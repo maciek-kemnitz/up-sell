@@ -303,7 +303,14 @@
 		    $('#sortable').find('.list-item').each(function () {
 
 			    var name = $(this).find('#up-sell-name').text().toLowerCase().trim();
-			    var skus = $(this).find('#up-sell-name').data('skus').toLowerCase().trim();
+			    var skus = $(this).find('#up-sell-name').data('skus');
+
+			    if (undefined == skus)
+			    {
+				    skus = '';
+			    }
+
+			    skus = skus.toLowerCase().trim();
 
 			    if (name.indexOf(query) == -1 && skus.indexOf(query) == -1) {
 				    $(this).hide();
