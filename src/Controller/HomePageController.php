@@ -139,13 +139,14 @@ class HomePageController implements ControllerProviderInterface
 
 			$interval = new \DateInterval('P1D');
 			/** @var \DateTime[] $statsRange */
-			$statsRange = new \DatePeriod(new \DateTime('-7 days'), $interval, new \DateTime());
+			$statsRange = new \DatePeriod(new \DateTime('-7 days'), $interval, new \DateTime('+ 1 day'));
 
 			$statsData = [];
 
 			foreach ($statsRange as $date)
 			{
 				$dateString = $date->format('Y-m-d');
+
 				if (false == isset($statsData[$dateString]))
 				{
 					$statsData[$dateString]['upSellValue'] = 0;
@@ -163,7 +164,7 @@ class HomePageController implements ControllerProviderInterface
 				$cartValue += round($stat->getFullValue() / 100,2);
 			}
 
-			$avgCartValue = round($cartValue / $stats->count(), 2);
+			$avgCartValue = $cartValue ? round($cartValue / $stats->count(), 2) : 0;
 
 			$this->calculateStats($shoploApi);
 

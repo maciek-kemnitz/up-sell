@@ -96,4 +96,27 @@ class UpSell extends BaseUpSell
 
 		return array_key_exists($productId, $connectedProducts);
 	}
+
+	public function getSkuFromProducts($formatted = false)
+	{
+		$relatedProductIds = $this->getRelatedProducts()->toKeyValue('id', 'productId');
+
+		$productsInCart = $this->getProductInCarts()->toKeyValue('id', 'productId');
+
+		$productIds = $relatedProductIds + $productsInCart;
+
+		$products = ProductQuery::create()
+			->filterByShopDomain($this->getShopDomain())
+			->filterByShoploProductId($productIds)
+			->find();
+
+		$skus = $products->toKeyValue('PrimaryKey', 'Sku');
+
+		if (false == $formatted)
+		{
+			return $skus;
+		}
+
+		return implode(',', $skus);
+	}
 }
