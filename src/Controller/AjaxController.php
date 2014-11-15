@@ -5,14 +5,22 @@ namespace src\Controller;
 use Shoplo\ShoploApi;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
+use src\Lib\ShoploObject;
+use src\Lib\Stats;
 use src\Model\Product;
 use src\Model\ProductInCart;
 use src\Model\ProductInCartQuery;
 use src\Model\ProductQuery;
+use src\Model\TmpRequest;
+use src\Model\TmpRequestPeer;
+use src\Model\TmpRequestQuery;
 use src\Model\UpSell;
 use src\Model\UpSellPeer;
 use src\Model\UpSellQuery;
+use src\Model\UpSellStats;
 use src\Model\WidgetStats;
+use src\Model\WidgetStatsPeer;
+use src\Model\WidgetStatsQuery;
 use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -283,6 +291,55 @@ class AjaxController implements ControllerProviderInterface
 			return new JsonResponse($data);
 		});
 
+		$controllers->post('/up-sell/home-page-stats', function (Request $request) use ($app)
+		{
+			$type = $request->request->get('type');
+			$statsData = null;
+			/** @var Stats $stats */
+			$stats = $app[ServiceRegistry::SERVICE_STATS];
+
+			$chartData = null;
+
+			switch ($type)
+			{
+				case 'month':
+					//co trzy dni
+					$range = ['min' => new \DateTime("-30 days"), "max" => new \DateTime('+1 day')];
+					$interval = new \DateInterval('P3D');
+					$chartData = $stats->prepareChartData($range, $interval, 'Y-m-d');
+					break;
+
+				case 'day':
+					//co dwie godziny
+					$range = ['min' => new \DateTime("Today"), "max" => new \DateTime('Tomorrow')];
+					$interval = new \DateInterval('PT1H');
+					$chartData = $stats->prepareChartData($range, $interval, "H", true);
+					break;
+
+				case 'week':
+					//co dzienie
+					$range = ['min' => new \DateTime("-7 days"), "max" => new \DateTime('+1 day')];
+					$interval = new \DateInterval('P1D');
+					$chartData = $stats->prepareChartData($range, $interval, 'Y-m-d');
+					break;
+			}
+
+
+
+			$view = $app['twig']->render(
+				'homepage-stats.block.html.twig',
+				['statsData' => $chartData['statsData']]);
+
+			$data = [
+				'html' => $view,
+				'statsNumbers' => $chartData['statsNumbers'],
+			];
+
+			return new JsonResponse($data);
+		});
+
 		return $controllers;
 	}
+
+
 }

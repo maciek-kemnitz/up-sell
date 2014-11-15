@@ -6,12 +6,14 @@ use Shoplo\ShoploApi;
 use Silex\Application;
 use src\Lib\GateKeeper;
 use src\Lib\ShoploObject;
+use src\Lib\Stats;
 
 class ServiceRegistry
 {
 	const SERVICE_SHOPLO 		= 'shoplo';
 	const SERVICE_SHOPLO_OBJECT = 'shoplo_object';
 	const SERVICE_GATEKEEPER 	= 'gatekeeper';
+	const SERVICE_STATS	        = 'stats';
 
 	/** @var Application  */
 	protected $app;
@@ -54,6 +56,13 @@ class ServiceRegistry
 			$gateKeeper = new GateKeeper($app[self::SERVICE_SHOPLO_OBJECT]);
 
 			return $gateKeeper;
+		});
+
+		$this->app[self::SERVICE_STATS] = $this->app->share(function ($app)
+		{
+			$stats = new Stats($app[self::SERVICE_SHOPLO_OBJECT]);
+
+			return $stats;
 		});
 	}
 
