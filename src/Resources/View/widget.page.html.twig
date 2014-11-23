@@ -432,7 +432,7 @@
 								{% if selectedVariant %}
 									<h2>{{ variant.price|number_format(2, '.', ',') }} zł</h2>
 								{% else %}
-									{% if product.getOriginalPrice() === product.getCurrentPrice() %}
+									{% if product.getOriginalPrice() == product.getCurrentPrice() %}
 										<h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
 									{% else %}
 									<h2>
