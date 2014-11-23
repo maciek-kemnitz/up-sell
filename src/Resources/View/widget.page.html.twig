@@ -436,7 +436,7 @@
 										<h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
 									{% else %}
 									<h2>
-										<span class="oldPrice">{{ product.getOriginalPrice|number_format(2, '.', ',') }}</span>
+										<span class="strike muted">{{ product.getOriginalPrice|number_format(2, '.', ',') }}</span>
 										<span class="newPrice">{{ product.getCurrentPrice|number_format(2, '.', ',') }}</span>
 										<span> zł</span>
 									</h2>
