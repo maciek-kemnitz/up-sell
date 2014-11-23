@@ -20,6 +20,7 @@ $app->mount('/ajax', new \src\Controller\AjaxController());
 $app->mount('/delete', new \src\Controller\DeleteController());
 $app->mount('/status', new \src\Controller\UpSellStatusController());
 $app->mount('/webhook', new \src\Controller\WebhookController());
+$app->mount('/admin', new \src\Controller\UpdateProductsController());
 
 
 $app->run();
