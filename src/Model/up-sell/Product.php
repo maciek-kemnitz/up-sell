@@ -24,6 +24,7 @@ class Product extends BaseProduct
 		$product->setShopDomain($shopDomain);
 		$product->setName($data['name']);
 
+
 		$images = $data['images'];
 
 		if (count($images))
@@ -87,6 +88,9 @@ class Product extends BaseProduct
 
 		$product->setUrl($data['url']);
 		$product->setSku($firstVariant['sku']);
+		$product->setAvailability((int) $firstVariant['availability']);
+		$product->setOriginalPrice((int) $firstVariant['price_regular']);
+		$product->setCurrentPrice((int) $firstVariant['price']);
 		$product->save();
 
 		return $product;

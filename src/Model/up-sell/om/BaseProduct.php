@@ -90,6 +90,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
     protected $current_price;
 
     /**
+     * The value for the availability field.
+     * @var        int
+     */
+    protected $availability;
+
+    /**
      * The value for the url field.
      * @var        string
      */
@@ -226,6 +232,17 @@ abstract class BaseProduct extends BaseObject implements Persistent
     {
 
         return $this->current_price;
+    }
+
+    /**
+     * Get the [availability] column value.
+     *
+     * @return int
+     */
+    public function getAvailability()
+    {
+
+        return $this->availability;
     }
 
     /**
@@ -431,6 +448,27 @@ abstract class BaseProduct extends BaseObject implements Persistent
     } // setCurrentPrice()
 
     /**
+     * Set the value of [availability] column.
+     *
+     * @param  int $v new value
+     * @return Product The current object (for fluent API support)
+     */
+    public function setAvailability($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->availability !== $v) {
+            $this->availability = $v;
+            $this->modifiedColumns[] = ProductPeer::AVAILABILITY;
+        }
+
+
+        return $this;
+    } // setAvailability()
+
+    /**
      * Set the value of [url] column.
      *
      * @param  string $v new value
@@ -574,11 +612,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $this->img_url = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->original_price = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
             $this->current_price = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
-            $this->url = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->thumbnail = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->sku = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-            $this->description = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-            $this->variants = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->availability = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
+            $this->url = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->thumbnail = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->sku = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->description = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->variants = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -588,7 +627,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 12; // 12 = ProductPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = ProductPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Product object", $e);
@@ -840,6 +879,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductPeer::CURRENT_PRICE)) {
             $modifiedColumns[':p' . $index++]  = '`current_price`';
         }
+        if ($this->isColumnModified(ProductPeer::AVAILABILITY)) {
+            $modifiedColumns[':p' . $index++]  = '`availability`';
+        }
         if ($this->isColumnModified(ProductPeer::URL)) {
             $modifiedColumns[':p' . $index++]  = '`url`';
         }
@@ -886,6 +928,9 @@ abstract class BaseProduct extends BaseObject implements Persistent
                         break;
                     case '`current_price`':
                         $stmt->bindValue($identifier, $this->current_price, PDO::PARAM_STR);
+                        break;
+                    case '`availability`':
+                        $stmt->bindValue($identifier, $this->availability, PDO::PARAM_INT);
                         break;
                     case '`url`':
                         $stmt->bindValue($identifier, $this->url, PDO::PARAM_STR);
@@ -1066,18 +1111,21 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 return $this->getCurrentPrice();
                 break;
             case 7:
-                return $this->getUrl();
+                return $this->getAvailability();
                 break;
             case 8:
-                return $this->getThumbnail();
+                return $this->getUrl();
                 break;
             case 9:
-                return $this->getSku();
+                return $this->getThumbnail();
                 break;
             case 10:
-                return $this->getDescription();
+                return $this->getSku();
                 break;
             case 11:
+                return $this->getDescription();
+                break;
+            case 12:
                 return $this->getVariants();
                 break;
             default:
@@ -1116,11 +1164,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $keys[4] => $this->getImgUrl(),
             $keys[5] => $this->getOriginalPrice(),
             $keys[6] => $this->getCurrentPrice(),
-            $keys[7] => $this->getUrl(),
-            $keys[8] => $this->getThumbnail(),
-            $keys[9] => $this->getSku(),
-            $keys[10] => $this->getDescription(),
-            $keys[11] => $this->getVariants(),
+            $keys[7] => $this->getAvailability(),
+            $keys[8] => $this->getUrl(),
+            $keys[9] => $this->getThumbnail(),
+            $keys[10] => $this->getSku(),
+            $keys[11] => $this->getDescription(),
+            $keys[12] => $this->getVariants(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1187,18 +1236,21 @@ abstract class BaseProduct extends BaseObject implements Persistent
                 $this->setCurrentPrice($value);
                 break;
             case 7:
-                $this->setUrl($value);
+                $this->setAvailability($value);
                 break;
             case 8:
-                $this->setThumbnail($value);
+                $this->setUrl($value);
                 break;
             case 9:
-                $this->setSku($value);
+                $this->setThumbnail($value);
                 break;
             case 10:
-                $this->setDescription($value);
+                $this->setSku($value);
                 break;
             case 11:
+                $this->setDescription($value);
+                break;
+            case 12:
                 $this->setVariants($value);
                 break;
         } // switch()
@@ -1232,11 +1284,12 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if (array_key_exists($keys[4], $arr)) $this->setImgUrl($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setOriginalPrice($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setCurrentPrice($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setUrl($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setThumbnail($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setSku($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setDescription($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setVariants($arr[$keys[11]]);
+        if (array_key_exists($keys[7], $arr)) $this->setAvailability($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setUrl($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setThumbnail($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setSku($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setDescription($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setVariants($arr[$keys[12]]);
     }
 
     /**
@@ -1255,6 +1308,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductPeer::IMG_URL)) $criteria->add(ProductPeer::IMG_URL, $this->img_url);
         if ($this->isColumnModified(ProductPeer::ORIGINAL_PRICE)) $criteria->add(ProductPeer::ORIGINAL_PRICE, $this->original_price);
         if ($this->isColumnModified(ProductPeer::CURRENT_PRICE)) $criteria->add(ProductPeer::CURRENT_PRICE, $this->current_price);
+        if ($this->isColumnModified(ProductPeer::AVAILABILITY)) $criteria->add(ProductPeer::AVAILABILITY, $this->availability);
         if ($this->isColumnModified(ProductPeer::URL)) $criteria->add(ProductPeer::URL, $this->url);
         if ($this->isColumnModified(ProductPeer::THUMBNAIL)) $criteria->add(ProductPeer::THUMBNAIL, $this->thumbnail);
         if ($this->isColumnModified(ProductPeer::SKU)) $criteria->add(ProductPeer::SKU, $this->sku);
@@ -1329,6 +1383,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $copyObj->setImgUrl($this->getImgUrl());
         $copyObj->setOriginalPrice($this->getOriginalPrice());
         $copyObj->setCurrentPrice($this->getCurrentPrice());
+        $copyObj->setAvailability($this->getAvailability());
         $copyObj->setUrl($this->getUrl());
         $copyObj->setThumbnail($this->getThumbnail());
         $copyObj->setSku($this->getSku());
@@ -1676,6 +1731,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
         $this->img_url = null;
         $this->original_price = null;
         $this->current_price = null;
+        $this->availability = null;
         $this->url = null;
         $this->thumbnail = null;
         $this->sku = null;
