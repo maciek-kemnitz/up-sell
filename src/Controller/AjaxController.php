@@ -10,6 +10,7 @@ use src\Lib\Stats;
 use src\Model\Product;
 use src\Model\ProductInCart;
 use src\Model\ProductInCartQuery;
+use src\Model\ProductPeer;
 use src\Model\ProductQuery;
 use src\Model\TmpRequest;
 use src\Model\TmpRequestPeer;
@@ -207,9 +208,6 @@ class AjaxController implements ControllerProviderInterface
 
 		});
 
-		/**
-		 * @todo limit products by availability
-		 */
 		$controllers->post('/autocomplete', function (Request $request) use ($app)
 		{
 			$query = $request->request->get('query');
@@ -220,6 +218,7 @@ class AjaxController implements ControllerProviderInterface
 
 			$products = ProductQuery::create()
 				->filterByShopDomain($shopDomain)
+				->filterByAvailability(1)
 				->filterByName($query.'%', \Criteria::LIKE)
 				->_or()
 				->filterBySku($query.'%', \Criteria::LIKE)
