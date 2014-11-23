@@ -68,8 +68,8 @@ class UpdateProductsController implements ControllerProviderInterface
 				foreach ($ownedProducts as $ownedProduct)
 				{
 					$ownedProduct->setSku($productIds[$ownedProduct->getShoploProductId()]['sku']);
-					$ownedProduct->setOriginalPrice($productIds[$ownedProduct->getShoploProductId()]['price_regular']);
-					$ownedProduct->setCurrentPrice($productIds[$ownedProduct->getShoploProductId()]['price']);
+					$ownedProduct->setOriginalPrice($productIds[$ownedProduct->getShoploProductId()]['price_regular']/100);
+					$ownedProduct->setCurrentPrice($productIds[$ownedProduct->getShoploProductId()]['price']/100);
 					$ownedProduct->save();
 					$updated++;
 				}
