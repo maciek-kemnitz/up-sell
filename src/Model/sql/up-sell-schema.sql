@@ -51,6 +51,7 @@ CREATE TABLE `product`
     `name` TEXT NOT NULL,
     `img_url` TEXT NOT NULL,
     `original_price` DOUBLE NOT NULL,
+    `current_price` DOUBLE NOT NULL,
     `url` TEXT NOT NULL,
     `thumbnail` TEXT NOT NULL,
     `sku` VARCHAR(255) NOT NULL,

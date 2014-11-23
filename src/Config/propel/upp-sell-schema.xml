@@ -32,6 +32,7 @@
 		<column name="name" phpName="Name" type="LONGVARCHAR" required="true"/>
 		<column name="img_url" phpName="ImgUrl" type="LONGVARCHAR" required="true"/>
 		<column name="original_price" phpName="OriginalPrice" type="DOUBLE" required="true"/>
+		<column name="current_price" phpName="CurrentPrice" type="DOUBLE" required="true"/>
 		<column name="url" phpName="Url" type="LONGVARCHAR" required="true"/>
 		<column name="thumbnail" phpName="Thumbnail" type="LONGVARCHAR" required="true"/>
 		<column name="sku" phpName="Sku" type="VARCHAR" size="255" required="true"/>

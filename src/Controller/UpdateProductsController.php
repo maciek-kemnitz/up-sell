@@ -45,9 +45,12 @@ class UpdateProductsController implements ControllerProviderInterface
 				$productIds = [];
 				foreach ($products as $product)
 				{
+
 					if (isset($product['variants'][0]))
 					{
-						$productIds[$product['variants'][0]['id']] = $product['variants'][0]['sku'];
+						$productIds[$product['variants'][0]['id']]['sku'] = $product['variants'][0]['sku'];
+						$productIds[$product['variants'][0]['id']]['price'] = $product['variants'][0]['price'];
+						$productIds[$product['variants'][0]['id']]['price_regular'] = $product['variants'][0]['price_regular'];
 					}
 					else
 					{
@@ -64,7 +67,9 @@ class UpdateProductsController implements ControllerProviderInterface
 
 				foreach ($ownedProducts as $ownedProduct)
 				{
-					$ownedProduct->setSku($productIds[$ownedProduct->getShoploProductId()]);
+					$ownedProduct->setSku($productIds[$ownedProduct->getShoploProductId()]['sku']);
+					$ownedProduct->setOriginalPrice($productIds[$ownedProduct->getShoploProductId()]['price_regular']);
+					$ownedProduct->setCurrentPrice($productIds[$ownedProduct->getShoploProductId()]['price']);
 					$ownedProduct->save();
 					$updated++;
 				}

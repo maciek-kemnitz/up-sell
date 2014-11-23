@@ -28,6 +28,7 @@ use src\Model\WidgetStats;
  * @method ProductQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method ProductQuery orderByImgUrl($order = Criteria::ASC) Order by the img_url column
  * @method ProductQuery orderByOriginalPrice($order = Criteria::ASC) Order by the original_price column
+ * @method ProductQuery orderByCurrentPrice($order = Criteria::ASC) Order by the current_price column
  * @method ProductQuery orderByUrl($order = Criteria::ASC) Order by the url column
  * @method ProductQuery orderByThumbnail($order = Criteria::ASC) Order by the thumbnail column
  * @method ProductQuery orderBySku($order = Criteria::ASC) Order by the sku column
@@ -40,6 +41,7 @@ use src\Model\WidgetStats;
  * @method ProductQuery groupByName() Group by the name column
  * @method ProductQuery groupByImgUrl() Group by the img_url column
  * @method ProductQuery groupByOriginalPrice() Group by the original_price column
+ * @method ProductQuery groupByCurrentPrice() Group by the current_price column
  * @method ProductQuery groupByUrl() Group by the url column
  * @method ProductQuery groupByThumbnail() Group by the thumbnail column
  * @method ProductQuery groupBySku() Group by the sku column
@@ -62,6 +64,7 @@ use src\Model\WidgetStats;
  * @method Product findOneByName(string $name) Return the first Product filtered by the name column
  * @method Product findOneByImgUrl(string $img_url) Return the first Product filtered by the img_url column
  * @method Product findOneByOriginalPrice(double $original_price) Return the first Product filtered by the original_price column
+ * @method Product findOneByCurrentPrice(double $current_price) Return the first Product filtered by the current_price column
  * @method Product findOneByUrl(string $url) Return the first Product filtered by the url column
  * @method Product findOneByThumbnail(string $thumbnail) Return the first Product filtered by the thumbnail column
  * @method Product findOneBySku(string $sku) Return the first Product filtered by the sku column
@@ -74,6 +77,7 @@ use src\Model\WidgetStats;
  * @method array findByName(string $name) Return Product objects filtered by the name column
  * @method array findByImgUrl(string $img_url) Return Product objects filtered by the img_url column
  * @method array findByOriginalPrice(double $original_price) Return Product objects filtered by the original_price column
+ * @method array findByCurrentPrice(double $current_price) Return Product objects filtered by the current_price column
  * @method array findByUrl(string $url) Return Product objects filtered by the url column
  * @method array findByThumbnail(string $thumbnail) Return Product objects filtered by the thumbnail column
  * @method array findBySku(string $sku) Return Product objects filtered by the sku column
@@ -186,7 +190,7 @@ abstract class BaseProductQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `id`, `shoplo_product_id`, `shop_domain`, `name`, `img_url`, `original_price`, `url`, `thumbnail`, `sku`, `description`, `variants` FROM `product` WHERE `id` = :p0';
+        $sql = 'SELECT `id`, `shoplo_product_id`, `shop_domain`, `name`, `img_url`, `original_price`, `current_price`, `url`, `thumbnail`, `sku`, `description`, `variants` FROM `product` WHERE `id` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -486,6 +490,48 @@ abstract class BaseProductQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ProductPeer::ORIGINAL_PRICE, $originalPrice, $comparison);
+    }
+
+    /**
+     * Filter the query on the current_price column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCurrentPrice(1234); // WHERE current_price = 1234
+     * $query->filterByCurrentPrice(array(12, 34)); // WHERE current_price IN (12, 34)
+     * $query->filterByCurrentPrice(array('min' => 12)); // WHERE current_price >= 12
+     * $query->filterByCurrentPrice(array('max' => 12)); // WHERE current_price <= 12
+     * </code>
+     *
+     * @param     mixed $currentPrice The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProductQuery The current query, for fluid interface
+     */
+    public function filterByCurrentPrice($currentPrice = null, $comparison = null)
+    {
+        if (is_array($currentPrice)) {
+            $useMinMax = false;
+            if (isset($currentPrice['min'])) {
+                $this->addUsingAlias(ProductPeer::CURRENT_PRICE, $currentPrice['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($currentPrice['max'])) {
+                $this->addUsingAlias(ProductPeer::CURRENT_PRICE, $currentPrice['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ProductPeer::CURRENT_PRICE, $currentPrice, $comparison);
     }
 
     /**
