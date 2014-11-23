@@ -53,7 +53,7 @@ CREATE TABLE `product`
     `original_price` DOUBLE NOT NULL,
     `url` TEXT NOT NULL,
     `thumbnail` TEXT NOT NULL,
-    `sku` FLOAT NOT NULL,
+    `sku` VARCHAR(255) NOT NULL,
     `description` TEXT,
     `variants` TEXT,
     PRIMARY KEY (`id`),

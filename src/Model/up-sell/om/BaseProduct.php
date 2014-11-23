@@ -97,7 +97,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
 
     /**
      * The value for the sku field.
-     * @var        double
+     * @var        string
      */
     protected $sku;
 
@@ -236,7 +236,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
     /**
      * Get the [sku] column value.
      *
-     * @return double
+     * @return string
      */
     public function getSku()
     {
@@ -437,13 +437,13 @@ abstract class BaseProduct extends BaseObject implements Persistent
     /**
      * Set the value of [sku] column.
      *
-     * @param  double $v new value
+     * @param  string $v new value
      * @return Product The current object (for fluent API support)
      */
     public function setSku($v)
     {
-        if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
+        if ($v !== null) {
+            $v = (string) $v;
         }
 
         if ($this->sku !== $v) {
@@ -537,7 +537,7 @@ abstract class BaseProduct extends BaseObject implements Persistent
             $this->original_price = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
             $this->url = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->thumbnail = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->sku = ($row[$startcol + 8] !== null) ? (double) $row[$startcol + 8] : null;
+            $this->sku = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->description = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->variants = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->resetModified();

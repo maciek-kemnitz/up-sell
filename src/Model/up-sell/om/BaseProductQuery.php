@@ -64,7 +64,7 @@ use src\Model\WidgetStats;
  * @method Product findOneByOriginalPrice(double $original_price) Return the first Product filtered by the original_price column
  * @method Product findOneByUrl(string $url) Return the first Product filtered by the url column
  * @method Product findOneByThumbnail(string $thumbnail) Return the first Product filtered by the thumbnail column
- * @method Product findOneBySku(double $sku) Return the first Product filtered by the sku column
+ * @method Product findOneBySku(string $sku) Return the first Product filtered by the sku column
  * @method Product findOneByDescription(string $description) Return the first Product filtered by the description column
  * @method Product findOneByVariants(string $variants) Return the first Product filtered by the variants column
  *
@@ -76,7 +76,7 @@ use src\Model\WidgetStats;
  * @method array findByOriginalPrice(double $original_price) Return Product objects filtered by the original_price column
  * @method array findByUrl(string $url) Return Product objects filtered by the url column
  * @method array findByThumbnail(string $thumbnail) Return Product objects filtered by the thumbnail column
- * @method array findBySku(double $sku) Return Product objects filtered by the sku column
+ * @method array findBySku(string $sku) Return Product objects filtered by the sku column
  * @method array findByDescription(string $description) Return Product objects filtered by the description column
  * @method array findByVariants(string $variants) Return Product objects filtered by the variants column
  *
@@ -551,37 +551,24 @@ abstract class BaseProductQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterBySku(1234); // WHERE sku = 1234
-     * $query->filterBySku(array(12, 34)); // WHERE sku IN (12, 34)
-     * $query->filterBySku(array('min' => 12)); // WHERE sku >= 12
-     * $query->filterBySku(array('max' => 12)); // WHERE sku <= 12
+     * $query->filterBySku('fooValue');   // WHERE sku = 'fooValue'
+     * $query->filterBySku('%fooValue%'); // WHERE sku LIKE '%fooValue%'
      * </code>
      *
-     * @param     mixed $sku The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $sku The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ProductQuery The current query, for fluid interface
      */
     public function filterBySku($sku = null, $comparison = null)
     {
-        if (is_array($sku)) {
-            $useMinMax = false;
-            if (isset($sku['min'])) {
-                $this->addUsingAlias(ProductPeer::SKU, $sku['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($sku['max'])) {
-                $this->addUsingAlias(ProductPeer::SKU, $sku['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
+        if (null === $comparison) {
+            if (is_array($sku)) {
                 $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $sku)) {
+                $sku = str_replace('*', '%', $sku);
+                $comparison = Criteria::LIKE;
             }
         }
 

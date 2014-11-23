@@ -207,22 +207,22 @@ class AjaxController implements ControllerProviderInterface
 
 		});
 
+		/**
+		 * @todo limit products by availability
+		 */
 		$controllers->post('/autocomplete', function (Request $request) use ($app)
 		{
-			$method = $request->query->get('method');
-			$resource = $request->query->get('resource');
-			$size = $request->query->get('size');
 			$query = $request->request->get('query');
-			$offset = $request->query->get('offset');
-			$limit = $request->query->get('limit');
 
-			/** @var ShoploApi $shoploApi */
-			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO];
-			$shopDomain = $shoploApi->shop->retrieve()['permanent_domain'];
+			/** @var ShoploObject $shoploApi */
+			$shoploApi = $app[ServiceRegistry::SERVICE_SHOPLO_OBJECT];
+			$shopDomain = $shoploApi->getPermanentDomain();
 
 			$products = ProductQuery::create()
-				->filterByName($query.'%', \Criteria::LIKE)
 				->filterByShopDomain($shopDomain)
+				->filterByName($query.'%', \Criteria::LIKE)
+				->_or()
+				->filterBySku($query.'%', \Criteria::LIKE)
 				->limit(20)
 				->find();
 

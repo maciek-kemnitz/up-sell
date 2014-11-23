@@ -172,4 +172,29 @@ class ShoploObject
 		return $this->api->checkout->retrieve(null, ["order_id" => $orderId])['cart'];
 	}
 
+	public function createApplicationCharge($fields)
+	{
+		return $this->api->application_charge->create($fields);
+	}
+
+	public function getApplicationCharges($id = 0)
+	{
+		return $this->api->application_charge->retrieve($id);
+	}
+
+	public function countApplicationCharges()
+	{
+		return $this->api->application_charge->count();
+	}
+
+	public function deleteApplicationCharge($id)
+	{
+		return $this->api->application_charge->delete($id);
+	}
+
+	public function activateApplicationCharge($id)
+	{
+		return $this->api->application_charge->activate($id);
+	}
+
 }
