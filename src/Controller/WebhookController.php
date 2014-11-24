@@ -50,6 +50,32 @@ class WebhookController implements ControllerProviderInterface
 
 		});
 
+		$controllers->post('/product/update', function (Request $request) use ($app)
+		{
+			$hmac_key = $_SERVER['HTTP_SHOPLO_HMAC_SHA256'];
+			$calculated_key = base64_encode(hash_hmac('sha256', http_build_query($_POST), SECRET_KEY));
+			if ($hmac_key != $calculated_key)
+			{
+				return new AccessDeniedHttpException();
+			}
+
+//			if (false === $request->request->has('product'))
+//			{
+//				exit;
+//			}
+			$all = $request->request->all();
+
+			$orderData = $request->request->get('order');
+
+			$tmpRequest = new TmpRequest();
+			$tmpRequest->setData(json_encode($all));
+			$tmpRequest->setShopId($request->headers->get('shoplo-shop-id'));
+			$tmpRequest->save();
+
+			exit;
+
+		});
+
 		return $controllers;
 
 	}
