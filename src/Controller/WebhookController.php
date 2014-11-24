@@ -12,6 +12,7 @@ namespace src\Controller;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use src\Lib\ShoploObject;
+use src\Model\Product;
 use src\Model\TmpRequest;
 
 use src\Service\ServiceRegistry;
@@ -59,18 +60,14 @@ class WebhookController implements ControllerProviderInterface
 				return new AccessDeniedHttpException();
 			}
 
-//			if (false === $request->request->has('product'))
-//			{
-//				exit;
-//			}
-			$all = $request->request->all();
+			if (false === $request->request->has('product'))
+			{
+				exit;
+			}
 
-			$orderData = $request->request->get('order');
+			$productData = $request->request->get('product');
 
-			$tmpRequest = new TmpRequest();
-			$tmpRequest->setData(json_encode($all));
-			$tmpRequest->setShopId($request->headers->get('shoplo-shop-id'));
-			$tmpRequest->save();
+			$product = Product::updateProductFromArray($productData, $request->headers->get('shoplo-shop-id'));
 
 			exit;
 
