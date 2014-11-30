@@ -67,13 +67,11 @@ class WebhookController implements ControllerProviderInterface
 
 			$productData = $request->request->get('product');
 
-			if ((int) $request->headers->get('shoplo-shop-id') == 10344)
-			{
 				$tmpRequest = new TmpRequest();
 				$tmpRequest->setData(json_encode($productData));
 				$tmpRequest->setShopId($request->headers->get('shoplo-shop-id'));
 				$tmpRequest->save();
-			}
+
 
 
 			$product = Product::updateProductFromArray($productData, $request->headers->get('shoplo-shop-id'));
