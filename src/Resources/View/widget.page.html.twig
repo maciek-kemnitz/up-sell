@@ -392,7 +392,7 @@
 									<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ rProduct.getVariantSelected() }}">Do koszyka</button>
 								{% else %}
 									<div class="up-price">
-										{% if product.getOriginalPrice() == product.getCurrentPrice() %}
+										{% if product.getOriginalPrice() == product.getCurrentPrice()  or 0 == product.getCurrentPrice() %}
 											<h2 id="{{ product.getId() }}-price">{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
 										{% else %}
 											<h2 id="{{ product.getId() }}-price">
@@ -444,7 +444,7 @@
 								{% if selectedVariant %}
 									<h2>{{ variant.price|number_format(2, '.', ',') }} zł</h2>
 								{% else %}
-									{% if product.getOriginalPrice() == product.getCurrentPrice() %}
+									{% if product.getOriginalPrice() == product.getCurrentPrice() or 0 == product.getCurrentPrice() %}
 										<h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
 									{% else %}
 									<h2>
