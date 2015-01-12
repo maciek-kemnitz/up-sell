@@ -176,7 +176,7 @@ class AjaxController implements ControllerProviderInterface
 
 			if (0 == count($variants))
 			{
-				return new JsonResponse(['status' => 'no up-sell']);
+				return new JsonResponse(['status' => 'no up-sell', "cart_value" => $cartValue]);
 			}
 
 			$params = [
