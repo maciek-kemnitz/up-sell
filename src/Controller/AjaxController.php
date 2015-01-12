@@ -122,6 +122,11 @@ class AjaxController implements ControllerProviderInterface
 			$variantsInCart	= $request->request->get('variants');
 			$shopDomain		= $request->request->get('shopDomain');
 			$cartValue 		= $request->request->get('cartValue');
+			if (null !== $cartValue)
+			{
+				$cartValue = round($cartValue / 100);
+			}
+
 			$userKey        = $request->request->get('userKey');
 
 			$uppSells = UpSellQuery::create()
