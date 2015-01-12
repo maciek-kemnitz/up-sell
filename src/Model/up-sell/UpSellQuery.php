@@ -21,8 +21,8 @@ class UpSellQuery extends BaseUpSellQuery
 
 	public function priceInRange($price)
 	{
-		$query = $this->filterByPriceFrom($price, \Criteria::LESS_EQUAL)
-						->filterByPriceTo($price, \Criteria::GREATER_EQUAL);
+		$query = $this->filterByPriceFrom($price, \Criteria::GREATER_EQUAL)
+						->filterByPriceTo($price, \Criteria::LESS_EQUAL);
 
 		return $query;
 	}
