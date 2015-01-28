@@ -51,7 +51,7 @@ class UpdateProductsController implements ControllerProviderInterface
 						$productIds[$product['variants'][0]['id']]['price'] = $product['variants'][0]['price'];
 						$productIds[$product['variants'][0]['id']]['price_regular'] = $product['variants'][0]['price_regular'];
 						$productIds[$product['variants'][0]['id']]['availability'] = (int) $product['variants'][0]['availability'];
-						$productIds[$product['variants'][0]['id']]['thumbnail'] = (int) $product['variants'][0]['thumbnail'];
+						$productIds[$product['variants'][0]['id']]['thumbnail'] = $product['variants'][0]['thumbnail'];
 					}
 					else
 					{
@@ -73,6 +73,7 @@ class UpdateProductsController implements ControllerProviderInterface
 					$ownedProduct->setOriginalPrice($productIds[$ownedProduct->getShoploProductId()]['price_regular']/100);
 					$ownedProduct->setCurrentPrice($productIds[$ownedProduct->getShoploProductId()]['price']/100);
 					$ownedProduct->setAvailability($productIds[$ownedProduct->getShoploProductId()]['availability']);
+					var_dump($productIds[$ownedProduct->getShoploProductId()]['thumbnail']);
 					$ownedProduct->setThumbnail($productIds[$ownedProduct->getShoploProductId()]['thumbnail']);
 					$ownedProduct->save();
 					$updated++;
