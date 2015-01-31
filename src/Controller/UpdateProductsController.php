@@ -73,8 +73,8 @@ class UpdateProductsController implements ControllerProviderInterface
 					$ownedProduct->setOriginalPrice($productIds[$ownedProduct->getShoploProductId()]['price_regular']/100);
 					$ownedProduct->setCurrentPrice($productIds[$ownedProduct->getShoploProductId()]['price']/100);
 					$ownedProduct->setAvailability($productIds[$ownedProduct->getShoploProductId()]['availability']);
-					var_dump($productIds[$ownedProduct->getShoploProductId()]['thumbnail']);
 					$ownedProduct->setThumbnail($productIds[$ownedProduct->getShoploProductId()]['thumbnail']);
+					$ownedProduct->setImgUrl($productIds[$ownedProduct->getShoploProductId()]['thumbnail']);
 					$ownedProduct->save();
 					$updated++;
 				}
