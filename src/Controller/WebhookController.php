@@ -13,6 +13,7 @@ use Silex\Application;
 use Silex\ControllerProviderInterface;
 use src\Lib\ShoploObject;
 use src\Model\Product;
+use src\Model\ProductQuery;
 use src\Model\TmpRequest;
 
 use src\Service\ServiceRegistry;
@@ -68,6 +69,38 @@ class WebhookController implements ControllerProviderInterface
 			$productData = $request->request->get('product');
 
 			$product = Product::updateProductFromArray($productData, $request->headers->get('shoplo-shop-id'));
+
+			exit;
+
+		});
+
+		$controllers->post('/product/delete', function (Request $request) use ($app)
+		{
+			$hmac_key = $_SERVER['HTTP_SHOPLO_HMAC_SHA256'];
+			$calculated_key = base64_encode(hash_hmac('sha256', http_build_query($_POST), SECRET_KEY));
+			if ($hmac_key != $calculated_key)
+			{
+				return new AccessDeniedHttpException();
+			}
+
+			if (false === $request->request->has('product'))
+			{
+				exit;
+			}
+
+			$productData = $request->request->get('product');
+
+			$shopId = $request->headers->get('shoplo-shop-id');
+
+			$variants = $productData['variants'];
+
+			$ids = [];
+			foreach ($variants as $variant)
+			{
+				$ids[] = $variant['id'];
+			}
+
+			ProductQuery::create()->filterById($ids)->delete();
 
 			exit;
 
