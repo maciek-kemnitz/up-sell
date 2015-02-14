@@ -16,6 +16,7 @@ use src\Model\Product;
 use src\Model\ProductQuery;
 use src\Model\TmpRequest;
 
+use src\Model\UpSellQuery;
 use src\Service\ServiceRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -91,6 +92,13 @@ class WebhookController implements ControllerProviderInterface
 			$productData = $request->request->get('product');
 
 			$shopId = $request->headers->get('shoplo-shop-id');
+			$upSell = UpSellQuery::create()->findOneByShopId($shopId);
+			if (null === $upSell)
+			{
+				exit;
+			}
+
+			$shopDomain = $upSell->getShopDomain();
 
 			$variants = $productData['variants'];
 
@@ -100,7 +108,7 @@ class WebhookController implements ControllerProviderInterface
 				$ids[] = $variant['id'];
 			}
 
-			ProductQuery::create()->filterById($ids)->delete();
+			ProductQuery::create()->filterByShopDomain($shopDomain)->filterByShoploProductId($ids)->delete();
 
 			exit;
 
