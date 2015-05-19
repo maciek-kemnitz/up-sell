@@ -40,7 +40,13 @@ class AddController implements ControllerProviderInterface
 			for($i=0; $i <= $pageCount; $i++)
 			{
 				$products = $shoploApi->product->retrieve(0,0,0,["page"=>$i, "limit"=>100 ]);
-				$products = $products['products'];
+				$tmpProducts = $products['products'];
+				$products = [];
+
+				foreach ($tmpProducts as $product)
+				{
+					$products[$product['id']] = $product;
+				}
 
 				$productIds = [];
 				foreach ($products as $product)
@@ -62,6 +68,7 @@ class AddController implements ControllerProviderInterface
 					->find();
 
 				$ownedIds = $ownedProducts->toKeyValue('shoploProductId', 'shoploProductId');
+
 
 				$missingProductIds = array_diff(array_keys($productIds), $ownedIds);
 
