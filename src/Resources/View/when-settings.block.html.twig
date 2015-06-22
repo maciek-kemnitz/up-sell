@@ -40,7 +40,7 @@
     <section id="related" class="control-group bottom box  clearfix">
         <label class="control-label" for="pageTitle">
             <div class="prettycheckbox">
-                <input type="checkbox" name="cos" checked="checked"/>
+                <input type="checkbox" name="cos" {% if upSell is not defined or (upSell != null and not upSell.usePriceRange()) %}checked="checked"{% endif %}/>
             </div>
             Pokaż ofertę gdy w koszyku znajduję się konkretny produkt
         </label>
