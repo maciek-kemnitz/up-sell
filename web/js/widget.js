@@ -38,7 +38,7 @@ $(function () {
 
                 var productId = $(this).parents('form').find('[name="id"]').val();
 
-	            if (productId = undefined)
+	            if (productId == undefined)
 	            {
 		            if ($(this).attr('href') && $(this).attr('href').match(/\d+/))
 		            {
