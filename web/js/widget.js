@@ -31,12 +31,21 @@ $(function () {
 	        });
 
 	        var form = $('form[method="post"]').first();
-//	        change to data-attribute
+
 	        $(form).find('[type="submit"]').attr('id', 'addToCart');
 
             $('body').delegate('#addToCart','click', function () {
 
                 var productId = $(this).parents('form').find('[name="id"]').val();
+
+	            if (productId = undefined)
+	            {
+		            if ($(this).attr('href') && $(this).attr('href').match(/\d+/))
+		            {
+						productId = $(this).attr('href').match(/\d+/);
+		            }
+	            }
+
                 var productData = {
                     'id': productId
                 };
