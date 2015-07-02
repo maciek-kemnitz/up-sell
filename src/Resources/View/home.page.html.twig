@@ -73,13 +73,20 @@
 		                        <ul id="sortable">
 		                            {% for upSell in uppSells %}
 		                                <li class="list-item">
-		                                    <ul class="table-columns three-in-row top-frame" data-up-sell-id="{{ upSell.getId() }}">
+		                                    <ul class="table-columns four-in-row top-frame" data-up-sell-id="{{ upSell.getId() }}">
 		                                        <li id="up-sell-name" data-skus="{{ upSell.getSkuFromProducts(true) }}" class="box ">
 		                                            {{ upSell.getName() }}
 
 		                                        </li>
 		                                        <li class="box ">
 		                                             {{ upSell.getCreatedAt() }}
+		                                        </li>
+			                                    <li class="box ">
+				                                    {% if upSell.getPlacement() == 'cart' %}
+					                                    <span class="badge badge-inverse">koszyk</span>
+				                                    {% else %}
+					                                    <span class="badge badge-inverse">produkt</span>
+				                                    {% endif %}
 		                                        </li>
 		                                        <li class="box ">
 		                                            <a href="/edit/{{ upSell.getId() }}">Edytuj</a>
