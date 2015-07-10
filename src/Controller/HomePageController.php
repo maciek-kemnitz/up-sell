@@ -184,7 +184,7 @@ class HomePageController implements ControllerProviderInterface
 
 		$controllers->get('/modal', function (Request $request) use ($app)
 		{
-			$upSell = UpSellQuery::create()->findPk(497);
+			$upSell = UpSellQuery::create()->findPk(799);
 
 			/** @var Product[] $upSellProducts */
 			$upSellProducts = $upSell->getProducts();
@@ -201,7 +201,13 @@ class HomePageController implements ControllerProviderInterface
 				$variants[$product->getId()] = json_decode($product->getVariants(), true);
 			}
 
-			return $app['twig']->render('modal.html.twig', ['upSell' => $upSell, 'products' => $upSell->getProducts(), 'variants' => $variants, 'rProducts' => $rProducts]);
+			return $app['twig']->render('modal.html.twig', [
+				'upSell' => $upSell,
+				'products' => $upSell->getProducts(),
+				'variants' => $variants,
+				'rProducts' => $rProducts,
+				'placement' => "product"
+			]);
 
 		});
 

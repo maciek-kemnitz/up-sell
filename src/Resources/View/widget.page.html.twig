@@ -347,9 +347,24 @@
 	cursor: pointer;
 }
 
+#up-sell-modal .table-block {
+	display: table;
+}
+
+#up-sell-modal .table-row {
+	display: table-row;
+}
+
+#up-sell-modal .table-cell {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	width: 100%;
+}
+
 
 </style>
-<div id="up-sell-modal" class="up-sell-modal hide fade in" style="display: none;">
+<div id="up-sell-modal" class="up-sell-modal hide fade in" >
 	<div class="up-sell-modal-header">
 		<div class="up-sell-heading">
 			<h1>{{ upSell.getHeadline() }}</h1>
@@ -372,51 +387,67 @@
 					{% for rProduct in rProducts %}
 						{% set product = rProduct.getProduct() %}
 						<li class="multi-item"{% if loop.index > 3 %} style="display: none;"{% endif %}>
-							<div >
-								<img  src="{{ product.getImgUrl() }}"/>
-							</div>
-							<div class="up-sell-description-container">
+							<div class="table-block">
+								<div class="table-row">
+									<div class="table-cell" style="height: 210px">
+
+										<img  src="{{ product.getImgUrl() }}"/>
+
+									</div>
+									</div>
+								<div class="table-row">
+
+									<div class="table-cell">
+
+										<div class="up-sell-description-container">
                             <span class="product-name">
                                 {{ product.getName()|length > 70 ? product.getName()|striptags|slice(0, 70) ~ '...' : product.getName()|striptags  }}
                             </span>
 
-								{% if upSell.getSelectedVariant(product) %}
-									<br>
-									<span class="product-name">
+											{% if upSell.getSelectedVariant(product) %}
+												<br>
+												<span class="product-name">
                                     {{ variants[product.getId()][rProduct.getVariantSelected()].var_type}}
                                 </span>
-									<div class="up-price">
-										<h2>{{ variants[product.getId()][rProduct.getVariantSelected()].price|number_format(2, '.', ',') }} zł</h2>
-									</div>
+												<div class="up-price">
+													<h2>{{ variants[product.getId()][rProduct.getVariantSelected()].price|number_format(2, '.', ',') }} zł</h2>
+												</div>
 
-									<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ rProduct.getVariantSelected() }}">Do koszyka</button>
-								{% else %}
-									<div class="up-price">
-										{% if product.getOriginalPrice() == product.getCurrentPrice()  or 0 == product.getCurrentPrice() %}
-											<h2 id="{{ product.getId() }}-price">{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
-										{% else %}
-											<h2 id="{{ product.getId() }}-price">
-												<span class="strike muted">{{ product.getOriginalPrice|number_format(2, '.', ',') }}</span>
-												<span class="newPrice">{{ product.getCurrentPrice|number_format(2, '.', ',') }}</span>
-												<span> zł</span>
-											</h2>
-										{% endif %}
-									</div>
+												<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ rProduct.getVariantSelected() }}">Do koszyka</button>
+											{% else %}
+												<div class="up-price">
+													{% if product.getOriginalPrice() == product.getCurrentPrice()  or 0 == product.getCurrentPrice() %}
+														<h2 id="{{ product.getId() }}-price">{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
+													{% else %}
+														<h2 id="{{ product.getId() }}-price">
+															<span class="strike muted">{{ product.getOriginalPrice|number_format(2, '.', ',') }}</span>
+															<span class="newPrice">{{ product.getCurrentPrice|number_format(2, '.', ',') }}</span>
+															<span> zł</span>
+														</h2>
+													{% endif %}
+												</div>
 
-									{% if product.getId() in variants|keys and variants[product.getId()] is not null %}
-										<select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
-											{% for key, variant in variants[product.getId()] %}
-												{% if loop.first %}
-													<option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
-												{% else %}
-													<option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
+												{% if product.getId() in variants|keys and variants[product.getId()] is not null %}
+													<select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
+														{% for key, variant in variants[product.getId()] %}
+															{% if loop.first %}
+																<option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
+															{% else %}
+																<option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
+															{% endif %}
+														{% endfor %}
+													</select>
 												{% endif %}
-											{% endfor %}
-										</select>
-									{% endif %}
-									<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
-								{% endif %}
+												<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
+											{% endif %}
+										</div>
+
+									</div>
+
+								</div>
 							</div>
+
+
 						</li>
 					{% endfor %}
 				</ul>
