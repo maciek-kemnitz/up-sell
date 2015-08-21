@@ -10,7 +10,7 @@
             {% endif %}
         {% endfor %}
     {% endif %}
-    <li class="item chosen" data-id="{{ product.getShoploProductId() }}" data-thumbnail="{{ product.getThumbnail() }}" {% if variantString is defined %}data-variants="{{ variantString }}"{% endif %} data-name="{{ product.getName() }}">
+    <li class="item chosen" style="display: block" data-id="{{ product.getShoploProductId() }}" data-thumbnail="{{ product.getThumbnail() }}" {% if variantString is defined %}data-variants="{{ variantString }}"{% endif %} data-name="{{ product.getName() }}">
         <ul class="table-columns">
             <li class="with-thumb-50 name">
                 <ul class="table-columns">
