@@ -1,81 +1,81 @@
 <style>
 #up-sell-modal .muted {
-	color: #8b9ba1;
+    color: #8b9ba1;
 }
 
 #up-sell-modal .strike {
-	text-decoration: line-through
+    text-decoration: line-through
 }
 
 #up-sell-modal .pull-right {
-	float: right;
+    float: right;
 }
 
 #up-sell-modal .btn-up-black {
-	-moz-border-radius: 2px;
-	-moz-box-shadow: #090808 0px 0px 0px;
-	-moz-transition: all 0.5s ease;
-	-ms-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
-	-webkit-border-radius: 5px;
-	-webkit-box-shadow: #6E7849 0 0 10px;
-	-webkit-transition: all 0.5s ease;
-	background-color: #090808;
-	border-radius: 2px;
-	border: 0px solid #090808;
-	box-shadow: #090808 0px 0px 0px;
-	color: #ffffff;
-	display: inline-block;
+    -moz-border-radius: 2px;
+    -moz-box-shadow: #090808 0px 0px 0px;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: #6E7849 0 0 10px;
+    -webkit-transition: all 0.5s ease;
+    background-color: #090808;
+    border-radius: 2px;
+    border: 0px solid #090808;
+    box-shadow: #090808 0px 0px 0px;
+    color: #ffffff;
+    display: inline-block;
 
-	margin: auto;
-	padding: 8px 17px;
-	text-decoration: none;
-	text-shadow: #000000 5px 5px 15px;
-	transition: all 0.5s ease;
-	cursor: pointer;
-	font-weight: bold;
-	font-size: 15px;
+    margin: auto;
+    padding: 8px 17px;
+    text-decoration: none;
+    text-shadow: #000000 5px 5px 15px;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
 }
 
 #up-sell-modal .btn-up-black:hover {
-	opacity: 0.9;
+    opacity: 0.9;
 }
 
 #up-sell-modal .btn-up-gray {
-	-moz-border-radius: 2px;
-	-moz-box-shadow: #090808 0px 0px 0px;
-	-moz-transition: all 0.5s ease;
-	-ms-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
-	-webkit-border-radius: 5px;
-	-webkit-box-shadow: #6E7849 0 0 10px;
-	-webkit-transition: all 0.5s ease;
-	background-color: #999999;
-	border-radius: 2px;
-	border: 0px solid #090808;
-	box-shadow: #090808 0px 0px 0px;
-	color: #ffffff;
-	display: inline-block;
+    -moz-border-radius: 2px;
+    -moz-box-shadow: #090808 0px 0px 0px;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: #6E7849 0 0 10px;
+    -webkit-transition: all 0.5s ease;
+    background-color: #999999;
+    border-radius: 2px;
+    border: 0px solid #090808;
+    box-shadow: #090808 0px 0px 0px;
+    color: #ffffff;
+    display: inline-block;
 
-	margin: auto;
-	padding: 8px 17px;
-	text-decoration: none;
-	transition: all 0.5s ease;
-	cursor: pointer;
-	font-weight: bold;
-	font-size: 15px;
+    margin: auto;
+    padding: 8px 17px;
+    text-decoration: none;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
 }
 
 #up-sell-modal .btn-up-gray:hover {
-	opacity: 0.9;
+    opacity: 0.9;
 }
 
 
 
 
 #up-sell-modal {
-	font-family: inherit;
-	/*letter-spacing: -1px;*/
+    font-family: inherit;
+    /*letter-spacing: -1px;*/
 }
 
 /*.modal-body {*/
@@ -87,11 +87,11 @@
 /*}*/
 
 #up-sell-modal .up-sell-content {
-	position: relative;
+    position: relative;
 }
 
 #up-sell-modal .up-sell-content-inner {
-	margin-top: 63px;
+    margin-top: 63px;
 }
 
 /*.up-sell-heading {*/
@@ -99,433 +99,807 @@
 /*}*/
 
 #up-sell-modal .up-sell-heading h1 {
-	margin-top: 0px;
-	margin-bottom: 5px;
+    margin-top: 0px;
+    margin-bottom: 5px;
 
 }
 
 #up-sell-modal .clearfix{
-	*zoom:1;
+    *zoom:1;
 }
 #up-sell-modal .clearfix:before, .clearfix:after {
-	display:table;
-	content:"";
-	line-height:0;
+    display:table;
+    content:"";
+    line-height:0;
 }
 #up-sell-modal .clearfix:after {
-	clear:both;
+    clear:both;
 }
 
 #up-sell-modal .up-sell-img {
-	float: left;
-	margin-left: 25px;
+    float: left;
+    width: 40%;
+    padding-top: 20px;
 }
 
-#up-sell-modal .up-sell-description-container {
-	margin-left: 305px;
-}
+#up-sell-modal .up-sell-content-inner .up-sell-description-container {
+    float: left;
+    width: 60%;
 
+}
+@media (max-width: 767px) {
+    #up-sell-modal .up-sell-img, #up-sell-modal .up-sell-content-inner .up-sell-description-container {
+        width:100%;
+    }
+    #up-sell-modal .up-sell-img {
+        padding-top: 0;
+    }
+
+}
 #up-sell-modal .product-name {
-	margin-bottom: 10px;
-	margin-top: 0px;
-	padding-top: 10px;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    padding-top: 10px;
 }
 
 #up-sell-modal del {
-	font-size: 18px;
-	font-weight: bold;
-	display: block;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
 }
 
 #up-sell-modal .up-price {
-	margin: 15px 0;
+    margin: 15px 0;
 }
 
 #up-sell-modal .up-price h2 {
-	margin: 0;
-	font-size:20px;
-	line-height: 22px;
+    margin: 0;
+    font-size:20px;
+    line-height: 22px;
 }
 
 #up-sell-modal .up-sell-bottom {
-	padding-top: 15px;
-	margin-top: 50px;
-	/*width: 100%;*/
-	border-top: solid 1px #CCCCCC;
+    padding-top: 15px;
+    margin-top: 50px;
+    /*width: 100%;*/
+    border-top: solid 1px #CCCCCC;
 }
 
 #up-sell-modal .to-basket {
-	margin-right: 5px;
-	font-size: 12px;
-	cursor: pointer;
+    margin-right: 5px;
+    font-size: 12px;
+    cursor: pointer;
 }
 
-#up-sell-modal.up-sell-modal {
-	position: fixed;
-	top: 5%;
-	/*left: 10%;*/
-	/*max-width: 900px;*/
-	z-index: 1050;
-	/*width: 560px;*/
-	/*width: 800px;*/
-	width: 80%;
-	/*height: 80%;*/
-	/*margin-left: -280px;*/
-	/*margin-left: -335px;*/
-	background-color: #ffffff;
-	border: 1px solid #999;
-	border: 1px solid rgba(0, 0, 0, 0.3);
-	*border: 1px solid #999;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	outline: none;
-	-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-	-webkit-background-clip: padding-box;
-	-moz-background-clip: padding-box;
-	background-clip: padding-box;
-	padding: 20px 40px;
-}
-
-#up-sell-modal.up-sell-modal.fade {
-	top: -25%;
-	-webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
-	-moz-transition: opacity 0.3s linear, top 0.3s ease-out;
-	-o-transition: opacity 0.3s linear, top 0.3s ease-out;
-	transition: opacity 0.3s linear, top 0.3s ease-out;
-}
-
-#up-sell-modal.up-sell-modal.fade.in {
-	top: 6%;
-}
 
 #up-sell-modal .up-sell-modal-header {
-	padding-top: 20px;
-	/*border-bottom: 1px solid #eee;*/
+    padding-top: 20px;
+    /*border-bottom: 1px solid #eee;*/
 }
 
 
-/*.modal-header h3 {*/
-/*margin: 0;*/
-/*line-height: 30px;*/
-/*}*/
-
 #up-sell-modal .up-sell-modal-body {
-	position: relative;
-	max-height: 400px;
+    position: relative;
+    max-height: 400px;
 
-	overflow-y: auto;
+    overflow-y: auto;
 }
 
 #up-sell-modal .up-sell-modal-form {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 #up-sell-modal .up-sell-modal-footer {
-	padding: 14px 15px 15px;
-	margin-bottom: 0;
-	text-align: right;
-	background-color: #f5f5f5;
-	border-top: 1px solid #ddd;
-	-webkit-border-radius: 0 0 6px 6px;
-	-moz-border-radius: 0 0 6px 6px;
-	border-radius: 0 0 6px 6px;
-	*zoom: 1;
-	-webkit-box-shadow: inset 0 1px 0 #ffffff;
-	-moz-box-shadow: inset 0 1px 0 #ffffff;
-	box-shadow: inset 0 1px 0 #ffffff;
+    padding: 14px 15px 15px;
+    margin-bottom: 0;
+    text-align: right;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    -webkit-border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
+    border-radius: 0 0 6px 6px;
+    *zoom: 1;
+    -webkit-box-shadow: inset 0 1px 0 #ffffff;
+    -moz-box-shadow: inset 0 1px 0 #ffffff;
+    box-shadow: inset 0 1px 0 #ffffff;
 }
 
 #up-sell-modal .up-sell-modal-footer:before,
 #up-sell-modal .up-sell-modal-footer:after {
-	display: table;
-	line-height: 0;
-	content: "";
+    display: table;
+    line-height: 0;
+    content: "";
 }
 
 #up-sell-modal .up-sell-modal-footer:after {
-	clear: both;
+    clear: both;
 }
 
 #up-sell-modal .up-sell-modal-footer .btn + .btn {
-	margin-bottom: 0;
-	margin-left: 5px;
+    margin-bottom: 0;
+    margin-left: 5px;
 }
 
 #up-sell-modal .up-sell-modal-footer .btn-group .btn + .btn {
-	margin-left: -1px;
+    margin-left: -1px;
 }
 
 #up-sell-modal .up-sell-modal-footer .btn-block + .btn-block {
-	margin-left: 0;
+    margin-left: 0;
 }
 
 #up-sell-modal .up-sell-modal-backdrop {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	z-index: 1040;
-	background-color: #B2B2B2;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #B2B2B2;
 }
 
 #up-sell-modal .up-sell-modal-backdrop.fade {
-	opacity: 0;
+    opacity: 0;
 }
 
 #up-sell-modal .up-sell-modal-backdrop,
 #up-sell-modal .up-sell-modal-backdrop.fade.in {
-	opacity: 0.8;
-	filter: alpha(opacity=80);
+    opacity: 0.8;
+    filter: alpha(opacity=80);
 }
 
 #up-sell-modal .up-sell-multi {
-	margin: 30px auto;
-	text-align: center;
-	padding: 0;
-	margin: 30px 0 0 0;
-	/*width: 60%;*/
+    margin: 30px auto;
+    text-align: center;
+    padding: 0;
+    margin: 30px 0 0 0;
+    /*width: 60%;*/
 
 }
 
 #up-sell-modal .up-sell-multi .up-sell-description-container {
-	text-align: center;
-	margin: 10px 0 0 0;
+    text-align: center;
+    margin: 10px 0 0 0;
 }
 
 #up-sell-modal .up-sell-multi del {
-	display: inline;
-	margin-right: 10px;
+    display: inline;
+    margin-right: 10px;
 }
 
 #up-sell-modal .multi-item {
-	text-align: center;
-	display: inline-block;
-	width: 30%;
-	vertical-align: top;
-	/*float: left;*/
-	/*margin: 0 50px;*/
+    text-align: center;
+    vertical-align: top;
+
 }
 
 #up-sell-modal .multi-item .product-name {
-	font-weight: bold;
-	font-size: 16px;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 #up-sell-modal .multi-item select {
-	display: block;
-	margin: 10px auto;
+    display: block;
+    margin: 10px auto;
 }
 #up-sell-modal .up-sell-img{
-	height:180px;
-	line-height: 180px;
-	vertical-align: middle;
+    height:180px;
+    line-height: 180px;
+    vertical-align: middle;
 }
 #up-sell-modal .up-sell-img img {
-	max-width: 180px;
-	max-height: 180px;
+    max-width: 180px;
+    max-height: 180px;
 }
 
 #up-sell-modal .multi-item img {
-	max-width: 180px;
-	max-height: 180px;
+    max-width: 180px;
+    max-height: 180px;
 }
 
 #up-sell-modal .right-arrow {
-	position: absolute;
-	top: 50%;
-	right: 0px;
-	cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    cursor: pointer;
 }
 
 #up-sell-modal .left-arrow {
-	position: absolute;
-	top: 50%;
-	cursor: pointer;
+    position: absolute;
+    top: 50%;
+    cursor: pointer;
 }
 
-#up-sell-modal .table-block {
-	display: table;
+
+
+/*  Remodal styles  */
+/* ==========================================================================
+   Remodal's necessary styles
+   ========================================================================== */
+
+/* Hide scroll bar */
+
+html.remodal-is-locked {
+    overflow: hidden;
+
+    -ms-touch-action: none;
+    touch-action: none;
 }
 
-#up-sell-modal .table-row {
-	display: table-row;
+.up-sell-modal, [data-remodal-id] {
+    display: none;
 }
 
-#up-sell-modal .table-cell {
-	display: table-cell;
-	vertical-align: middle;
-	text-align: center;
-	width: 100%;
+/* Necessary styles of the overlay */
+
+.remodal-overlay {
+    position: fixed;
+    z-index: 9999;
+    top: -5000px;
+    right: -5000px;
+    bottom: -5000px;
+    left: -5000px;
+
+    display: none;
 }
+
+/* Necessary styles of the wrapper */
+
+.remodal-wrapper {
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    display: none;
+    overflow: auto;
+
+    text-align: center;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.remodal-wrapper:after {
+    display: inline-block;
+
+    height: 100%;
+    margin-left: -0.05em;
+
+    content: "";
+}
+
+/* Fix iPad, iPhone glitches */
+
+.remodal-overlay,
+.remodal-wrapper {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* Necessary styles of the modal dialog */
+
+#up-sell-modal {
+    position: relative;
+
+    outline: none;
+
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+.remodal-is-initialized {
+    /* Disable Anti-FOUC */
+    display: inline-block;
+}
+
+/*
+ *  Remodal - v1.0.6
+ *  Responsive, lightweight, fast, synchronized with CSS animations, fully customizable modal window plugin with declarative configuration and hash tracking.
+ *  http://vodkabears.github.io/remodal/
+ *
+ *  Made by Ilya Makarov
+ *  Under MIT License
+ */
+
+/* ==========================================================================
+   Remodal's default mobile first theme
+   ========================================================================== */
+
+/* Default theme styles for the background */
+
+.remodal-bg.remodal-is-opening,
+.remodal-bg.remodal-is-opened {
+    -webkit-filter: blur(3px);
+    filter: blur(3px);
+}
+
+/* Default theme styles of the overlay */
+
+.remodal-overlay {
+    background: rgba(43, 46, 56, 0.9);
+}
+
+.remodal-overlay.remodal-is-opening,
+.remodal-overlay.remodal-is-closing {
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+
+.remodal-overlay.remodal-is-opening {
+    -webkit-animation-name: remodal-overlay-opening-keyframes;
+    animation-name: remodal-overlay-opening-keyframes;
+}
+
+.remodal-overlay.remodal-is-closing {
+    -webkit-animation-name: remodal-overlay-closing-keyframes;
+    animation-name: remodal-overlay-closing-keyframes;
+}
+
+/* Default theme styles of the wrapper */
+
+.remodal-wrapper {
+    padding: 10px 10px 0;
+}
+
+/* Default theme styles of the modal dialog */
+
+#up-sell-modal {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 35px;
+
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+
+    color: #2b2e38;
+    background: #fff;
+}
+
+#up-sell-modal.remodal-is-opening,
+#up-sell-modal.remodal-is-closing {
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+
+#up-sell-modal.remodal-is-opening {
+    -webkit-animation-name: remodal-opening-keyframes;
+    animation-name: remodal-opening-keyframes;
+}
+
+#up-sell-modal.remodal-is-closing {
+    -webkit-animation-name: remodal-closing-keyframes;
+    animation-name: remodal-closing-keyframes;
+}
+
+/* Vertical align of the modal dialog */
+
+#up-sell-modal,
+.remodal-wrapper:after {
+    vertical-align: middle;
+}
+
+/* Close button */
+
+.remodal-close {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: block;
+    overflow: visible;
+
+    width: 35px;
+    height: 35px;
+    margin: 0;
+    padding: 0;
+
+    cursor: pointer;
+    -webkit-transition: color 0.2s;
+    transition: color 0.2s;
+    text-decoration: none;
+
+    color: #95979c;
+    border: 0;
+    outline: 0;
+    background: transparent;
+}
+
+.remodal-close:hover,
+.remodal-close:focus {
+    color: #2b2e38;
+}
+
+.remodal-close:before {
+    font-family: Arial, "Helvetica CY", "Nimbus Sans L", sans-serif !important;
+    font-size: 25px;
+    line-height: 35px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: block;
+
+    width: 35px;
+
+    content: "\00d7";
+    text-align: center;
+}
+
+/* Dialog buttons */
+
+.remodal-confirm,
+.remodal-cancel {
+    font: inherit;
+
+    display: inline-block;
+    overflow: visible;
+
+    min-width: 110px;
+    margin: 0;
+    padding: 12px 0;
+
+    cursor: pointer;
+    -webkit-transition: background 0.2s;
+    transition: background 0.2s;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+
+    border: 0;
+    outline: 0;
+}
+
+.remodal-confirm {
+    color: #fff;
+    background: #81c784;
+}
+
+.remodal-confirm:hover,
+.remodal-confirm:focus {
+    background: #66bb6a;
+}
+
+.remodal-cancel {
+    color: #fff;
+    background: #e57373;
+}
+
+.remodal-cancel:hover,
+.remodal-cancel:focus {
+    background: #ef5350;
+}
+
+/* Remove inner padding and border in Firefox 4+ for the button tag. */
+
+.remodal-confirm::-moz-focus-inner,
+.remodal-cancel::-moz-focus-inner,
+.remodal-close::-moz-focus-inner {
+    padding: 0;
+
+    border: 0;
+}
+
+/* Keyframes
+   ========================================================================== */
+
+@-webkit-keyframes remodal-opening-keyframes {
+    from {
+        -webkit-transform: scale(1.05);
+        transform: scale(1.05);
+
+        opacity: 0;
+    }
+    to {
+        -webkit-transform: none;
+        transform: none;
+
+        opacity: 1;
+    }
+}
+
+@keyframes remodal-opening-keyframes {
+    from {
+        -webkit-transform: scale(1.05);
+        transform: scale(1.05);
+
+        opacity: 0;
+    }
+    to {
+        -webkit-transform: none;
+        transform: none;
+
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes remodal-closing-keyframes {
+    from {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+
+        opacity: 1;
+    }
+    to {
+        -webkit-transform: scale(0.95);
+        transform: scale(0.95);
+
+        opacity: 0;
+    }
+}
+
+@keyframes remodal-closing-keyframes {
+    from {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+
+        opacity: 1;
+    }
+    to {
+        -webkit-transform: scale(0.95);
+        transform: scale(0.95);
+
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes remodal-overlay-opening-keyframes {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes remodal-overlay-opening-keyframes {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes remodal-overlay-closing-keyframes {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes remodal-overlay-closing-keyframes {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Media queries
+   ========================================================================== */
+
+@media only screen and (min-width: 641px) {
+    #up-sell-modal {
+        max-width: 700px;
+    }
+}
+
+/* IE8
+   ========================================================================== */
+
+.lt-ie9 .remodal-overlay {
+    background: #2b2e38;
+}
+
+.lt-ie9 #up-sell-modal {
+    width: 700px;
+}
+
+
+.multi-item {
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 100%;
+    vertical-align: top;
+    margin-bottom: 50px;
+    display: inline-block; }
+@media (min-width: 768px) {
+    .multi-item {
+        margin-bottom: 0;
+        width: 31.3333333333%;
+        margin-left: 2%;
+        padding-left: 0;
+        padding-right: 0; } }
+@media (min-width: 990px) {
+    .multi-item {
+        width: 31.3333333333%; } }
+
+.up-sell-multi{
+    margin-left: -2%;
+    font-size: 0rem;
+    font-size: 0px;
+    vertical-align:  }
+@media screen and (max-width: 768px) {
+    .up-sell-multi {
+        margin: 0; } }
 
 
 </style>
-<div id="up-sell-modal" class="up-sell-modal hide fade in" style="display: none;">
-	<div class="up-sell-modal-header">
-		<div class="up-sell-heading">
-			<h1>{{ upSell.getHeadline() }}</h1>
-			<small>{{ upSell.getDescription() }}</small>
-		</div>
-	</div>
-	<div class="up-sell-modal-body">
-		<div class="up-sell-content clearfix">
-			{% if products.count() > 3 %}
-				<div class="right-arrow">
-					<img width="30px" height="80px" src="http://{{ app.request.host }}/img/rightArrow.png">
-				</div>
-				<div class="left-arrow" style="display: none;">
-					<img width="30px" height="80px" src="http://{{ app.request.host }}/img/leftArrow.png">
-				</div>
-			{% endif %}
+<div id="up-sell-modal" class="up-sell-modal">
+    <div class="up-sell-modal-header">
+        <div class="up-sell-heading">
+            <h1>{{ upSell.getHeadline() }}</h1>
+            <small>{{ upSell.getDescription() }}</small>
+        </div>
+    </div>
+    <div class="up-sell-modal-body">
+        <div class="up-sell-content clearfix">
+            {% if products.count() > 3 %}
+                <div class="right-arrow">
+                    <img width="30px" height="80px" src="http://{{ app.request.host }}/img/rightArrow.png">
+                </div>
+                <div class="left-arrow" style="display: none;">
+                    <img width="30px" height="80px" src="http://{{ app.request.host }}/img/leftArrow.png">
+                </div>
+            {% endif %}
 
-			{% if rProducts.count() > 1 %}
-				<ul class="up-sell-multi">
-					{% for rProduct in rProducts %}
-						{% set product = rProduct.getProduct() %}
-						<li class="multi-item"{% if loop.index > 3 %} style="display: none;"{% endif %}>
-							<div class="table-block">
-								<div class="table-row">
-									<div class="table-cell" style="height: 180px">
+            {% if rProducts.count() > 1 %}
+                <ul class="up-sell-multi">
+                    {% for rProduct in rProducts %}
+                        {% set product = rProduct.getProduct() %}
+                        <li class="multi-item"{% if loop.index > 3 %} style="display: none;"{% endif %}>
+                            <div class="table-block">
+                                <div class="table-row">
+                                    <div class="table-cell" style="height: 180px">
 
-										<img  src="{{ product.getImgUrl() }}"/>
+                                        <img  src="{{ product.getImgUrl() }}"/>
 
-									</div>
-									</div>
-								<div class="table-row">
+                                    </div>
+                                </div>
+                                <div class="table-row">
 
-									<div class="table-cell">
+                                    <div class="table-cell">
 
-										<div class="up-sell-description-container">
+                                        <div class="up-sell-description-container">
                             <span class="product-name">
                                 {{ product.getName()|length > 70 ? product.getName()|striptags|slice(0, 70) ~ '...' : product.getName()|striptags  }}
                             </span>
 
-											{% if upSell.getSelectedVariant(product) %}
-												<br>
-												<span class="product-name">
+                                            {% if upSell.getSelectedVariant(product) %}
+                                                <br>
+                                                <span class="product-name">
                                     {{ variants[product.getId()][rProduct.getVariantSelected()].var_type}}
                                 </span>
-												<div class="up-price">
-													<h2>{{ variants[product.getId()][rProduct.getVariantSelected()].price|number_format(2, '.', ',') }} zł</h2>
-												</div>
+                                                <div class="up-price">
+                                                    <h2>{{ variants[product.getId()][rProduct.getVariantSelected()].price|number_format(2, '.', ',') }} zł</h2>
+                                                </div>
 
-												<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ rProduct.getVariantSelected() }}">Do koszyka</button>
-											{% else %}
-												<div class="up-price">
-													{% if product.getOriginalPrice() == product.getCurrentPrice()  or 0 == product.getCurrentPrice() %}
-														<h2 id="{{ product.getId() }}-price">{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
-													{% else %}
-														<h2 id="{{ product.getId() }}-price">
-															<span class="strike muted">{{ product.getOriginalPrice|number_format(2, '.', ',') }}</span>
-															<span class="newPrice">{{ product.getCurrentPrice|number_format(2, '.', ',') }}</span>
-															<span> zł</span>
-														</h2>
-													{% endif %}
-												</div>
+                                                <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ rProduct.getVariantSelected() }}">Do koszyka</button>
+                                            {% else %}
+                                                <div class="up-price">
+                                                    {% if product.getOriginalPrice() == product.getCurrentPrice()  or 0 == product.getCurrentPrice() %}
+                                                        <h2 id="{{ product.getId() }}-price">{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
+                                                    {% else %}
+                                                        <h2 id="{{ product.getId() }}-price">
+                                                            <span class="strike muted">{{ product.getOriginalPrice|number_format(2, '.', ',') }}</span>
+                                                            <span class="newPrice">{{ product.getCurrentPrice|number_format(2, '.', ',') }}</span>
+                                                            <span> zł</span>
+                                                        </h2>
+                                                    {% endif %}
+                                                </div>
 
-												{% if product.getId() in variants|keys and variants[product.getId()] is not null %}
-													<select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
-														{% for key, variant in variants[product.getId()] %}
-															{% if loop.first %}
-																<option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
-															{% else %}
-																<option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
-															{% endif %}
-														{% endfor %}
-													</select>
-												{% endif %}
-												<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
-											{% endif %}
-										</div>
+                                                {% if product.getId() in variants|keys and variants[product.getId()] is not null %}
+                                                    <select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
+                                                        {% for key, variant in variants[product.getId()] %}
+                                                            {% if loop.first %}
+                                                                <option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
+                                                            {% else %}
+                                                                <option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </select>
+                                                {% endif %}
+                                                <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
+                                            {% endif %}
+                                        </div>
 
-									</div>
+                                    </div>
 
-								</div>
-							</div>
-
-
-						</li>
-					{% endfor %}
-				</ul>
-			{% else %}
-				{% for rProduct in rProducts %}
-					{% set product = rProduct.getProduct() %}
-					<div class="up-sell-content-inner">
-						<div class="up-sell-img">
-							<img src="{{ product.getImgUrl() }}"/>
-						</div>
-						<div class="up-sell-description-container">
-							{% set selectedVariant = rProduct.getVariantSelected() %}
-							{% if selectedVariant %}
-								{% set variant = variants[product.getId()][selectedVariant] %}
-							{% endif %}
-							<h2 class=" product-name">
-								{{ product.getName()|length > 70 ? product.getName()|striptags|slice(0, 70) ~ '...' : product.getName()|striptags  }} {% if selectedVariant %}{{ variant.var_type }}{% endif %}
-							</h2>
-							<small class="muted">
-								{% if product.getDescription() != null %}
-									{{ product.getDescription()|length > 200 ? product.getDescription()|striptags|slice(0, 200) ~ '...' : product.getDescription()|striptags  }}
-								{% endif %}
-							</small>
-							<div class="up-price">
-								{% if selectedVariant %}
-									<h2>{{ variant.price|number_format(2, '.', ',') }} zł</h2>
-								{% else %}
-									{% if product.getOriginalPrice() == product.getCurrentPrice() or 0 == product.getCurrentPrice() %}
-										<h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
-									{% else %}
-									<h2>
-										<span class="strike muted">{{ product.getOriginalPrice|number_format(2, '.', ',') }}</span>
-										<span class="newPrice">{{ product.getCurrentPrice|number_format(2, '.', ',') }}</span>
-										<span> zł</span>
-									</h2>
-									{% endif %}
-								{% endif %}
-							</div>
+                                </div>
+                            </div>
 
 
-							{% if selectedVariant %}
-								<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ selectedVariant }}">Do koszyka</button>
-							{% else %}
-								<button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
-								{% if product.getId() in variants|keys and variants[product.getId()] is not null %}
-									<select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
-										{% for key, variant in variants[product.getId()] %}
-											{% if loop.first %}
-												<option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
-											{% else %}
-												<option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
-											{% endif %}
-										{% endfor %}
-									</select>
-								{% endif %}
-							{% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {% for rProduct in rProducts %}
+                    {% set product = rProduct.getProduct() %}
+                    <div class="up-sell-content-inner">
+                        <div class="up-sell-img">
+                            <img src="{{ product.getImgUrl() }}"/>
+                        </div>
+                        <div class="up-sell-description-container">
+                            {% set selectedVariant = rProduct.getVariantSelected() %}
+                            {% if selectedVariant %}
+                                {% set variant = variants[product.getId()][selectedVariant] %}
+                            {% endif %}
+                            <h2 class=" product-name">
+                                {{ product.getName()|length > 70 ? product.getName()|striptags|slice(0, 70) ~ '...' : product.getName()|striptags  }} {% if selectedVariant %}{{ variant.var_type }}{% endif %}
+                            </h2>
+                            <small class="muted">
+                                {% if product.getDescription() != null %}
+                                    {{ product.getDescription()|length > 200 ? product.getDescription()|striptags|slice(0, 200) ~ '...' : product.getDescription()|striptags  }}
+                                {% endif %}
+                            </small>
+                            <div class="up-price">
+                                {% if selectedVariant %}
+                                    <h2>{{ variant.price|number_format(2, '.', ',') }} zł</h2>
+                                {% else %}
+                                    {% if product.getOriginalPrice() == product.getCurrentPrice() or 0 == product.getCurrentPrice() %}
+                                        <h2>{{ product.getOriginalPrice|number_format(2, '.', ',') }} zł</h2>
+                                    {% else %}
+                                        <h2>
+                                            <span class="strike muted">{{ product.getOriginalPrice|number_format(2, '.', ',') }}</span>
+                                            <span class="newPrice">{{ product.getCurrentPrice|number_format(2, '.', ',') }}</span>
+                                            <span> zł</span>
+                                        </h2>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
 
-						</div>
-					</div>
-				{% endfor %}
-			{% endif %}
-		</div>
 
-	</div>
-	<div class="up-sell-bottom clearfix">
-		<div class="pull-right">
-	        {% if placement == "product" %}
-			<span class="muted to-basket" data-dismiss="modal">Przejdź od razu do koszyka »</span>
-	        {% endif %}
-			<button class="btn-up-gray" data-dismiss="modal">Nie dziękuję!</button>
-		</div>
-	</div>
+                            {% if selectedVariant %}
+                                <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ selectedVariant }}">Do koszyka</button>
+                            {% else %}
+                                <button class="btn-up-black up-sell-add-to-cart" data-product-id="{{ product.getShoploProductId() }}">Do koszyka</button>
+                                {% if product.getId() in variants|keys and variants[product.getId()] is not null %}
+                                    <select name="variant-id" id="variant-select" data-product-id="{{ product.getId() }}">
+                                        {% for key, variant in variants[product.getId()] %}
+                                            {% if loop.first %}
+                                                <option value="{{ key }}" data-price="{{ variant['price'] }}" selected>{{ variant['var_type'] }}</option>
+                                            {% else %}
+                                                <option value="{{ key }}" data-price="{{ variant['price'] }}">{{ variant['var_type'] }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+    <div class="up-sell-bottom clearfix">
+        <div class="pull-right">
+            {% if placement == "product" %}
+                <span class="muted to-basket" data-dismiss="modal">Przejdź od razu do koszyka »</span>
+            {% endif %}
+            <button class="btn-up-gray" data-dismiss="modal">Nie dziękuję!</button>
+        </div>
+    </div>
 </div>
+ds="text/javascript">
 
-<script type="text/javascript">
-
-	{% if variantSelected is defined %}
-	var variantSelected = {{ variantSelected }};
-	{% endif %}
+{% if variantSelected is defined %}
+    var variantSelected = {{ variantSelected }};
+{% endif %}
 
 </script>

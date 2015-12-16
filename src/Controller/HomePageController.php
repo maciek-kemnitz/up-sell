@@ -39,6 +39,7 @@ class HomePageController implements ControllerProviderInterface
 					"userKey": "{$cart->user_key}"
 					};
 				</script>
+				<script src="http://up-sell.pl/js/remodal.js"></script>
 				<script src="http://up-sell.pl/js/widget.js"></script>',
 				'<script type="text/javascript">
 					var userData = {
@@ -90,11 +91,11 @@ class HomePageController implements ControllerProviderInterface
 					{
 						$currentContent .= $snippetInclude[$i];
 						$shoploApi->createAsset(
-								  $themeId,
-									  $template['key'],
-									  $currentContent,
-									  $template['content_type'],
-									  $template['public_url']
+							$themeId,
+							$template['key'],
+							$currentContent,
+							$template['content_type'],
+							$template['public_url']
 						);
 					}
 				}
@@ -110,9 +111,9 @@ class HomePageController implements ControllerProviderInterface
 
 
 			$upSells = UpSellQuery::create()
-				->filterByShopDomain($shop['permanent_domain'])
-				->orderByOrder()
-				->find();
+			                      ->filterByShopDomain($shop['permanent_domain'])
+			                      ->orderByOrder()
+			                      ->find();
 
 			return $app['twig']->render('home.page.html.twig', [
 				'product'=>$shoploApi->getProducts(), 'uppSells' => $upSells, 'shop'=>$shop,
@@ -144,7 +145,7 @@ class HomePageController implements ControllerProviderInterface
 
 			/** @var UpSell[] $upSells */
 			$upSells = UpSellQuery::create()
-				->findByShopDomain($oldShopDomain);
+			                      ->findByShopDomain($oldShopDomain);
 
 			foreach ($upSells as $upSell)
 			{
