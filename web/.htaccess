@@ -1,0 +1,41 @@
+RewriteEngine On
+
+RewriteBase /
+
+Header set Access-Control-Allow-Origin "*"
+
+# pliki z kropką bezposrednio
+#RewriteRule     ^css/(.*)$ vc_server.php [QSA,L]
+#RewriteRule     ^js/(.*)$ vc_server.php [QSA,L]
+#RewriteRule     ^less/(.*)$ vc_server.php [QSA,L]
+#
+<FilesMatch "\.(ttf|otf|eot)$">
+    <IfModule mod_headers.c>
+        Header set Access-Control-Allow-Origin "*"
+    </IfModule>
+</FilesMatch>
+#
+#
+## endpointy uslug na dedykowane front-controllery
+#
+## slash na koncu jest wymagany przy dostepie via django/xml
+##RewriteRule	^panel/api$ api.php [QSA,L]
+##RewriteRule	^panel/api/([a-zA-Z0-9_-]+):([a-zA-Z0-9_-]+)/([a-z]+)$ api.php?api_key=$1&signature=$2&resource=$3&type=json [QSA,L]
+#RewriteRule	^panel/api(.*)$ api.php [QSA,L]
+#RewriteRule	^ajax/?$ ajax.php?input=rest [QSA,L]
+#RewriteRule	^json/?$ json.php [QSA,L]
+#RewriteRule	^services/(.*)/?$ api.php [QSA,L]
+#RewriteRule	^robots.txt/?$ index.php [QSA,L]
+#RewriteRule	^sitemap(.*).xml/?$ index.php [QSA,L]
+## RewriteRule	^(.*).php/?$ gate.php [QSA,L]
+## RewriteRule	^(.*).html/?$ gate.php [QSA,L]
+#
+#RewriteCond %{REQUEST_URI} \..+$
+#RewriteRule .* - [L]
+
+# wszystkie pozostale requesty na glowny front-controller
+
+RewriteRule	^css/(.*).css/?$ css/$1.css [QSA,L]
+RewriteRule	^js/(.*).js$ js/$1.js [QSA,L]
+
+RewriteRule ^(.*)$ index.php [QSA,L]
