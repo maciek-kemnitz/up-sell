@@ -42,9 +42,12 @@ $(function () {
 		            return true;
 	            }
 
-                $('#up-sell-modal').addClass('modalMargin');
-                $('#up-sell-modal').css('display', 'block');
-                $('#up-sell-modal').addClass('in');
+                //$('#up-sell-modal').addClass('modalMargin');
+                //$('#up-sell-modal').css('display', 'block');
+                //$('#up-sell-modal').addClass('in');
+
+                upSellModal = $('#up-sell-modal').remodal();
+                upSellModal.open();
 
 	            var statsData = {
 		            'shopDomain': shopDomain,

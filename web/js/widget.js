@@ -54,13 +54,10 @@ $(function () {
 
                 if (typeof variantSelected != 'undefined' && variantSelected != productId)
                 {
-                    //return true;
+                    return true;
                 }
                 upSellModal = $('#up-sell-modal').remodal();
                 upSellModal.open();
-                // $('#up-sell-modal').addClass('modalMargin');
-                // $('#up-sell-modal').css('display', 'block');
-                // $('#up-sell-modal').addClass('in');
 
                 var statsData = {
                     'shopDomain': shopDomain,
@@ -69,9 +66,9 @@ $(function () {
                     'user_key': userKey
                 };
 
-                // $.post("http://up-sell.pl/ajax/up-sell/stats", statsData, 'json');
+                $.post("http://up-sell.pl/ajax/up-sell/stats", statsData, 'json');
 
-                // $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData);
+                $.post("http://"+ window.location.hostname +"/koszyk/dodaj", productData);
 
                 return false;
             });

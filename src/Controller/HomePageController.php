@@ -53,6 +53,7 @@ class HomePageController implements ControllerProviderInterface
 						]
 					};
 				</script>
+				<script src="http://up-sell.pl/js/remodal.js"></script>
 				<script src="http://up-sell.pl/js/widget-cart.js"></script>'
 			];
 
