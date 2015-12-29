@@ -38,7 +38,8 @@ $(function () {
 
             $('body').delegate('form','submit', function () {
 
-                var productId = $(this).parents('form').find('[name="id"]').val();
+                //var productId = $(this).parents('form').find('[name="id"]').val();
+                var productId = $(this).find('[name="id"]').val();
 
                 if (productId == undefined)
                 {
